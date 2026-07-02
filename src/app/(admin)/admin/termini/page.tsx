@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Termini | Koda 95 Admin",
+  robots: { index: false, follow: false },
+};
+
 export default function TerminiListPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-2">

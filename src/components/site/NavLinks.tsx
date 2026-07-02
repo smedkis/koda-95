@@ -12,6 +12,12 @@ const LINKS = [
 export function NavLinks() {
   const pathname = usePathname();
 
+  // Hide on the registration confirmation page — don't invite navigating
+  // away right after a successful sign-up.
+  if (pathname.endsWith("/potrjeno")) {
+    return null;
+  }
+
   return (
     <div className="flex items-center gap-8">
       {LINKS.map((link) => (

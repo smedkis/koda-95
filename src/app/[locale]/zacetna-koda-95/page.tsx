@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { AboutSection } from "@/components/site/AboutSection";
 import { FaqSection } from "@/components/site/FaqSection";
@@ -72,6 +73,12 @@ const PLACEHOLDER_FAQ = [
       "Da, pri prijavi lahko izberete, da plačilo izvede podjetje, in vnesete njegove podatke.",
   },
 ];
+
+export const metadata: Metadata = {
+  title: "Začetna Koda 95 — Prijava na usposabljanje | Tahografi Cuderman",
+  description:
+    "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) za poklicne voznike kategorij C in D. Izberite termin in se prijavite.",
+};
 
 export default function ZacetnaKoda95Page() {
   return (

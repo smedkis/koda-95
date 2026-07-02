@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { ColumnGuides } from "@/components/site/ColumnGuides";
 import { FaqSection } from "@/components/site/FaqSection";
@@ -19,6 +20,11 @@ const PLACEHOLDER_TERMIN = {
   date: "Sreda, 20.05. 2026",
   timeRange: "15.00 - 21.00",
   address: "Pot za krajem 35, 4000 Kranj",
+};
+
+export const metadata: Metadata = {
+  title: `${PLACEHOLDER_TERMIN.title} | Tahografi Cuderman`,
+  description: PLACEHOLDER_TERMIN.description,
 };
 
 export default function TerminPage() {
