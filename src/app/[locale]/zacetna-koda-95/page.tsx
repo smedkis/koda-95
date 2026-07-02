@@ -5,6 +5,7 @@ import { Footer } from "@/components/site/Footer";
 import { Hero } from "@/components/site/Hero";
 import { LogosSection } from "@/components/site/LogosSection";
 import { NumbersSection } from "@/components/site/NumbersSection";
+import { SectionDivider } from "@/components/site/SectionDivider";
 import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminiSection } from "@/components/site/TerminiSection";
 
@@ -85,6 +86,7 @@ export default function ZacetnaKoda95Page() {
       />
       <TerminiSection termini={PLACEHOLDER_TERMINI} />
       <LogosSection />
+      <SectionDivider />
       <FaqSection faqs={PLACEHOLDER_FAQ} />
       <AboutSection />
       <NumbersSection />

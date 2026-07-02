@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/Container";
 import { ColumnGuides } from "@/components/site/ColumnGuides";
 import { FaqSection } from "@/components/site/FaqSection";
 import { Footer } from "@/components/site/Footer";
+import { SectionDivider } from "@/components/site/SectionDivider";
 import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminDetails } from "@/components/site/TerminDetails";
 import { TerminRegistrationForm } from "@/components/site/TerminRegistrationForm";
@@ -42,7 +43,7 @@ export default function TerminPage() {
               <TerminRegistrationForm />
             </div>
           </div>
-          <div className="w-screen border-b border-divider ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]" />
+          <SectionDivider />
           <FaqSection faqs={TERMIN_FAQ} />
           <SubscriptionSection />
         </div>
