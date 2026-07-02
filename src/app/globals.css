@@ -12,11 +12,15 @@
   --color-heading: #000000;
   --color-paragraph: #402e32;
   --color-placeholder: #999999;
-  --color-container-border: #ece8e5;
+  --color-container-border: #f0f0f0;
 }
 
 body {
   background: #ffffff;
   color: var(--color-paragraph);
   font-family: var(--font-body);
+  /* Full-bleed sections use 100vw, which is a few px wider than the visible
+     viewport when a scrollbar is present — this clips that sliver instead
+     of showing a horizontal scrollbar. */
+  overflow-x: hidden;
 }

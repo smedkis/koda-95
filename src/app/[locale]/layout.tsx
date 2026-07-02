@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
+import { Nav } from "@/components/site/Nav";
 import { montserrat, sourceSans } from "@/fonts";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
@@ -32,7 +33,10 @@ export default async function LocaleLayout({
       className={`${montserrat.variable} ${sourceSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <Nav />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );
