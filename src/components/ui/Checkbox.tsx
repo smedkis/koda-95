@@ -7,7 +7,7 @@ type CheckboxProps = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { label, className, ...props },
+  { label, className, required, ...props },
   ref,
 ) {
   return (
@@ -16,6 +16,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
         <input
           ref={ref}
           type="checkbox"
+          required={required}
           className="peer absolute inset-0 z-10 size-full cursor-pointer opacity-0"
           {...props}
         />
@@ -38,6 +39,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
       {label ? (
         <TextSmall as="span" className="select-none">
           {label}
+          {required ? " *" : ""}
         </TextSmall>
       ) : null}
     </label>

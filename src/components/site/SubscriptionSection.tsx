@@ -20,8 +20,13 @@ export function SubscriptionSection() {
             <Heading2>Ne zamudite naslednjih terminov usposabljanja.</Heading2>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="flex gap-4">
-              <Input type="email" placeholder="E-poštni naslov" className="w-72" />
+            <div className="flex items-end gap-4">
+              <Input
+                type="email"
+                label="E-poštni naslov"
+                placeholder="E-poštni naslov"
+                className="w-72"
+              />
               <Button variant="secondary">Prijavi se</Button>
             </div>
             <Checkbox label="Strinjam se s splošnimi pogoji poslovanja in politiko zasebnosti." />

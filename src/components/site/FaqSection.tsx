@@ -9,7 +9,7 @@ export type FaqItemData = {
 
 export function FaqSection({ faqs }: { faqs: FaqItemData[] }) {
   return (
-    <div className="mt-32 grid grid-cols-5 gap-16">
+    <div className="mt-32 grid grid-cols-5 gap-24">
       <div className="col-span-2 flex flex-col">
         <Heading2>Pogosto zastavljena vprašanja</Heading2>
         <TextBig className="mt-4">

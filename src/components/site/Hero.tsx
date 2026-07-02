@@ -4,6 +4,7 @@ import { Breadcrumbs } from "./Breadcrumbs";
 type Crumb = {
   label: string;
   href?: string;
+  external?: boolean;
 };
 
 export function Hero({
@@ -17,7 +18,7 @@ export function Hero({
 }) {
   return (
     <div className="mx-auto mt-32 flex max-w-[680px] flex-col items-center gap-4 text-center">
-      <Breadcrumbs items={breadcrumbs} />
+      <Breadcrumbs items={breadcrumbs} className="justify-center" />
       <Heading1>{title}</Heading1>
       <TextBig>{description}</TextBig>
     </div>

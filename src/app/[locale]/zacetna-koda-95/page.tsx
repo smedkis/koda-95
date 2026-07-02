@@ -13,7 +13,7 @@ const PLACEHOLDER_TERMINI = [
   {
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 08.06. 2026",
-    address: "Ljubljanska cesta 30, 4000 Kranj",
+    address: "Pot za krajem 35, 4000 Kranj",
     timeRange: "08.00 - 16.00",
     attendeeCount: 12,
     capacity: 20,
@@ -22,7 +22,7 @@ const PLACEHOLDER_TERMINI = [
   {
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 13.07. 2026",
-    address: "Ljubljanska cesta 30, 4000 Kranj",
+    address: "Pot za krajem 35, 4000 Kranj",
     timeRange: "08.00 - 16.00",
     attendeeCount: 5,
     capacity: 20,
@@ -31,7 +31,7 @@ const PLACEHOLDER_TERMINI = [
   {
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 10.08. 2026",
-    address: "Ljubljanska cesta 30, 4000 Kranj",
+    address: "Pot za krajem 35, 4000 Kranj",
     timeRange: "08.00 - 16.00",
     attendeeCount: 18,
     capacity: 20,
@@ -40,7 +40,7 @@ const PLACEHOLDER_TERMINI = [
   {
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 14.09. 2026",
-    address: "Ljubljanska cesta 30, 4000 Kranj",
+    address: "Pot za krajem 35, 4000 Kranj",
     timeRange: "08.00 - 16.00",
     attendeeCount: 2,
     capacity: 20,
@@ -77,7 +77,7 @@ export default function ZacetnaKoda95Page() {
     <Container>
       <Hero
         breadcrumbs={[
-          { label: "Domov", href: "https://tahograficuderman.si" },
+          { label: "Domov", href: "https://tahograficuderman.si", external: true },
           { label: "Začetno usposabljanje" },
         ]}
         title="Prijava na začetno usposabljanje Koda 95"
