@@ -67,12 +67,12 @@ export function ConfirmationDetails({
   ];
 
   return (
-    <div className="mx-auto mt-6 max-w-[680px]">
+    <div className="mx-auto mt-6 max-w-[680px] print:mt-4">
       <Box>
         {rows.map((row, index) => (
           <DetailRow key={row.label} {...row} showDivider={index < rows.length - 1} />
         ))}
-        <div className="-mx-8 -mb-8 mt-4 aspect-video overflow-hidden rounded-b-lg">
+        <div className="-mx-8 -mb-8 mt-4 aspect-video overflow-hidden rounded-b-lg print:hidden">
           <iframe
             src={`https://www.google.com/maps?q=${encodeURIComponent(location)}&output=embed`}
             className="h-full w-full border-0"

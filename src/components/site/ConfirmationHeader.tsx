@@ -5,7 +5,7 @@ import { Heading2, Text } from "@/components/ui/Typography";
 export function ConfirmationHeader() {
   const t = useTranslations("Confirmation");
   return (
-    <div className="mx-auto mt-32 max-w-[680px] text-center">
+    <div className="mx-auto mt-32 max-w-[680px] text-center print:mt-12">
       <div className="flex items-center justify-center gap-4">
         <Image src="/kljukica.svg" alt="" width={40} height={40} className="shrink-0" />
         <Heading2>{t("title")}</Heading2>

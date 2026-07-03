@@ -39,7 +39,7 @@ export function LanguageSwitcher() {
   const router = useRouter();
 
   return (
-    <div className="relative">
+    <div className="relative print:hidden">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}

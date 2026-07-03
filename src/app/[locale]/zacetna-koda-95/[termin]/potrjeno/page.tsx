@@ -13,6 +13,7 @@ import { SectionDivider } from "@/components/site/SectionDivider";
 const PLACEHOLDER_PRIJAVA = {
   driver: "Janez Novak",
   termin: "Začetno usposabljanje Koda 95",
+  date: "2026-06-08",
   time: "08.00 - 16.00",
   price: "Cena bo znana naknadno",
   registrationCode: "TC-2848",
@@ -31,12 +32,18 @@ export default function PotrjenoPage() {
   return (
     <Container>
       <ConfirmationHeader />
-      <ConfirmationSummary />
+      <ConfirmationSummary
+        title={PLACEHOLDER_PRIJAVA.termin}
+        date={PLACEHOLDER_PRIJAVA.date}
+        timeRange={PLACEHOLDER_PRIJAVA.time}
+        location={PLACEHOLDER_PRIJAVA.location}
+      />
       <ConfirmationDetails {...PLACEHOLDER_PRIJAVA} />
       <ConfirmationHelp />
-      <div className="mt-32">
+      <div className="mt-32 print:mt-6">
         <SectionDivider />
         <Footer />
+        <SectionDivider className="hidden print:block" />
       </div>
     </Container>
   );

@@ -6,8 +6,8 @@ import { NavLinks } from "./NavLinks";
 
 export function Nav() {
   return (
-    <div className="border-b border-divider">
-      <Container className="flex items-center justify-between py-6">
+    <div className="border-b border-divider print:border-t">
+      <Container className="flex items-center justify-between py-6 print:justify-center">
         <Link href="/" className="shrink-0">
           <Image
             src="/logo.png"

@@ -4,14 +4,14 @@ import { Text, TextMedium } from "@/components/ui/Typography";
 export function Footer() {
   const t = useTranslations("Footer");
   return (
-    <div className="flex items-center justify-between py-6">
+    <div className="flex items-center justify-between py-6 print:justify-center">
       <Text>{t("copyright")}</Text>
       <div className="flex items-center gap-4">
         <a
           href="https://www.tahograficuderman.si/pogoji-poslovanja-in-politika-zasebnosti"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:underline"
+          className="hover:underline print:hidden"
         >
           <TextMedium>{t("terms")}</TextMedium>
         </a>
@@ -19,7 +19,7 @@ export function Footer() {
           href="https://gregacuderman.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:underline"
+          className="hover:underline print:hidden"
         >
           <TextMedium>{t("credit")}</TextMedium>
         </a>

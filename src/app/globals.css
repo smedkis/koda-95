@@ -24,3 +24,7 @@ body {
      of showing a horizontal scrollbar. */
   overflow-x: hidden;
 }
+
+@page {
+  margin: 12mm;
+}
