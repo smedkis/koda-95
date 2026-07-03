@@ -62,7 +62,7 @@ export function LanguageSwitcher() {
         </svg>
       </button>
       {open ? (
-        <Box className="absolute right-0 top-full z-10 mt-2 w-max p-1" as="ul">
+        <Box className="absolute right-0 top-full z-50 mt-2 w-max p-1" as="ul">
           {routing.locales.map((loc) => (
             <li key={loc}>
               <button

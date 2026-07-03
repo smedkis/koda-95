@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { Eyebrow, Heading2, Text } from "@/components/ui/Typography";
@@ -33,18 +34,18 @@ export function TerminDetails({
   timeRange: string;
   address: string;
 }) {
+  const t = useTranslations("TerminDetails");
   return (
     <div>
       <Breadcrumbs
         items={[
-          { label: "Domov", href: "https://tahograficuderman.si", external: true },
           { label: programLabel, href: programHref },
           { label: title },
         ]}
       />
       <Heading2 className="mt-6">{title}</Heading2>
       <Text className="mt-4">{description}</Text>
-      <Eyebrow className="mt-8">Podrobnosti termina</Eyebrow>
+      <Eyebrow className="mt-8">{t("detailsHeading")}</Eyebrow>
       <div className="mt-4 grid grid-cols-2 gap-4">
         {price ? (
           <>
@@ -69,7 +70,7 @@ export function TerminDetails({
           </>
         )}
       </div>
-      <Eyebrow className="mt-6">Lokacija</Eyebrow>
+      <Eyebrow className="mt-6">{t("location")}</Eyebrow>
       <div className="mt-4">
         <DetailRow icon="/icon-location.svg">{address}</DetailRow>
       </div>
@@ -78,7 +79,7 @@ export function TerminDetails({
           src={`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`}
           className="h-full w-full border-0"
           loading="lazy"
-          title="Lokacija termina"
+          title={t("mapTitle")}
         />
       </div>
     </div>
