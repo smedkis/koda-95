@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { ColumnGuides } from "@/components/site/ColumnGuides";
 import { FaqSection } from "@/components/site/FaqSection";
@@ -26,7 +27,8 @@ export const metadata: Metadata = {
   description: PLACEHOLDER_TERMIN.description,
 };
 
-export default function TerminPage() {
+export default async function TerminPage() {
+  const t = await getTranslations("Programs.zacetna");
   return (
     <Container>
       <div className="relative">
@@ -35,7 +37,7 @@ export default function TerminPage() {
           <div className="grid grid-cols-5 gap-24 pb-32">
             <div className="col-span-2 min-w-0">
               <TerminDetails
-                programLabel="Začetna Koda 95"
+                programLabel={t("name")}
                 programHref="/zacetna-koda-95"
                 title={PLACEHOLDER_TERMIN.title}
                 description={PLACEHOLDER_TERMIN.description}

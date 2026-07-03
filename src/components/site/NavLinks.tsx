@@ -1,20 +1,21 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { TextMedium } from "@/components/ui/Typography";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
-const LINKS = [
-  { href: "/redna-koda-95", label: "Redna Koda 95" },
-  { href: "/zacetna-koda-95", label: "Začetna Koda 95" },
-] as const;
-
 export function NavLinks() {
   const pathname = usePathname();
+  const t = useTranslations("Nav");
+  const LINKS = [
+    { href: "/redna-koda-95", label: t("redna") },
+    { href: "/zacetna-koda-95", label: t("zacetna") },
+  ] as const;
 
-  // Hide on the registration confirmation page — don't invite navigating
-  // away right after a successful sign-up.
-  if (pathname.endsWith("/potrjeno")) {
+  // Hide on the registration form and confirmation page — don't invite
+  // navigating away mid-registration or right after a successful sign-up.
+  if (pathname.endsWith("/potrjeno") || pathname.endsWith("/obrazec")) {
     return null;
   }
 

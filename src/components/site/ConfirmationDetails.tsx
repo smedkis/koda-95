@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Box } from "@/components/ui/Box";
 import { Eyebrow, Text } from "@/components/ui/Typography";
@@ -55,13 +56,14 @@ export function ConfirmationDetails({
   registrationCode: string;
   location: string;
 }) {
+  const t = useTranslations("Confirmation");
   const rows = [
-    { icon: <DetailIcon src="/icon-profile.svg" />, label: "Voznik", value: driver },
-    { icon: <DetailIcon src="/icon-calendar.svg" />, label: "Termin", value: termin },
-    { icon: <DetailIcon src="/icon-clock.svg" />, label: "Ura", value: time },
-    { icon: <DetailIcon src="/icon-ticket.svg" />, label: "Cena", value: price },
-    { icon: <HashIcon />, label: "Številka prijave", value: registrationCode },
-    { icon: <DetailIcon src="/icon-location.svg" />, label: "Lokacija", value: location },
+    { icon: <DetailIcon src="/icon-profile.svg" />, label: t("driver"), value: driver },
+    { icon: <DetailIcon src="/icon-calendar.svg" />, label: t("termin"), value: termin },
+    { icon: <DetailIcon src="/icon-clock.svg" />, label: t("time"), value: time },
+    { icon: <DetailIcon src="/icon-ticket.svg" />, label: t("price"), value: price },
+    { icon: <HashIcon />, label: t("registrationNumber"), value: registrationCode },
+    { icon: <DetailIcon src="/icon-location.svg" />, label: t("location"), value: location },
   ];
 
   return (
@@ -75,7 +77,7 @@ export function ConfirmationDetails({
             src={`https://www.google.com/maps?q=${encodeURIComponent(location)}&output=embed`}
             className="h-full w-full border-0"
             loading="lazy"
-            title="Lokacija termina"
+            title={t("mapTitle")}
           />
         </div>
       </Box>

@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Nav } from "@/components/site/Nav";
 import { montserrat, sourceSans } from "@/fonts";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
-export const metadata: Metadata = {
-  title: "Koda 95 — Tahografi Cuderman",
-  description: "Prijave na usposabljanja Koda 95",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("RootMeta");
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

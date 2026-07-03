@@ -1,6 +1,144 @@
 {
-  "HomePage": {
-    "title": "Koda 95",
-    "description": "Tahografi Cuderman — project setup in progress."
+  "Nav": {
+    "redna": "Periodic Training – Koda 95",
+    "zacetna": "Initial Qualification – Koda 95"
+  },
+  "Footer": {
+    "copyright": "Tahografi Cuderman d.o.o. ©2026",
+    "terms": "Terms of Business and Privacy Policy",
+    "credit": "Built by: Grega Cuderman"
+  },
+  "TerminCard": {
+    "reserve": "Book this session"
+  },
+  "TerminiSection": {
+    "heading": "Choose a training session"
+  },
+  "LogosSection": {
+    "trust": "Drivers from more than 250 companies trust us with their Koda 95 training"
+  },
+  "Faq": {
+    "heading": "Frequently asked questions",
+    "intro": "Read the most common questions about Koda 95. If you have further questions, get in touch — we're happy to help.",
+    "callUs": "Call us",
+    "writeUs": "Write to us"
+  },
+  "About": {
+    "rating": "4.9 (51 reviews)",
+    "heading": "Why choose us for your Koda 95 training?",
+    "body": "Tahografi Cuderman is an authorised driver training centre for Koda 95. We combine expert knowledge, hands-on experience, and a real understanding of the driving profession, so drivers always leave with something useful.",
+    "cta": "Choose a session"
+  },
+  "Numbers": {
+    "heading": "Our company, by the numbers",
+    "years": "Years in business",
+    "customers": "Satisfied customers",
+    "staff": "Experienced staff members",
+    "services": "Services completed",
+    "technicians": "Technicians trained"
+  },
+  "Subscription": {
+    "eyebrow": "Set a reminder",
+    "heading": "Don't miss the next training sessions.",
+    "email": "Email address",
+    "submit": "Subscribe",
+    "consent": "I agree to the general terms of business and privacy policy."
+  },
+  "TerminDetails": {
+    "home": "Home",
+    "detailsHeading": "Session details",
+    "location": "Location",
+    "mapTitle": "Session location"
+  },
+  "TerminRegistrationForm": {
+    "fullName": "Full name",
+    "email": "Email address",
+    "phone": "Phone number",
+    "consentMarketing": "I'd like to receive Koda 95 updates by phone and email.",
+    "consentTerms": "I agree to the general terms of business and privacy policy.",
+    "submit": "Register for this session"
+  },
+  "Confirmation": {
+    "title": "Your registration is confirmed!",
+    "subtitle": "We've emailed you instructions for filling out the form.",
+    "summaryHeading": "Registration summary",
+    "addToCalendar": "Add to Calendar",
+    "print": "Print",
+    "driver": "Driver",
+    "termin": "Session",
+    "time": "Time",
+    "price": "Price",
+    "registrationNumber": "Registration number",
+    "location": "Location",
+    "mapTitle": "Session location",
+    "pageTitle": "Registration confirmed"
+  },
+  "ConfirmationHelp": {
+    "heading": "Need help?"
+  },
+  "Obrazec": {
+    "headerTitle": "Fill out the form before your training",
+    "headerDescription": "We need your personal details for the training to run smoothly. It takes less than 2 minutes to fill in.",
+    "step1Title": "Driving licence category",
+    "step2Title": "Personal details",
+    "step3Title": "Payment",
+    "stepLabel": "<highlight>Step {step}</highlight> of {totalSteps}",
+    "back": "Back",
+    "next": "Next",
+    "categoryC": "Category C",
+    "categoryD": "Category D",
+    "placeOfBirth": "Place of birth",
+    "countryOfBirth": "Country of birth",
+    "selectCountry": "Select a country",
+    "citizenship": "Citizenship",
+    "emso": "EMŠO (Slovenian personal ID)",
+    "dateOfBirth": "Date of birth",
+    "residenceType": "Type of residence *",
+    "permanentResidence": "Permanent residence",
+    "temporaryResidence": "Temporary residence",
+    "address": "Address",
+    "addressPlaceholder": "Street and house number",
+    "postalCode": "Postal code",
+    "city": "City",
+    "paySelf": "I'll pay myself",
+    "payCompany": "My company pays",
+    "companyName": "Company name",
+    "companyTaxNumber": "Company tax number",
+    "companyEmail": "Email address",
+    "confirmedTitle": "Your form has been submitted!",
+    "confirmedDescription": "One more step — arrange payment to confirm your registration.",
+    "pageTitle": "Form submitted",
+    "paymentViaCompany": "Payment via company",
+    "accountingNotice": "Our accounting team will send the invoice to your company. No payment is required from you.",
+    "qrOnlineOnly": "The QR code only works with personal online banking. Payment isn't possible at the post office, a bank branch, petrol stations, or other places that accept bill payments.",
+    "qrPlaceholder": "QR code",
+    "qrAlt": "Payment QR code",
+    "recipient": "Recipient",
+    "iban": "IBAN",
+    "reference": "Reference",
+    "amount": "Amount",
+    "noValue": "—"
+  },
+  "Programs": {
+    "redna": {
+      "name": "Periodic Training – Koda 95",
+      "breadcrumb": "Periodic training",
+      "heroTitle": "Register for periodic Koda 95 training",
+      "heroDescription": "Are you a professional driver holding category C or D? Periodic training to renew Koda 95 (CPC) is legally required every 5 years. At Tahografi Cuderman we run training sessions all year round. Pick a session that works for you and register using the form.",
+      "metaTitle": "Periodic Koda 95 Training — Register | Tahografi Cuderman",
+      "metaDescription": "Periodic training to renew Koda 95 (CPC) for professional drivers holding category C or D. Choose a session and register."
+    },
+    "zacetna": {
+      "name": "Initial Qualification – Koda 95",
+      "breadcrumb": "Initial qualification",
+      "heroTitle": "Register for initial Koda 95 qualification",
+      "heroDescription": "Are you a new professional driver holding category C or D? Initial Koda 95 qualification is legally required to obtain your driver's Certificate of Professional Competence (CPC). At Tahografi Cuderman we run training sessions all year round. Pick a session that works for you and register using the form.",
+      "metaTitle": "Initial Koda 95 Qualification — Register | Tahografi Cuderman",
+      "metaDescription": "Initial training to obtain the driver's Certificate of Professional Competence (CPC) for professional drivers holding category C or D. Choose a session and register."
+    }
+  },
+  "RootMeta": {
+    "title": "Koda 95 — Tahografi Cuderman",
+    "description": "Registration for Koda 95 training"
   }
 }

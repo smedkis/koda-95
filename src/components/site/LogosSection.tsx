@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Eyebrow } from "@/components/ui/Typography";
 
 // Duplicated placeholders to reach 7 — real additional logos to follow.
@@ -13,9 +14,10 @@ const LOGOS = [
 ];
 
 export function LogosSection() {
+  const t = useTranslations("LogosSection");
   return (
     <div className="mt-24 mb-32 flex flex-col items-center gap-8">
-      <Eyebrow>Za izobraževanje Kode 95 nam zaupajo vozniki iz več kot 250 podjetij</Eyebrow>
+      <Eyebrow>{t("trust")}</Eyebrow>
       <div className="flex w-full flex-wrap items-center justify-between gap-x-8 gap-y-4">
         {LOGOS.map((src, index) => (
           <Image

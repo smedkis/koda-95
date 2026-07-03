@@ -1,9 +1,11 @@
+import { useTranslations } from "next-intl";
 import { Text, TextMedium } from "@/components/ui/Typography";
 
 export function Footer() {
+  const t = useTranslations("Footer");
   return (
     <div className="flex items-center justify-between py-6">
-      <Text>Tahografi Cuderman d.o.o. ©2026</Text>
+      <Text>{t("copyright")}</Text>
       <div className="flex items-center gap-4">
         <a
           href="https://www.tahograficuderman.si/pogoji-poslovanja-in-politika-zasebnosti"
@@ -11,7 +13,7 @@ export function Footer() {
           rel="noopener noreferrer"
           className="hover:underline"
         >
-          <TextMedium>Pogoji poslovanja in politika zasebnosti</TextMedium>
+          <TextMedium>{t("terms")}</TextMedium>
         </a>
         <a
           href="https://gregacuderman.com"
@@ -19,7 +21,7 @@ export function Footer() {
           rel="noopener noreferrer"
           className="hover:underline"
         >
-          <TextMedium>Izdelal: Grega Cuderman</TextMedium>
+          <TextMedium>{t("credit")}</TextMedium>
         </a>
       </div>
     </div>

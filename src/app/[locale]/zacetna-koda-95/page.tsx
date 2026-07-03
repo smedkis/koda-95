@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { AboutSection } from "@/components/site/AboutSection";
 import { FaqSection } from "@/components/site/FaqSection";
@@ -74,22 +75,26 @@ const PLACEHOLDER_FAQ = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: "Začetna Koda 95 — Prijava na usposabljanje | Tahografi Cuderman",
-  description:
-    "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) za poklicne voznike kategorij C in D. Izberite termin in se prijavite.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Programs.zacetna");
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  };
+}
 
-export default function ZacetnaKoda95Page() {
+export default async function ZacetnaKoda95Page() {
+  const t = await getTranslations("Programs.zacetna");
+  const tHome = await getTranslations("TerminDetails");
   return (
     <Container>
       <Hero
         breadcrumbs={[
-          { label: "Domov", href: "https://tahograficuderman.si", external: true },
-          { label: "Začetno usposabljanje" },
+          { label: tHome("home"), href: "https://tahograficuderman.si", external: true },
+          { label: t("breadcrumb") },
         ]}
-        title="Prijava na začetno usposabljanje Koda 95"
-        description="Ste nov poklicni voznik s kategorijo C ali D? Začetno usposabljanje Koda 95 je zakonsko obvezno za pridobitev temeljne kvalifikacije voznika (TKV). Pri Tahografi Cuderman organiziramo usposabljanja skozi vse leto. Izberite termin, ki vam ustreza, in se prijavite preko obrazca."
+        title={t("heroTitle")}
+        description={t("heroDescription")}
       />
       <TerminiSection termini={PLACEHOLDER_TERMINI} />
       <LogosSection />

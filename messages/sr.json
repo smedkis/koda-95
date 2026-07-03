@@ -1,6 +1,144 @@
 {
-  "HomePage": {
-    "title": "Koda 95",
-    "description": "Tahografi Cuderman — postavljanje projekta je u toku."
+  "Nav": {
+    "redna": "Periodična obuka – Koda 95",
+    "zacetna": "Osnovna kvalifikacija – Koda 95"
+  },
+  "Footer": {
+    "copyright": "Tahografi Cuderman d.o.o. ©2026",
+    "terms": "Uslovi poslovanja i politika privatnosti",
+    "credit": "Izradio: Grega Cuderman"
+  },
+  "TerminCard": {
+    "reserve": "Rezerviši termin"
+  },
+  "TerminiSection": {
+    "heading": "Izaberite termin obuke"
+  },
+  "LogosSection": {
+    "trust": "Vozači iz više od 250 kompanija nam veruju za obuku Koda 95"
+  },
+  "Faq": {
+    "heading": "Često postavljana pitanja",
+    "intro": "Pročitajte najčešća pitanja o Koda 95. Ako imate dodatna pitanja, kontaktirajte nas. Rado ćemo vam pomoći.",
+    "callUs": "Pozovite nas",
+    "writeUs": "Pišite nam"
+  },
+  "About": {
+    "rating": "4,9 (51 recenzija)",
+    "heading": "Zašto izabrati nas za obuku Koda 95?",
+    "body": "Tahografi Cuderman je ovlašćeni centar za obuku vozača — Koda 95. Spajamo stručno znanje, praktično iskustvo i razumevanje vozačke profesije, zato vozači od nas uvek odnesu nešto korisno.",
+    "cta": "Izaberite termin"
+  },
+  "Numbers": {
+    "heading": "Naša kompanija u brojkama",
+    "years": "Godina rada",
+    "customers": "Zadovoljnih klijenata",
+    "staff": "Iskusnih saradnika",
+    "services": "Obavljenih usluga",
+    "technicians": "Obučenih tehničara"
+  },
+  "Subscription": {
+    "eyebrow": "Podesite podsetnik",
+    "heading": "Ne propustite naredne termine obuke.",
+    "email": "E-mail adresa",
+    "submit": "Prijavi se",
+    "consent": "Slažem se sa opštim uslovima poslovanja i politikom privatnosti."
+  },
+  "TerminDetails": {
+    "home": "Početna",
+    "detailsHeading": "Detalji termina",
+    "location": "Lokacija",
+    "mapTitle": "Lokacija termina"
+  },
+  "TerminRegistrationForm": {
+    "fullName": "Ime i prezime",
+    "email": "E-mail adresa",
+    "phone": "Broj telefona",
+    "consentMarketing": "Želim da primam obaveštenja o Koda 95 putem telefona i e-maila.",
+    "consentTerms": "Slažem se sa opštim uslovima poslovanja i politikom privatnosti.",
+    "submit": "Prijavi se na termin"
+  },
+  "Confirmation": {
+    "title": "Vaša prijava je potvrđena!",
+    "subtitle": "Poslali smo vam e-mail sa uputstvima za popunjavanje obrasca.",
+    "summaryHeading": "Pregled prijave",
+    "addToCalendar": "Dodaj u kalendar",
+    "print": "Odštampaj",
+    "driver": "Vozač",
+    "termin": "Termin",
+    "time": "Vreme",
+    "price": "Cena",
+    "registrationNumber": "Broj prijave",
+    "location": "Lokacija",
+    "mapTitle": "Lokacija termina",
+    "pageTitle": "Prijava potvrđena"
+  },
+  "ConfirmationHelp": {
+    "heading": "Potrebna vam je pomoć?"
+  },
+  "Obrazec": {
+    "headerTitle": "Popunite obrazac pre obuke",
+    "headerDescription": "Za nesmetan tok obuke potrebni su nam vaši lični podaci. Popunjavanje traje manje od 2 minuta.",
+    "step1Title": "Kategorija vozačke dozvole",
+    "step2Title": "Lični podaci",
+    "step3Title": "Plaćanje",
+    "stepLabel": "<highlight>Korak {step}</highlight> od {totalSteps}",
+    "back": "Nazad",
+    "next": "Dalje",
+    "categoryC": "Kategorija C",
+    "categoryD": "Kategorija D",
+    "placeOfBirth": "Mesto rođenja",
+    "countryOfBirth": "Država rođenja",
+    "selectCountry": "Izaberite državu",
+    "citizenship": "Državljanstvo",
+    "emso": "EMŠO (slovenački lični broj)",
+    "dateOfBirth": "Datum rođenja",
+    "residenceType": "Vrsta prebivališta *",
+    "permanentResidence": "Stalno prebivalište",
+    "temporaryResidence": "Privremeno prebivalište",
+    "address": "Adresa",
+    "addressPlaceholder": "Ulica i kućni broj",
+    "postalCode": "Poštanski broj",
+    "city": "Mesto",
+    "paySelf": "Plaćam sam",
+    "payCompany": "Plaća firma",
+    "companyName": "Naziv firme",
+    "companyTaxNumber": "Poreski broj firme",
+    "companyEmail": "E-mail adresa",
+    "confirmedTitle": "Vaš obrazac je popunjen!",
+    "confirmedDescription": "Preostalo je samo plaćanje da potvrdite prijavu.",
+    "pageTitle": "Obrazac popunjen",
+    "paymentViaCompany": "Plaćanje preko firme",
+    "accountingNotice": "Naše računovodstvo će firmi dostaviti račun. Od vas nije potrebna nikakva uplata.",
+    "qrOnlineOnly": "QR kod važi samo za lično elektronsko bankarstvo. Plaćanje nije moguće na pošti, u banci, na benzinskim pumpama i drugim mestima koja omogućavaju plaćanje uplatnica.",
+    "qrPlaceholder": "QR kod",
+    "qrAlt": "QR kod za plaćanje",
+    "recipient": "Primalac",
+    "iban": "Račun",
+    "reference": "Poziv na broj",
+    "amount": "Iznos",
+    "noValue": "—"
+  },
+  "Programs": {
+    "redna": {
+      "name": "Periodična obuka – Koda 95",
+      "breadcrumb": "Periodična obuka",
+      "heroTitle": "Prijava na periodičnu obuku Koda 95",
+      "heroDescription": "Da li ste profesionalni vozač kategorije C ili D? Periodična obuka za obnavljanje Koda 95 zakonski je obavezna svakih 5 godina. U Tahografi Cuderman organizujemo obuke tokom cele godine. Izaberite termin koji vam odgovara i prijavite se putem obrasca.",
+      "metaTitle": "Periodična obuka Koda 95 — Prijava | Tahografi Cuderman",
+      "metaDescription": "Periodična obuka za obnavljanje Koda 95 za profesionalne vozače kategorije C i D. Izaberite termin i prijavite se."
+    },
+    "zacetna": {
+      "name": "Osnovna kvalifikacija – Koda 95",
+      "breadcrumb": "Osnovna kvalifikacija",
+      "heroTitle": "Prijava na osnovnu kvalifikaciju Koda 95",
+      "heroDescription": "Da li ste novi profesionalni vozač kategorije C ili D? Osnovna kvalifikacija Koda 95 zakonski je obavezna za sticanje osnovne kvalifikacije vozača. U Tahografi Cuderman organizujemo obuke tokom cele godine. Izaberite termin koji vam odgovara i prijavite se putem obrasca.",
+      "metaTitle": "Osnovna kvalifikacija Koda 95 — Prijava | Tahografi Cuderman",
+      "metaDescription": "Osnovna obuka za sticanje osnovne kvalifikacije vozača za profesionalne vozače kategorije C i D. Izaberite termin i prijavite se."
+    }
+  },
+  "RootMeta": {
+    "title": "Koda 95 — Tahografi Cuderman",
+    "description": "Prijave za obuke Koda 95"
   }
 }

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Box } from "@/components/ui/Box";
 import { ButtonLink } from "@/components/ui/Button";
@@ -32,6 +33,7 @@ export function TerminCard({
   capacity,
   href,
 }: TerminCardProps) {
+  const t = useTranslations("TerminCard");
   return (
     <Box className="flex flex-col">
       <Heading3>{title}</Heading3>
@@ -48,7 +50,7 @@ export function TerminCard({
         </div>
       </div>
       <ButtonLink href={href} variant="secondary" className="mt-8 self-start">
-        Rezerviraj termin
+        {t("reserve")}
       </ButtonLink>
     </Box>
   );

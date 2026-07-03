@@ -1,6 +1,144 @@
 {
-  "HomePage": {
-    "title": "Koda 95",
-    "description": "Tahografi Cuderman — nastavitev projekta je v teku."
+  "Nav": {
+    "redna": "Redna Koda 95",
+    "zacetna": "Začetna Koda 95"
+  },
+  "Footer": {
+    "copyright": "Tahografi Cuderman d.o.o. ©2026",
+    "terms": "Pogoji poslovanja in politika zasebnosti",
+    "credit": "Izdelal: Grega Cuderman"
+  },
+  "TerminCard": {
+    "reserve": "Rezerviraj termin"
+  },
+  "TerminiSection": {
+    "heading": "Izberite termin usposabljanja"
+  },
+  "LogosSection": {
+    "trust": "Za izobraževanje Kode 95 nam zaupajo vozniki iz več kot 250 podjetij"
+  },
+  "Faq": {
+    "heading": "Pogosto zastavljena vprašanja",
+    "intro": "Preberite si pogosta vprašanja o Kodi 95. Če imate dodatna vprašanja, nas kontaktirajte. Z veseljem vam bomo pomagali.",
+    "callUs": "Pokličite nas",
+    "writeUs": "Pišite nam"
+  },
+  "About": {
+    "rating": "4,9 (51 mnenj)",
+    "heading": "Zakaj izbrati nas za usposabljanje Kode 95?",
+    "body": "Pri Tahografi Cuderman smo pooblaščen center za usposabljanje voznikov - Koda 95. Združujemo strokovno znanje, praktične izkušnje in razumevanje vozniškega poklica, zato vozniki od nas vedno odnesejo nekaj uporabnega.",
+    "cta": "Izberite termin"
+  },
+  "Numbers": {
+    "heading": "Naše podjetje v številkah",
+    "years": "Let delovanja",
+    "customers": "Zadovoljnih strank",
+    "staff": "Izkušenih sodelavcev",
+    "services": "Opravljenih storitev",
+    "technicians": "Izšolanih tehnikov"
+  },
+  "Subscription": {
+    "eyebrow": "Nastavite opomnik",
+    "heading": "Ne zamudite naslednjih terminov usposabljanja.",
+    "email": "E-poštni naslov",
+    "submit": "Prijavi se",
+    "consent": "Strinjam se s splošnimi pogoji poslovanja in politiko zasebnosti."
+  },
+  "TerminDetails": {
+    "home": "Domov",
+    "detailsHeading": "Podrobnosti termina",
+    "location": "Lokacija",
+    "mapTitle": "Lokacija termina"
+  },
+  "TerminRegistrationForm": {
+    "fullName": "Ime in priimek",
+    "email": "E-poštni naslov",
+    "phone": "Telefonska številka",
+    "consentMarketing": "Želim prejemati obvestila Kode 95 na tel. številko in po elektronski pošti.",
+    "consentTerms": "Strinjam se s splošnimi pogoji poslovanja in politiko zasebnosti.",
+    "submit": "Prijavi se na termin"
+  },
+  "Confirmation": {
+    "title": "Vaša prijava je potrjena!",
+    "subtitle": "Poslali smo vam e-pošto z navodili za izpolnitev obrazca.",
+    "summaryHeading": "Povzetek prijave",
+    "addToCalendar": "Dodaj v Koledar",
+    "print": "Natisni",
+    "driver": "Voznik",
+    "termin": "Termin",
+    "time": "Ura",
+    "price": "Cena",
+    "registrationNumber": "Številka prijave",
+    "location": "Lokacija",
+    "mapTitle": "Lokacija termina",
+    "pageTitle": "Prijava potrjena"
+  },
+  "ConfirmationHelp": {
+    "heading": "Potrebujete pomoč?"
+  },
+  "Obrazec": {
+    "headerTitle": "Izpolnite obrazec pred usposabljanjem",
+    "headerDescription": "Za nemoten potek usposabljanja potrebujemo vaše osebne podatke. Izpolnitev podatkov traja manj kot 2 minuti.",
+    "step1Title": "Kategorija vozniškega dovoljenja",
+    "step2Title": "Osebni podatki",
+    "step3Title": "Plačilo",
+    "stepLabel": "<highlight>Korak {step}</highlight> / {totalSteps}",
+    "back": "Nazaj",
+    "next": "Naprej",
+    "categoryC": "Kategorija C",
+    "categoryD": "Kategorija D",
+    "placeOfBirth": "Kraj rojstva",
+    "countryOfBirth": "Država rojstva",
+    "selectCountry": "Izberite državo",
+    "citizenship": "Državljanstvo",
+    "emso": "EMŠO",
+    "dateOfBirth": "Datum rojstva",
+    "residenceType": "Vrsta prebivališča *",
+    "permanentResidence": "Stalno prebivališče",
+    "temporaryResidence": "Začasno prebivališče",
+    "address": "Naslov",
+    "addressPlaceholder": "Ulica in hišna številka",
+    "postalCode": "Poštna številka",
+    "city": "Kraj",
+    "paySelf": "Plačam sam",
+    "payCompany": "Plača podjetje",
+    "companyName": "Naziv podjetja",
+    "companyTaxNumber": "Davčna številka podjetja",
+    "companyEmail": "E-poštni naslov",
+    "confirmedTitle": "Vaš obrazec je izpolnjen!",
+    "confirmedDescription": "Uredite še plačilo za potrditev prijave.",
+    "pageTitle": "Obrazec izpolnjen",
+    "paymentViaCompany": "Plačilo prek podjetja",
+    "accountingNotice": "Naše računovodstvo bo podjetju posredovalo račun. Od vas ni potrebno nobeno plačilo.",
+    "qrOnlineOnly": "QR koda velja samo za osebno spletno banko. Plačilo ni možno na pošti, banki, bencinskih servisih in drugih mestih, ki omogočajo plačevanje položnic.",
+    "qrPlaceholder": "QR koda",
+    "qrAlt": "QR koda za plačilo",
+    "recipient": "Prejemnik",
+    "iban": "TRR",
+    "reference": "Referenca",
+    "amount": "Cena",
+    "noValue": "—"
+  },
+  "Programs": {
+    "redna": {
+      "name": "Redna Koda 95",
+      "breadcrumb": "Redno usposabljanje",
+      "heroTitle": "Prijava na redno usposabljanje Koda 95",
+      "heroDescription": "Ste poklicni voznik s kategorijo C ali D? Redno usposabljanje za podaljšanje kode 95 (TKV) je zakonsko obvezno vsakih 5 let. Pri Tahografi Cuderman organiziramo usposabljanja skozi vse leto. Izberite termin, ki vam ustreza, in se prijavite preko obrazca.",
+      "metaTitle": "Redna Koda 95 — Prijava na usposabljanje | Tahografi Cuderman",
+      "metaDescription": "Redno usposabljanje za podaljšanje kode 95 (TKV) za poklicne voznike kategorij C in D. Izberite termin in se prijavite."
+    },
+    "zacetna": {
+      "name": "Začetna Koda 95",
+      "breadcrumb": "Začetno usposabljanje",
+      "heroTitle": "Prijava na začetno usposabljanje Koda 95",
+      "heroDescription": "Ste nov poklicni voznik s kategorijo C ali D? Začetno usposabljanje Koda 95 je zakonsko obvezno za pridobitev temeljne kvalifikacije voznika (TKV). Pri Tahografi Cuderman organiziramo usposabljanja skozi vse leto. Izberite termin, ki vam ustreza, in se prijavite preko obrazca.",
+      "metaTitle": "Začetna Koda 95 — Prijava na usposabljanje | Tahografi Cuderman",
+      "metaDescription": "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) za poklicne voznike kategorij C in D. Izberite termin in se prijavite."
+    }
+  },
+  "RootMeta": {
+    "title": "Koda 95 — Tahografi Cuderman",
+    "description": "Prijave na usposabljanja Koda 95"
   }
 }

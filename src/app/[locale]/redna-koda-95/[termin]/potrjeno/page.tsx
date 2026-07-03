@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { ConfirmationDetails } from "@/components/site/ConfirmationDetails";
 import { ConfirmationHeader } from "@/components/site/ConfirmationHeader";
@@ -18,10 +19,13 @@ const PLACEHOLDER_PRIJAVA = {
   location: "Pot za krajem 35, 4000 Kranj",
 };
 
-export const metadata: Metadata = {
-  title: "Prijava potrjena | Tahografi Cuderman",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Confirmation");
+  return {
+    title: `${t("pageTitle")} | Tahografi Cuderman`,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default function PotrjenoPage() {
   return (

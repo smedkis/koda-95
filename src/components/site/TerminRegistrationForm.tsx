@@ -1,28 +1,25 @@
+import { useTranslations } from "next-intl";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 
 export function TerminRegistrationForm() {
+  const t = useTranslations("TerminRegistrationForm");
   return (
     <Box className="flex flex-col">
+      <Input label={t("fullName")} placeholder={t("fullName")} name="fullName" required />
       <Input
-        label="Ime in priimek"
-        placeholder="Ime in priimek"
-        name="fullName"
-        required
-      />
-      <Input
-        label="E-poštni naslov"
-        placeholder="E-poštni naslov"
+        label={t("email")}
+        placeholder={t("email")}
         name="email"
         type="email"
         required
         className="mt-6"
       />
       <Input
-        label="Telefonska številka"
-        placeholder="Telefonska številka"
+        label={t("phone")}
+        placeholder={t("phone")}
         name="phone"
         type="tel"
         required
@@ -30,17 +27,17 @@ export function TerminRegistrationForm() {
       />
       <Checkbox
         name="consentMarketing"
-        label="Želim prejemati obvestila Kode 95 na tel. številko in po elektronski pošti."
+        label={t("consentMarketing")}
         className="mt-6"
       />
       <Checkbox
         name="consentTerms"
         required
-        label="Strinjam se s splošnimi pogoji poslovanja in politiko zasebnosti."
+        label={t("consentTerms")}
         className="mt-4"
       />
       <Button variant="secondary" className="mt-8 w-full">
-        Prijavi se na termin
+        {t("submit")}
       </Button>
     </Box>
   );

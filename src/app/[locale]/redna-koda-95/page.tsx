@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { AboutSection } from "@/components/site/AboutSection";
 import { FaqSection } from "@/components/site/FaqSection";
@@ -72,22 +73,26 @@ const PLACEHOLDER_FAQ = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: "Redna Koda 95 — Prijava na usposabljanje | Tahografi Cuderman",
-  description:
-    "Redno usposabljanje za podaljšanje kode 95 (TKV) za poklicne voznike kategorij C in D. Izberite termin in se prijavite.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Programs.redna");
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  };
+}
 
-export default function RednaKoda95Page() {
+export default async function RednaKoda95Page() {
+  const t = await getTranslations("Programs.redna");
+  const tHome = await getTranslations("TerminDetails");
   return (
     <Container>
       <Hero
         breadcrumbs={[
-          { label: "Domov", href: "https://tahograficuderman.si", external: true },
-          { label: "Redno usposabljanje" },
+          { label: tHome("home"), href: "https://tahograficuderman.si", external: true },
+          { label: t("breadcrumb") },
         ]}
-        title="Prijava na redno usposabljanje Koda 95"
-        description="Ste poklicni voznik s kategorijo C ali D? Redno usposabljanje za podaljšanje kode 95 (TKV) je zakonsko obvezno vsakih 5 let. Pri Tahografi Cuderman organiziramo usposabljanja skozi vse leto. Izberite termin, ki vam ustreza, in se prijavite preko obrazca."
+        title={t("heroTitle")}
+        description={t("heroDescription")}
       />
       <TerminiSection termini={PLACEHOLDER_TERMINI} />
       <LogosSection />

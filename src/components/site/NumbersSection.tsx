@@ -1,17 +1,18 @@
+import { useTranslations } from "next-intl";
 import { Eyebrow, Heading1, TextMedium } from "@/components/ui/Typography";
 
-const NUMBERS = [
-  { value: "37+", label: "Let delovanja" },
-  { value: "3.000+", label: "Zadovoljnih strank" },
-  { value: "11", label: "Izkušenih sodelavcev" },
-  { value: "10.000+", label: "Opravljenih storitev" },
-  { value: "100+", label: "Izšolanih tehnikov" },
-];
-
 export function NumbersSection() {
+  const t = useTranslations("Numbers");
+  const NUMBERS = [
+    { value: "37+", label: t("years") },
+    { value: "3.000+", label: t("customers") },
+    { value: "11", label: t("staff") },
+    { value: "10.000+", label: t("services") },
+    { value: "100+", label: t("technicians") },
+  ];
   return (
     <div className="mt-24 flex flex-col items-center">
-      <Eyebrow>Naše podjetje v številkah</Eyebrow>
+      <Eyebrow>{t("heading")}</Eyebrow>
       <div className="mt-16 grid w-full grid-cols-5 gap-8">
         {NUMBERS.map((item) => (
           <div key={item.label} className="flex flex-col items-start gap-2 text-left">

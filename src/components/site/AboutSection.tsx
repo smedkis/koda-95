@@ -1,24 +1,22 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { ButtonLink } from "@/components/ui/Button";
 import { Heading2, Text, TextBig } from "@/components/ui/Typography";
 
 export function AboutSection() {
+  const t = useTranslations("About");
   return (
     <div className="mt-32 flex flex-col items-center">
       <div className="flex max-w-[680px] flex-col items-center text-center">
         <div className="flex items-center gap-2">
           <Image src="/google.svg" alt="Google" width={40} height={40} />
           <Image src="/stars.svg" alt="" width={101} height={17} />
-          <Text className="font-semibold">4,9 (51 mnenj)</Text>
+          <Text className="font-semibold">{t("rating")}</Text>
         </div>
-        <Heading2 className="mt-4">Zakaj izbrati nas za usposabljanje Kode 95?</Heading2>
-        <TextBig className="mt-4">
-          Pri Tahografi Cuderman smo pooblaščen center za usposabljanje voznikov - Koda 95.
-          Združujemo strokovno znanje, praktične izkušnje in razumevanje vozniškega poklica,
-          zato vozniki od nas vedno odnesejo nekaj uporabnega.
-        </TextBig>
+        <Heading2 className="mt-4">{t("heading")}</Heading2>
+        <TextBig className="mt-4">{t("body")}</TextBig>
         <ButtonLink href="#termini" variant="primary" className="mt-8">
-          Izberite termin
+          {t("cta")}
         </ButtonLink>
       </div>
       <Image
