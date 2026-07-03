@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { AdminFooter } from "@/components/admin/AdminFooter";
+import { AdminNav } from "@/components/admin/AdminNav";
+import { Container } from "@/components/ui/Container";
 import { montserrat, sourceSans } from "@/fonts";
 import "../globals.css";
 
@@ -17,7 +20,13 @@ export default function AdminRootLayout({
       lang="sl"
       className={`${montserrat.variable} ${sourceSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-screen flex flex-col">
+        <Container className="flex flex-1 flex-col bg-secondary-bg">
+          <AdminNav />
+          <div className="flex flex-1 flex-col">{children}</div>
+          <AdminFooter />
+        </Container>
+      </body>
     </html>
   );
 }

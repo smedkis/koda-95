@@ -1,6 +1,7 @@
 import createMiddleware from "next-intl/middleware";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
+import { ADMIN_SESSION_COOKIE, isValidSessionToken } from "./lib/admin-auth";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -10,7 +11,26 @@ const intlMiddleware = createMiddleware(routing);
 // before handing the request off, so they fall through to the default locale.
 const BOT_USER_AGENT = /bot|crawl|spider|slurp|facebookexternalhit|slackbot|whatsapp|telegrambot|discordbot|preview/i;
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const sessionToken = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+
+  if (pathname.startsWith("/admin")) {
+    const authenticated = await isValidSessionToken(sessionToken);
+    if (!authenticated) {
+      return NextResponse.redirect(new URL("/prijava", request.url));
+    }
+    return NextResponse.next();
+  }
+
+  if (pathname === "/prijava") {
+    const authenticated = await isValidSessionToken(sessionToken);
+    if (authenticated) {
+      return NextResponse.redirect(new URL("/admin/termini", request.url));
+    }
+    return NextResponse.next();
+  }
+
   const userAgent = request.headers.get("user-agent") ?? "";
 
   if (BOT_USER_AGENT.test(userAgent)) {
@@ -23,5 +43,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|admin|prijava|_next|_vercel|.*\\..*).*)"],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 };
