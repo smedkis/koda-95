@@ -61,14 +61,16 @@ export function AdminNav() {
           />
         ) : (
           <>
-            <Image
-              src="/logo.png"
-              alt="Tahografi Cuderman"
-              width={266}
-              height={100}
-              className="h-12 w-auto justify-self-start"
-              priority
-            />
+            <Link href="/admin/termini" className="justify-self-start">
+              <Image
+                src="/logo.png"
+                alt="Tahografi Cuderman"
+                width={266}
+                height={100}
+                className="h-12 w-auto"
+                priority
+              />
+            </Link>
             <div className="flex items-center justify-self-center gap-8">
               <Link href="/admin/termini">
                 <TextMedium

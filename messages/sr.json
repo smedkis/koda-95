@@ -40,6 +40,9 @@
   "Subscription": {
     "eyebrow": "Podesite podsetnik",
     "heading": "Ne propustite naredne termine obuke.",
+    "description": "Prijavite se i budite obavešteni o novim terminima obuke Koda 95.",
+    "name": "Ime i prezime",
+    "phone": "Broj telefona",
     "email": "E-mail adresa",
     "submit": "Prijavi se",
     "consent": "Slažem se sa opštim uslovima poslovanja i politikom privatnosti."

@@ -96,17 +96,22 @@ function EnrollmentBadge({ enrollment }: { enrollment: ObvescanjeEnrollment }) {
   return <Text className="text-[14px] text-placeholder">Ni bil prijavljen</Text>;
 }
 
-export function ObvescanjeTable({ entries }: { entries: ObvescanjeEntry[] }) {
-  const [rows, setRows] = useState(entries);
+export function ObvescanjeTable({
+  entries,
+  onDelete,
+}: {
+  entries: ObvescanjeEntry[];
+  onDelete: (id: string) => void;
+}) {
   const [sortKey, setSortKey] = useState<SortKey>("dateAdded");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
-  const pendingDeleteRow = rows.find((row) => row.id === pendingDeleteId) ?? null;
+  const pendingDeleteRow = entries.find((row) => row.id === pendingDeleteId) ?? null;
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
   const sortedRows = useMemo(() => {
-    const copy = [...rows];
+    const copy = [...entries];
     copy.sort((a, b) => {
       const aValue = a[sortKey] ?? "";
       const bValue = b[sortKey] ?? "";
@@ -114,7 +119,7 @@ export function ObvescanjeTable({ entries }: { entries: ObvescanjeEntry[] }) {
       return sortDirection === "asc" ? comparison : -comparison;
     });
     return copy;
-  }, [rows, sortKey, sortDirection]);
+  }, [entries, sortKey, sortDirection]);
 
   const totalPages = Math.max(1, Math.ceil(sortedRows.length / pageSize));
   const clampedPage = Math.min(currentPage, totalPages);
@@ -140,7 +145,9 @@ export function ObvescanjeTable({ entries }: { entries: ObvescanjeEntry[] }) {
   };
 
   const confirmDelete = () => {
-    setRows((current) => current.filter((row) => row.id !== pendingDeleteId));
+    if (pendingDeleteId) {
+      onDelete(pendingDeleteId);
+    }
     setPendingDeleteId(null);
   };
 

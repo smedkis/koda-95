@@ -1,8 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow, Heading3, Text } from "@/components/ui/Typography";
+import { cn } from "@/lib/cn";
 
 function InfoRow({ icon, children }: { icon: string; children: ReactNode }) {
   return (
@@ -23,6 +25,7 @@ function StatRow({ label, value }: { label: string; value: string }) {
 }
 
 export type AdminTerminCardProps = {
+  id: string;
   title: string;
   date: string;
   address: string;
@@ -36,6 +39,7 @@ export type AdminTerminCardProps = {
 };
 
 export function AdminTerminCard({
+  id,
   title,
   date,
   address,
@@ -75,9 +79,14 @@ export function AdminTerminCard({
         <StatRow label="Plačano" value={`${paidCount}/${registeredCount}`} />
       </div>
       <div className="mt-6 flex items-center gap-4">
-        <Button type="button" variant="secondary" className="flex-1 justify-center">
+        <Link
+          href={`/admin/termini/${id}`}
+          className={cn(
+            "inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-black hover:text-white",
+          )}
+        >
           Odpri
-        </Button>
+        </Link>
         <Button
           type="button"
           variant="secondary"

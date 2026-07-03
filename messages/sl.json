@@ -40,6 +40,9 @@
   "Subscription": {
     "eyebrow": "Nastavite opomnik",
     "heading": "Ne zamudite naslednjih terminov usposabljanja.",
+    "description": "Prijavite se in bodite obveščeni o novih terminih usposabljanja Koda 95.",
+    "name": "Ime in priimek",
+    "phone": "Telefonska številka",
     "email": "E-poštni naslov",
     "submit": "Prijavi se",
     "consent": "Strinjam se s splošnimi pogoji poslovanja in politiko zasebnosti."

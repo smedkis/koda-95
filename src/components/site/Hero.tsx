@@ -12,13 +12,13 @@ export function Hero({
   title,
   description,
 }: {
-  breadcrumbs: Crumb[];
+  breadcrumbs?: Crumb[];
   title: string;
   description: string;
 }) {
   return (
     <div className="mx-auto mt-32 flex max-w-[680px] flex-col items-center gap-4 text-center">
-      <Breadcrumbs items={breadcrumbs} className="justify-center" />
+      {breadcrumbs ? <Breadcrumbs items={breadcrumbs} className="justify-center" /> : null}
       <Heading1>{title}</Heading1>
       <TextBig>{description}</TextBig>
     </div>

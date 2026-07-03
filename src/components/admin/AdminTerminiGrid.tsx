@@ -15,12 +15,12 @@ export function AdminTerminiGrid({
 
   return (
     <div className="mt-16 grid grid-cols-2 gap-8">
-      {termini.map((termin, index) => (
-        <AdminTerminCard key={`${termin.title}-${index}`} {...termin} />
+      {termini.map((termin) => (
+        <AdminTerminCard key={termin.id} {...termin} />
       ))}
       {showPast
-        ? pastTermini.map((termin, index) => (
-            <AdminTerminCard key={`${termin.title}-past-${index}`} {...termin} isPast />
+        ? pastTermini.map((termin) => (
+            <AdminTerminCard key={termin.id} {...termin} isPast />
           ))
         : (
             <div className="col-span-2 flex justify-center">

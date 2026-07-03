@@ -12,41 +12,37 @@ import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminiSection } from "@/components/site/TerminiSection";
 
 // Placeholder data — will be replaced with a real Supabase query.
-const PLACEHOLDER_TERMINI = [
+export const PLACEHOLDER_TERMINI = [
   {
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 08.06. 2026",
+    dateISO: "2026-06-08",
     address: "Pot za krajem 35, 4000 Kranj",
     timeRange: "08.00 - 16.00",
-    attendeeCount: 12,
-    capacity: 20,
     href: "/zacetna-koda-95/usposabljanje-2026-06-08",
   },
   {
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 13.07. 2026",
+    dateISO: "2026-07-13",
     address: "Pot za krajem 35, 4000 Kranj",
     timeRange: "08.00 - 16.00",
-    attendeeCount: 5,
-    capacity: 20,
     href: "/zacetna-koda-95/usposabljanje-2026-07-13",
   },
   {
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 10.08. 2026",
+    dateISO: "2026-08-10",
     address: "Pot za krajem 35, 4000 Kranj",
     timeRange: "08.00 - 16.00",
-    attendeeCount: 18,
-    capacity: 20,
     href: "/zacetna-koda-95/usposabljanje-2026-08-10",
   },
   {
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 14.09. 2026",
+    dateISO: "2026-09-14",
     address: "Pot za krajem 35, 4000 Kranj",
     timeRange: "08.00 - 16.00",
-    attendeeCount: 2,
-    capacity: 20,
     href: "/zacetna-koda-95/usposabljanje-2026-09-14",
   },
 ];
@@ -85,23 +81,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ZacetnaKoda95Page() {
   const t = await getTranslations("Programs.zacetna");
-  const tHome = await getTranslations("TerminDetails");
   return (
     <Container>
-      <Hero
-        breadcrumbs={[
-          { label: tHome("home"), href: "https://tahograficuderman.si", external: true },
-          { label: t("breadcrumb") },
-        ]}
-        title={t("heroTitle")}
-        description={t("heroDescription")}
-      />
+      <Hero title={t("heroTitle")} description={t("heroDescription")} />
       <TerminiSection termini={PLACEHOLDER_TERMINI} />
       <LogosSection />
       <SectionDivider />
-      <FaqSection faqs={PLACEHOLDER_FAQ} />
       <AboutSection />
       <NumbersSection />
+      <FaqSection faqs={PLACEHOLDER_FAQ} />
       <SubscriptionSection />
       <Footer />
     </Container>

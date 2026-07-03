@@ -40,6 +40,9 @@
   "Subscription": {
     "eyebrow": "Set a reminder",
     "heading": "Don't miss the next training sessions.",
+    "description": "Sign up to stay informed about new Koda 95 training sessions.",
+    "name": "Full name",
+    "phone": "Phone number",
     "email": "Email address",
     "submit": "Subscribe",
     "consent": "I agree to the general terms of business and privacy policy."

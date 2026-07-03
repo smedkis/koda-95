@@ -7,8 +7,9 @@ export const metadata: Metadata = {
 };
 
 // Placeholder data — will be replaced with a real Supabase query.
-const PLACEHOLDER_TERMINI = [
+export const PLACEHOLDER_TERMINI = [
   {
+    id: "redna-2026-05-20",
     program: "redna" as const,
     title: "Redno usposabljanje Koda 95 (2026)",
     date: "Sreda, 20.05. 2026",
@@ -21,6 +22,7 @@ const PLACEHOLDER_TERMINI = [
     paidCount: 5,
   },
   {
+    id: "redna-2026-06-17",
     program: "redna" as const,
     title: "Redno usposabljanje Koda 95 (2026)",
     date: "Sreda, 17.06. 2026",
@@ -33,6 +35,7 @@ const PLACEHOLDER_TERMINI = [
     paidCount: 2,
   },
   {
+    id: "redna-2026-07-15",
     program: "redna" as const,
     title: "Redno usposabljanje Koda 95 (2026)",
     date: "Sreda, 15.07. 2026",
@@ -45,6 +48,7 @@ const PLACEHOLDER_TERMINI = [
     paidCount: 12,
   },
   {
+    id: "zacetna-2026-06-08",
     program: "zacetna" as const,
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 08.06. 2026",
@@ -57,6 +61,7 @@ const PLACEHOLDER_TERMINI = [
     paidCount: 3,
   },
   {
+    id: "zacetna-2026-07-13",
     program: "zacetna" as const,
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 13.07. 2026",
@@ -70,8 +75,9 @@ const PLACEHOLDER_TERMINI = [
   },
 ];
 
-const PLACEHOLDER_PAST_TERMINI = [
+export const PLACEHOLDER_PAST_TERMINI = [
   {
+    id: "redna-2026-01-21",
     program: "redna" as const,
     title: "Redno usposabljanje Koda 95 (2026)",
     date: "Sreda, 21.01. 2026",
@@ -84,6 +90,7 @@ const PLACEHOLDER_PAST_TERMINI = [
     paidCount: 24,
   },
   {
+    id: "redna-2026-02-18",
     program: "redna" as const,
     title: "Redno usposabljanje Koda 95 (2026)",
     date: "Sreda, 18.02. 2026",
@@ -96,6 +103,7 @@ const PLACEHOLDER_PAST_TERMINI = [
     paidCount: 19,
   },
   {
+    id: "zacetna-2026-02-09",
     program: "zacetna" as const,
     title: "Začetno usposabljanje Koda 95",
     date: "Ponedeljek, 09.02. 2026",

@@ -15,7 +15,7 @@ const baseClasses =
 
 function ButtonIcon({ icon }: { icon?: ReactNode }) {
   if (!icon) return null;
-  return <span className="size-4 shrink-0">{icon}</span>;
+  return <span className="flex size-4 shrink-0 items-center justify-center">{icon}</span>;
 }
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {

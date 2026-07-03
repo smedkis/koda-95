@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ObvescanjeTable, type ObvescanjeEntry } from "@/components/admin/ObvescanjeTable";
+import { ObvescanjePageContent } from "@/components/admin/ObvescanjePageContent";
+import type { ObvescanjeEntry } from "@/components/admin/ObvescanjeTable";
 import { Button } from "@/components/ui/Button";
-import { Heading2 } from "@/components/ui/Typography";
+import { Heading2, Heading3 } from "@/components/ui/Typography";
 
 export const metadata: Metadata = {
   title: "Obveščanje | Koda 95 Admin",
@@ -139,27 +140,25 @@ export default function ObvescanjeListPage() {
     <div className="mt-32 mb-32">
       <div className="flex items-center justify-between">
         <Heading2>Obveščanje</Heading2>
-        <div className="flex items-center gap-4">
-          <Button
-            type="button"
-            variant="secondary"
-            icon={<Image src="/plus-dark.svg" alt="" width={14} height={14} />}
-            className="border border-[#C5C5C5] bg-[#F0F0F0] text-paragraph hover:bg-[#C5C5C5] hover:text-paragraph"
-          >
-            Dodaj
-          </Button>
-          <Button
-            type="button"
-            variant="primary"
-            icon={<Image src="/bell-white.svg" alt="" width={16} height={16} />}
-          >
-            Pošlji obvestilo
-          </Button>
-        </div>
+        <Button
+          type="button"
+          variant="primary"
+          icon={<Image src="/bell-white.svg" alt="" width={16} height={16} />}
+        >
+          Pošlji obvestilo
+        </Button>
       </div>
-      <div className="mt-16">
-        <ObvescanjeTable entries={PLACEHOLDER_ENTRIES} />
+      <div className="mt-16 flex items-center justify-between">
+        <Heading3>Naročniki</Heading3>
+        <Button
+          type="button"
+          variant="action"
+          icon={<Image src="/plus.svg" alt="" width={13} height={13} />}
+        >
+          Dodaj
+        </Button>
       </div>
+      <ObvescanjePageContent initialEntries={PLACEHOLDER_ENTRIES} />
     </div>
   );
 }
