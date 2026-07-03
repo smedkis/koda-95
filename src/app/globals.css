@@ -15,6 +15,14 @@
   --color-container-border: #f0f0f0;
 }
 
+html {
+  /* Reserve the scrollbar's width permanently, so pages shorter than the
+     viewport (no scrollbar) don't render a few px wider than pages that
+     scroll — without this, centered content visibly shifts sideways
+     between pages. */
+  scrollbar-gutter: stable;
+}
+
 body {
   background: #ffffff;
   color: var(--color-paragraph);
