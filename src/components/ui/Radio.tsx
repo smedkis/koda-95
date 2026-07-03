@@ -2,7 +2,7 @@ import { forwardRef, type InputHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { Eyebrow, TextMedium, TextSmall } from "./Typography";
 
-type CheckboxProps = InputHTMLAttributes<HTMLInputElement> & {
+type RadioProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: ReactNode;
   labelSize?: "sm" | "md" | "eyebrow";
 };
@@ -13,8 +13,8 @@ const LABEL_COMPONENTS = {
   eyebrow: Eyebrow,
 };
 
-export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { label, labelSize = "sm", className, required, ...props },
+export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(
+  { label, labelSize = "md", className, required, ...props },
   ref,
 ) {
   const LabelText = LABEL_COMPONENTS[labelSize];
@@ -23,26 +23,13 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
       <span className="relative inline-flex size-4 shrink-0">
         <input
           ref={ref}
-          type="checkbox"
+          type="radio"
           required={required}
           className="peer absolute inset-0 z-10 size-full cursor-pointer opacity-0"
           {...props}
         />
-        <span className="pointer-events-none absolute inset-0 rounded border border-paragraph bg-white transition-colors peer-checked:bg-secondary" />
-        <svg
-          viewBox="0 0 16 16"
-          fill="none"
-          aria-hidden="true"
-          className="pointer-events-none relative z-[1] m-auto size-3 text-black opacity-0 transition-opacity peer-checked:opacity-100"
-        >
-          <path
-            d="M3 8.5L6.5 12L13 4.5"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <span className="pointer-events-none absolute inset-0 rounded-full border border-paragraph bg-white transition-colors peer-checked:border-secondary" />
+        <span className="pointer-events-none absolute inset-0 m-auto size-2 scale-0 rounded-full bg-secondary-dark transition-transform peer-checked:scale-100" />
       </span>
       {label ? (
         <LabelText as="span" className="select-none">
