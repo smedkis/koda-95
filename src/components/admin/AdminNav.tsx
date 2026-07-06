@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 import { logout } from "@/app/(admin)/actions";
 import { Container } from "@/components/ui/Container";
-import { TextMedium } from "@/components/ui/Typography";
+import { Text, TextMedium } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
+import { searchDrivers } from "@/lib/admin-drivers-store";
 
 function SearchIcon() {
   return (
@@ -38,8 +39,18 @@ function ClearIcon() {
 
 export function AdminNav() {
   const [search, setSearch] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const isLoginPage = pathname === "/prijava";
+
+  const results = useMemo(() => searchDrivers(search), [search]);
+
+  const handleSelect = (terminId: string, driverId: string) => {
+    setSearch("");
+    setIsFocused(false);
+    router.push(`/admin/termini/${terminId}/vozniki/${driverId}`);
+  };
 
   return (
     <div className="w-screen border-b border-divider bg-white ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]">
@@ -93,13 +104,15 @@ export function AdminNav() {
         )}
         {isLoginPage ? null : (
           <div className="flex items-center justify-self-end gap-8">
-            <label className="flex items-center gap-2 rounded border border-divider bg-secondary-bg px-[14px] py-[10px]">
+            <label className="relative flex items-center gap-2 rounded border border-divider bg-secondary-bg px-[14px] py-[10px]">
               <SearchIcon />
               <input
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Išči voznike ali termine"
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+                placeholder="Išči voznike"
                 className="w-40 border-0 bg-transparent font-body text-[16px] text-paragraph placeholder-placeholder outline-none [&::-webkit-search-cancel-button]:hidden"
               />
               <button
@@ -110,6 +123,27 @@ export function AdminNav() {
               >
                 <ClearIcon />
               </button>
+              {isFocused && search.trim() ? (
+                <div className="absolute top-full right-0 z-50 mt-2 w-80 max-h-80 overflow-y-auto rounded border border-divider bg-white shadow-lg">
+                  {results.length > 0 ? (
+                    results.map(({ driver, terminId, terminTitle }) => (
+                      <button
+                        key={`${terminId}-${driver.id}`}
+                        type="button"
+                        onClick={() => handleSelect(terminId, driver.id)}
+                        className="flex w-full cursor-pointer flex-col items-start gap-0.5 border-b border-divider px-4 py-3 text-left last:border-b-0 hover:bg-secondary-bg"
+                      >
+                        <TextMedium className="text-[14px]">{driver.driverName}</TextMedium>
+                        <Text className="text-[12px] text-placeholder">{terminTitle}</Text>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="px-4 py-3">
+                      <Text className="text-[14px] text-placeholder">Ni zadetkov</Text>
+                    </div>
+                  )}
+                </div>
+              ) : null}
             </label>
             <form action={logout}>
               <button

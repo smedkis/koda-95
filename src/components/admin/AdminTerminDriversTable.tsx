@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Eyebrow, Text } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
@@ -8,11 +9,31 @@ import { cn } from "@/lib/cn";
 export type TerminDriver = {
   id: string;
   driverName: string;
-  category: "C" | "D" | "C+D";
+  email?: string;
+  phone?: string;
+  dateOfBirth?: string;
+  birthPlace?: string;
+  birthCountry?: string;
+  citizenship?: string;
+  emso?: string;
+  address?: string;
+  tempAddress?: string;
+  categoryC?: boolean;
+  categoryD?: boolean;
+  paymentMethod?: string;
+  paymentAmount?: string;
+  paymentReference?: string;
   formStatus: "izpolnjen" | "manjka";
   paymentStatus: "caka" | "poslano" | "poravnano";
   payer: "sam" | string;
 };
+
+export function formatDriverCategory(driver: TerminDriver): string {
+  if (driver.categoryC && driver.categoryD) return "C+D";
+  if (driver.categoryC) return "C";
+  if (driver.categoryD) return "D";
+  return "—";
+}
 
 const COLUMNS = ["Voznik", "Kategorija", "Obrazec", "Plačilo", "Plačnik"];
 const PAGE_SIZE_OPTIONS = [10, 50, 100];
@@ -54,7 +75,13 @@ function PaymentBadge({ status }: { status: TerminDriver["paymentStatus"] }) {
   );
 }
 
-export function AdminTerminDriversTable({ drivers }: { drivers: TerminDriver[] }) {
+export function AdminTerminDriversTable({
+  terminId,
+  drivers,
+}: {
+  terminId: string;
+  drivers: TerminDriver[];
+}) {
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -98,7 +125,7 @@ export function AdminTerminDriversTable({ drivers }: { drivers: TerminDriver[] }
                   <Text className="text-[14px]">{driver.driverName}</Text>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap">
-                  <Text className="text-[14px]">{driver.category}</Text>
+                  <Text className="text-[14px]">{formatDriverCategory(driver)}</Text>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap">
                   <FormBadge status={driver.formStatus} />
@@ -112,8 +139,8 @@ export function AdminTerminDriversTable({ drivers }: { drivers: TerminDriver[] }
                   </Text>
                 </td>
                 <td className="px-4 py-4 text-right">
-                  <button
-                    type="button"
+                  <Link
+                    href={`/admin/termini/${terminId}/vozniki/${driver.id}`}
                     aria-label={`Uredi ${driver.driverName}`}
                     className="inline-flex cursor-pointer items-center hover:opacity-60"
                   >
@@ -124,7 +151,7 @@ export function AdminTerminDriversTable({ drivers }: { drivers: TerminDriver[] }
                       height={16}
                       className="size-4 shrink-0"
                     />
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AddVoznikModal } from "./AddVoznikModal";
 import type { AdminTerminCardProps } from "./AdminTerminCard";
 import {
   AdminTerminDriversTable,
@@ -10,85 +11,17 @@ import {
 } from "./AdminTerminDriversTable";
 import { Button } from "@/components/ui/Button";
 import { Heading2, Heading3, Text } from "@/components/ui/Typography";
+import { addDriverToTermin, getDriversForTermin } from "@/lib/admin-drivers-store";
+import { PLACEHOLDER_DRIVERS } from "@/lib/admin-drivers-data";
 import {
   getAddedTermini,
   getTerminOverrides,
   parseModul,
   type StoredTermin,
 } from "@/lib/admin-termini-store";
+import { generateAttendancePdf } from "@/lib/generate-attendance-pdf";
 
 type BaseTermin = AdminTerminCardProps & { program: "redna" | "zacetna" };
-
-// Placeholder data — will be replaced with a real Supabase query filtered
-// by the termin id. Respects the rule that a missing form always implies
-// payment status "čaka" (a driver can't have paid or been sent a payment
-// before they've even filled out the registration form).
-const PLACEHOLDER_DRIVERS: TerminDriver[] = [
-  {
-    id: "1",
-    driverName: "Janez Novak",
-    category: "C",
-    formStatus: "izpolnjen",
-    paymentStatus: "poravnano",
-    payer: "sam",
-  },
-  {
-    id: "2",
-    driverName: "Ana Kovač",
-    category: "D",
-    formStatus: "izpolnjen",
-    paymentStatus: "poslano",
-    payer: "Kobal d.o.o.",
-  },
-  {
-    id: "3",
-    driverName: "Marko Zupan",
-    category: "C+D",
-    formStatus: "manjka",
-    paymentStatus: "caka",
-    payer: "sam",
-  },
-  {
-    id: "4",
-    driverName: "Petra Horvat",
-    category: "C",
-    formStatus: "izpolnjen",
-    paymentStatus: "poravnano",
-    payer: "Arriva",
-  },
-  {
-    id: "5",
-    driverName: "Luka Bregar",
-    category: "D",
-    formStatus: "izpolnjen",
-    paymentStatus: "caka",
-    payer: "sam",
-  },
-  {
-    id: "6",
-    driverName: "Nina Potočnik",
-    category: "C",
-    formStatus: "manjka",
-    paymentStatus: "caka",
-    payer: "sam",
-  },
-  {
-    id: "7",
-    driverName: "Rok Kranjc",
-    category: "C+D",
-    formStatus: "izpolnjen",
-    paymentStatus: "poslano",
-    payer: "Jurenič Transport",
-  },
-  {
-    id: "8",
-    driverName: "Maja Vidmar",
-    category: "D",
-    formStatus: "izpolnjen",
-    paymentStatus: "poravnano",
-    payer: "sam",
-  },
-];
 
 export function AdminTerminDetailContent({
   id,
@@ -98,6 +31,9 @@ export function AdminTerminDetailContent({
   baseTermin: BaseTermin | null;
 }) {
   const [termin, setTermin] = useState<BaseTermin | StoredTermin | null>(baseTermin);
+  const [drivers, setDrivers] = useState<TerminDriver[]>(PLACEHOLDER_DRIVERS);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     const overrides = getTerminOverrides();
@@ -113,6 +49,10 @@ export function AdminTerminDetailContent({
     setTermin(baseTermin);
   }, [id, baseTermin]);
 
+  useEffect(() => {
+    setDrivers(getDriversForTermin(id, PLACEHOLDER_DRIVERS));
+  }, [id]);
+
   if (!termin) {
     return <Text className="mt-4">Termina ni bilo mogoče najti.</Text>;
   }
@@ -120,15 +60,37 @@ export function AdminTerminDetailContent({
   const cleanTitle = termin.title.replace(/\s*\([^)]*\)\s*$/, "");
   const modul = termin.program === "redna" ? parseModul(termin.title) : undefined;
 
+  const handleExport = async () => {
+    setIsExporting(true);
+    try {
+      await generateAttendancePdf({
+        id,
+        title: cleanTitle,
+        modul,
+        date: termin.date,
+        address: termin.address,
+        drivers,
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <>
       <div className="mt-4 flex items-center justify-between">
         <Heading2>{cleanTitle}</Heading2>
         <Link
           href={`/admin/termini/${id}/uredi`}
-          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-black hover:text-white"
+          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-[#d06e1b]"
         >
-          <Image src="/Edit-white.svg" alt="" width={16} height={16} className="size-4 shrink-0" />
+          <Image
+            src="/Edit-white.svg"
+            alt=""
+            width={16}
+            height={16}
+            className="size-4 shrink-0"
+          />
           Uredi
         </Link>
       </div>
@@ -153,12 +115,13 @@ export function AdminTerminDetailContent({
         </div>
       </div>
       <div className="mt-16 flex items-center justify-between">
-        <Heading3>Prijavljeni vozniki ({PLACEHOLDER_DRIVERS.length})</Heading3>
+        <Heading3>Prijavljeni vozniki ({drivers.length})</Heading3>
         <div className="flex items-center gap-4">
           <Button
             type="button"
             variant="action"
             icon={<Image src="/plus.svg" alt="" width={13} height={13} />}
+            onClick={() => setIsAddOpen(true)}
           >
             Dodaj
           </Button>
@@ -166,14 +129,25 @@ export function AdminTerminDetailContent({
             type="button"
             variant="action"
             icon={<Image src="/icon-print.svg" alt="" width={16} height={16} />}
+            onClick={handleExport}
+            disabled={isExporting}
           >
-            Izvoz
+            {isExporting ? "Izvažam …" : "Izvoz"}
           </Button>
         </div>
       </div>
       <div className="mt-6">
-        <AdminTerminDriversTable drivers={PLACEHOLDER_DRIVERS} />
+        <AdminTerminDriversTable terminId={id} drivers={drivers} />
       </div>
+      {isAddOpen ? (
+        <AddVoznikModal
+          onAdd={(driver) => {
+            addDriverToTermin(id, driver, PLACEHOLDER_DRIVERS);
+            setDrivers((current) => [driver, ...current]);
+          }}
+          onClose={() => setIsAddOpen(false)}
+        />
+      ) : null}
     </>
   );
 }

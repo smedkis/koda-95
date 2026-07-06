@@ -6,10 +6,11 @@ import { Eyebrow } from "./Typography";
 // placeholder until confirmed.
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
+  inputClassName?: string;
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, label, required, ...props },
+  { className, inputClassName, label, required, ...props },
   ref,
 ) {
   return (
@@ -28,6 +29,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           "font-body text-[16px] text-paragraph placeholder-placeholder",
           "focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary",
           "disabled:cursor-not-allowed disabled:opacity-50",
+          inputClassName,
         )}
         {...props}
       />
