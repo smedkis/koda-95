@@ -88,7 +88,7 @@ export function AdminTerminiPageContent({
           <ProgramToggle program={program} onChange={setProgram} />
           <Link
             href="/admin/termini/dodaj"
-            className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-black hover:text-white"
+            className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-[#d06e1b]"
           >
             <Image src="/plus.svg" alt="" width={14} height={14} className="size-4 shrink-0" />
             Dodaj termin

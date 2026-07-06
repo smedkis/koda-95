@@ -30,7 +30,7 @@ export function ObvescanjePageContent({
         <Heading2>Obveščanje</Heading2>
         <Link
           href="/admin/obvescanje/posiljanje"
-          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-black hover:text-white"
+          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-[#d06e1b]"
         >
           <Image src="/bell-white.svg" alt="" width={16} height={16} className="size-4 shrink-0" />
           Pošlji obvestilo

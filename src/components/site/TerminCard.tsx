@@ -73,8 +73,9 @@ export function TerminCard({
       style={
         isNext
           ? {
-              backgroundImage:
-                "linear-gradient(#fff, #FFF6EC), linear-gradient(90deg, #f58220, #ffab5c)",
+              // Same flat fill as a regular card's bg-secondary-bg — only the
+              // border keeps its orange gradient to mark this as "next".
+              backgroundImage: "linear-gradient(#FAFAFA, #FAFAFA), linear-gradient(90deg, #f58220, #ffab5c)",
               backgroundOrigin: "border-box",
               backgroundClip: "padding-box, border-box",
             }
@@ -116,7 +117,7 @@ export function TerminCard({
         </div>
       ) : null}
       <div className="mt-6 flex items-center justify-between gap-3">
-        <span className="inline-flex w-fit items-center justify-center gap-2 self-start rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-black hover:text-white">
+        <span className="inline-flex w-fit items-center justify-center gap-2 self-start rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#2db896]">
           {t("reserve")}
         </span>
         <Text className="whitespace-nowrap text-right text-[14px] font-medium text-[#006e5e]">

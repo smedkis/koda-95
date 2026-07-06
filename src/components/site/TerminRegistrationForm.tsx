@@ -18,8 +18,9 @@ export function TerminRegistrationForm({ daysUntil }: { daysUntil?: number }) {
       style={
         isNext
           ? {
-              backgroundImage:
-                "linear-gradient(#fff, #FFF6EC), linear-gradient(90deg, #f58220, #ffab5c)",
+              // Same flat fill as a regular card's bg-secondary-bg — only the
+              // border keeps its orange gradient to mark this as "next".
+              backgroundImage: "linear-gradient(#FAFAFA, #FAFAFA), linear-gradient(90deg, #f58220, #ffab5c)",
               backgroundOrigin: "border-box",
               backgroundClip: "padding-box, border-box",
             }
