@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { ColumnGuides } from "@/components/site/ColumnGuides";
 import { FaqSection } from "@/components/site/FaqSection";
@@ -51,7 +50,6 @@ export default async function TerminPage({
   const termin = getTermin(slug);
   if (!termin) notFound();
 
-  const t = await getTranslations("Programs.redna");
   const isNext = isNextTermin(
     termin.dateISO,
     PLACEHOLDER_TERMINI.map((entry) => entry.dateISO),
@@ -65,7 +63,6 @@ export default async function TerminPage({
           <div className="grid grid-cols-5 gap-24 pb-32">
             <div className="col-span-2 min-w-0">
               <TerminDetails
-                programLabel={t("name")}
                 programHref="/redna-koda-95"
                 title={termin.title}
                 description={termin.description}

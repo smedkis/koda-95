@@ -3,6 +3,7 @@ import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
+import { Text } from "@/components/ui/Typography";
 
 export function TerminRegistrationForm({ daysUntil }: { daysUntil?: number }) {
   const t = useTranslations("TerminRegistrationForm");
@@ -11,8 +12,8 @@ export function TerminRegistrationForm({ daysUntil }: { daysUntil?: number }) {
     <Box
       className={
         isNext
-          ? "relative flex flex-col border-2 border-transparent shadow-[0_16px_36px_-20px_rgba(245,130,32,0.45)]"
-          : "flex flex-col"
+          ? "relative flex flex-col border-2 border-transparent pb-6 shadow-[0_16px_36px_-20px_rgba(245,130,32,0.45)]"
+          : "flex flex-col pb-6"
       }
       style={
         isNext
@@ -62,6 +63,9 @@ export function TerminRegistrationForm({ daysUntil }: { daysUntil?: number }) {
       <Button variant="secondary" className="mt-8 w-full">
         {t("submit")}
       </Button>
+      <Text className="mt-2 text-center text-[14px] font-medium text-[#006e5e]">
+        Prijavi se zdaj, plačaj kasneje
+      </Text>
     </Box>
   );
 }

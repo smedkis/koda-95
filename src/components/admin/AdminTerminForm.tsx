@@ -1,0 +1,234 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { AdminTerminCard } from "./AdminTerminCard";
+import {
+  addTermin,
+  formatSlovenianDate,
+  formatTimeRange,
+  saveTerminEdit,
+  type StoredTermin,
+} from "@/lib/admin-termini-store";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Eyebrow, Heading3 } from "@/components/ui/Typography";
+import { cn } from "@/lib/cn";
+
+type Program = "redna" | "zacetna";
+
+// Placeholder presets — first is the real location, the other two are
+// stand-ins until the actual additional locations are confirmed.
+const LOCATION_PRESETS = [
+  "Pot za krajem 35, 4000 Kranj",
+  "Cesta na Loko 12, 4000 Kranj",
+  "Savska cesta 8, 4000 Kranj",
+];
+const CUSTOM_LOCATION = "drugo";
+
+// Redna Koda 95 is split into yearly modules (35h spread over 5 years) — the
+// module year shows up in the termin title, independent of the session's
+// actual calendar date. Začetna has no module concept, just dated sessions.
+const MODUL_OPTIONS = ["2026", "2025", "2024", "2023", "2022", "2021", "2020"];
+
+function ProgramToggle({
+  program,
+  onChange,
+}: {
+  program: Program;
+  onChange: (program: Program) => void;
+}) {
+  const options: { value: Program; label: string }[] = [
+    { value: "redna", label: "Redna Koda 95" },
+    { value: "zacetna", label: "Začetna Koda 95" },
+  ];
+  return (
+    <div className="flex h-11 items-center gap-1 rounded border border-divider bg-[#F0F0F0] p-1">
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          onClick={() => onChange(option.value)}
+          className={cn(
+            "flex h-full flex-1 cursor-pointer items-center justify-center rounded px-4 font-body text-[16px] font-medium",
+            program === option.value ? "bg-white text-heading" : "text-placeholder",
+          )}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function AdminTerminForm({ initialTermin }: { initialTermin?: StoredTermin }) {
+  const router = useRouter();
+  const isEdit = !!initialTermin;
+
+  const [program, setProgram] = useState<Program>(initialTermin?.program ?? "redna");
+  const [modul, setModul] = useState(initialTermin?.modul ?? MODUL_OPTIONS[0]);
+  const [date, setDate] = useState(initialTermin?.dateISO ?? "");
+  const [startTime, setStartTime] = useState(initialTermin?.startTime ?? "15:00");
+  const [endTime, setEndTime] = useState(initialTermin?.endTime ?? "21:00");
+  const [locationChoice, setLocationChoice] = useState(() => {
+    if (initialTermin && !LOCATION_PRESETS.includes(initialTermin.address)) return CUSTOM_LOCATION;
+    return initialTermin?.address ?? LOCATION_PRESETS[0];
+  });
+  const [customAddress, setCustomAddress] = useState(() =>
+    initialTermin && !LOCATION_PRESETS.includes(initialTermin.address) ? initialTermin.address : "",
+  );
+  const address = locationChoice === CUSTOM_LOCATION ? customAddress : locationChoice;
+  const [capacity, setCapacity] = useState(initialTermin?.capacity ?? 24);
+  const [price, setPrice] = useState(initialTermin?.price ?? "50 EUR z DDV");
+
+  const isValid =
+    date.length > 0 &&
+    startTime.length > 0 &&
+    endTime.length > 0 &&
+    (program === "zacetna" || capacity > 0);
+
+  const title =
+    program === "redna"
+      ? `Redno usposabljanje Koda 95 (Modul ${modul})`
+      : "Začetno usposabljanje Koda 95";
+
+  const previewTermin = useMemo(() => {
+    return {
+      id: initialTermin?.id ?? (date ? `${program}-${date}` : `${program}-preview`),
+      program,
+      title,
+      date: date ? formatSlovenianDate(date) : "Izberi datum",
+      address: address || "Vnesi lokacijo",
+      timeRange: formatTimeRange(startTime, endTime),
+      attendeeCount: program === "zacetna" ? undefined : (initialTermin?.attendeeCount ?? 0),
+      capacity: program === "zacetna" ? undefined : capacity || 0,
+      registeredCount: initialTermin?.registeredCount ?? 0,
+      formsCompletedCount: initialTermin?.formsCompletedCount ?? 0,
+      paidCount: initialTermin?.paidCount ?? 0,
+      isPast: initialTermin?.isPast,
+      price: program === "redna" ? price : undefined,
+    };
+  }, [initialTermin, program, title, date, address, startTime, endTime, capacity, price]);
+
+  const handleSubmit = () => {
+    if (!isValid) return;
+    const termin: StoredTermin = {
+      ...previewTermin,
+      price: program === "redna" ? price : undefined,
+      program,
+      dateISO: date,
+      startTime,
+      endTime,
+      modul: program === "redna" ? modul : undefined,
+    };
+    if (isEdit) {
+      saveTerminEdit(termin);
+      router.push(`/admin/termini/${termin.id}`);
+    } else {
+      addTermin(termin);
+      router.push("/admin/termini");
+    }
+  };
+
+  return (
+    <div className="mt-16 grid grid-cols-2 gap-16">
+      <div>
+        <Heading3>Podatki o terminu</Heading3>
+        <div className="mt-6 flex flex-col gap-6">
+          <div>
+            <Eyebrow className="mb-2">Program</Eyebrow>
+            <ProgramToggle program={program} onChange={setProgram} />
+          </div>
+          {program === "redna" ? (
+            <Select
+              label="Modul"
+              required
+              value={modul}
+              onChange={(event) => setModul(event.target.value)}
+            >
+              {MODUL_OPTIONS.map((year) => (
+                <option key={year} value={year}>
+                  Modul {year}
+                </option>
+              ))}
+            </Select>
+          ) : null}
+          <Input
+            label="Datum"
+            type="date"
+            required
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Začetek"
+              type="time"
+              required
+              value={startTime}
+              onChange={(event) => setStartTime(event.target.value)}
+            />
+            <Input
+              label="Konec"
+              type="time"
+              required
+              value={endTime}
+              onChange={(event) => setEndTime(event.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-4">
+            <Select
+              label="Lokacija"
+              value={locationChoice}
+              onChange={(event) => setLocationChoice(event.target.value)}
+            >
+              {LOCATION_PRESETS.map((preset) => (
+                <option key={preset} value={preset}>
+                  {preset}
+                </option>
+              ))}
+              <option value={CUSTOM_LOCATION}>Drugo …</option>
+            </Select>
+            {locationChoice === CUSTOM_LOCATION ? (
+              <Input
+                label="Naslov"
+                placeholder="Vnesi naslov"
+                value={customAddress}
+                onChange={(event) => setCustomAddress(event.target.value)}
+              />
+            ) : null}
+          </div>
+          {program === "redna" ? (
+            <Input
+              label="Kapaciteta"
+              type="number"
+              min={1}
+              required
+              value={capacity}
+              onChange={(event) => setCapacity(Number(event.target.value))}
+            />
+          ) : null}
+          {program === "redna" ? (
+            <Input label="Cena" value={price} onChange={(event) => setPrice(event.target.value)} />
+          ) : null}
+        </div>
+        <Button
+          type="button"
+          variant="primary"
+          className="mt-8"
+          disabled={!isValid}
+          onClick={handleSubmit}
+        >
+          {isEdit ? "Shrani spremembe" : "Dodaj termin"}
+        </Button>
+      </div>
+      <div>
+        <Heading3>Predogled</Heading3>
+        <div className="mt-6">
+          <AdminTerminCard {...previewTermin} showActions={false} />
+        </div>
+      </div>
+    </div>
+  );
+}

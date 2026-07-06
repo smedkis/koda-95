@@ -1,26 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { AdminBackLink } from "./AdminBackLink";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
-import { Heading2, Heading3, TextMedium } from "@/components/ui/Typography";
-
-function ArrowLeftIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="size-3.5 shrink-0">
-      <path d="M5.09976 12L19.5 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
-      <path
-        d="M10.5498 18.0246L4.4998 12.0006L10.5498 5.97559"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="square"
-      />
-    </svg>
-  );
-}
+import { Heading2, Heading3 } from "@/components/ui/Typography";
 
 export type TerminOption = {
   id: string;
@@ -92,15 +78,7 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
 
   return (
     <div className="mt-32 mb-32">
-      <Link
-        href="/admin/obvescanje"
-        className="inline-flex items-center gap-1.5 text-placeholder hover:text-paragraph hover:underline"
-      >
-        <ArrowLeftIcon />
-        <TextMedium as="span" className="text-inherit">
-          Obveščanje
-        </TextMedium>
-      </Link>
+      <AdminBackLink href="/admin/obvescanje" label="Obveščanje" />
       <Heading2 className="mt-4">Pošlji obvestilo</Heading2>
 
       <Heading3 className="mt-8">1. Komu</Heading3>

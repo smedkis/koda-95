@@ -7,12 +7,13 @@ export function Box({
   children,
   className,
   style,
+  ...rest
 }: {
   as?: ElementType;
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
-}) {
+} & Record<string, unknown>) {
   return (
     <Tag
       className={cn(
@@ -20,6 +21,7 @@ export function Box({
         className,
       )}
       style={style}
+      {...rest}
     >
       {children}
     </Tag>

@@ -49,6 +49,7 @@
   },
   "TerminDetails": {
     "home": "Home",
+    "backToTermini": "All sessions",
     "detailsHeading": "Session details",
     "location": "Location",
     "mapTitle": "Session location"

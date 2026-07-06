@@ -2,8 +2,10 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Box } from "@/components/ui/Box";
-import { ButtonLink } from "@/components/ui/Button";
 import { Heading3, Text } from "@/components/ui/Typography";
+import { Link } from "@/i18n/navigation";
+import { parseModul } from "@/lib/admin-termini-store";
+import { cn } from "@/lib/cn";
 
 function InfoRow({ icon, children }: { icon: string; children: ReactNode }) {
   return (
@@ -14,32 +16,15 @@ function InfoRow({ icon, children }: { icon: string; children: ReactNode }) {
   );
 }
 
-function CapacityBar({
-  attendeeCount,
-  capacity,
-}: {
-  attendeeCount: number;
-  capacity: number;
-}) {
-  const percentage = Math.min(100, Math.round((attendeeCount / capacity) * 100));
-  const spotsLeft = Math.max(0, capacity - attendeeCount);
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-2">
-        <Image
-          src="/icon-profile.svg"
-          alt=""
-          width={24}
-          height={24}
-          className="size-6 shrink-0"
-        />
-        <Text className="whitespace-nowrap">Prosta mesta: {spotsLeft}</Text>
-      </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-divider">
-        <div className="h-full rounded-full bg-primary" style={{ width: `${percentage}%` }} />
-      </div>
-    </div>
-  );
+// Slovenian has dual number in addition to singular/plural, so "mesto"
+// declines differently depending on the count (checked on the last two
+// digits): 1 → mesto, 2 → mesti, 3-4 → mesta, 0 and 5+ → mest.
+function formatProstaMesta(count: number): string {
+  const lastTwoDigits = count % 100;
+  if (lastTwoDigits === 1) return `${count} prosto mesto`;
+  if (lastTwoDigits === 2) return `${count} prosti mesti`;
+  if (lastTwoDigits === 3 || lastTwoDigits === 4) return `${count} prosta mesta`;
+  return `${count} prostih mest`;
 }
 
 export type TerminCardProps = {
@@ -67,8 +52,19 @@ export function TerminCard({
 }: TerminCardProps) {
   const t = useTranslations("TerminCard");
   const isNext = daysUntil !== undefined;
+  const modul = parseModul(title);
+  const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, "");
+  const hasCapacity = capacity !== undefined && attendeeCount !== undefined;
+  const percentage = hasCapacity
+    ? Math.min(100, Math.round(((attendeeCount as number) / (capacity as number)) * 100))
+    : 0;
+  const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - (attendeeCount as number)) : 0;
+  const isScarce = hasCapacity && spotsLeft < 10;
+
   return (
     <Box
+      as={Link}
+      href={href}
       className={
         isNext
           ? "relative flex flex-col border-2 border-transparent shadow-[0_16px_36px_-20px_rgba(245,130,32,0.45)] transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_40px_-16px_rgba(245,130,32,0.55)]"
@@ -90,29 +86,43 @@ export function TerminCard({
           Naslednji termin · Čez {daysUntil} {daysUntil === 1 ? "dan" : "dni"}
         </span>
       ) : null}
-      <Heading3>{title}</Heading3>
+      <Heading3>{cleanTitle}</Heading3>
       <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4">
+        {modul ? <InfoRow icon="/Category.svg">Modul {modul}</InfoRow> : null}
+        {price ? <InfoRow icon="/icon-ticket.svg">{price}</InfoRow> : null}
         <InfoRow icon="/icon-calendar.svg">{date}</InfoRow>
         <InfoRow icon="/icon-clock.svg">{timeRange}</InfoRow>
+        <InfoRow icon="/icon-location.svg">{address}</InfoRow>
+        {hasCapacity ? (
+          <InfoRow icon="/icon-profile.svg">
+            {attendeeCount}/{capacity}
+          </InfoRow>
+        ) : (
+          <InfoRow icon="/icon-profile.svg">Neomejeno prostih mest</InfoRow>
+        )}
       </div>
-      {price ? (
-        <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-4">
-          <InfoRow icon="/icon-location.svg">{address}</InfoRow>
-          <InfoRow icon="/icon-ticket.svg">{price}</InfoRow>
-        </div>
-      ) : (
-        <div className="mt-4">
-          <InfoRow icon="/icon-location.svg">{address}</InfoRow>
-        </div>
-      )}
-      {capacity !== undefined && attendeeCount !== undefined ? (
+      {hasCapacity ? (
         <div className="mt-6">
-          <CapacityBar attendeeCount={attendeeCount} capacity={capacity} />
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-divider">
+            <div
+              className={cn("h-full rounded-full", isScarce ? "bg-[#852600]" : "bg-[#006e5e]")}
+              style={{ width: `${percentage}%` }}
+            />
+          </div>
+          <Text className={cn("mt-2", isScarce ? "text-[#852600]" : "text-[#006e5e]")}>
+            {isScarce ? "Veliko povpraševanja · " : ""}
+            {formatProstaMesta(spotsLeft)}
+          </Text>
         </div>
       ) : null}
-      <ButtonLink href={href} variant="secondary" className="mt-6 self-start">
-        {t("reserve")}
-      </ButtonLink>
+      <div className="mt-6 flex items-center justify-between gap-3">
+        <span className="inline-flex w-fit items-center justify-center gap-2 self-start rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-black hover:text-white">
+          {t("reserve")}
+        </span>
+        <Text className="whitespace-nowrap text-right text-[14px] font-medium text-[#006e5e]">
+          Prijavi se zdaj, plačaj kasneje
+        </Text>
+      </div>
     </Box>
   );
 }

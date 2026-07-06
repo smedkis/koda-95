@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PosljiObvestiloPageContent } from "@/components/admin/PosljiObvestiloPageContent";
-import { PLACEHOLDER_TERMINI } from "../../termini/page";
+import { PLACEHOLDER_TERMINI } from "@/lib/admin-termini-data";
 
 export const metadata: Metadata = {
   title: "Pošlji obvestilo | Koda 95 Admin",

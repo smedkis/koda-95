@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
-import { Breadcrumbs } from "./Breadcrumbs";
-import { Eyebrow, Heading2, Text } from "@/components/ui/Typography";
+import { Eyebrow, Heading2, Text, TextMedium } from "@/components/ui/Typography";
+import { Link } from "@/i18n/navigation";
 
 function DetailRow({ icon, children }: { icon: string; children: ReactNode }) {
   return (
@@ -13,8 +13,21 @@ function DetailRow({ icon, children }: { icon: string; children: ReactNode }) {
   );
 }
 
+function ArrowLeftIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="size-3.5 shrink-0">
+      <path d="M5.09976 12L19.5 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+      <path
+        d="M10.5498 18.0246L4.4998 12.0006L10.5498 5.97559"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="square"
+      />
+    </svg>
+  );
+}
+
 export function TerminDetails({
-  programLabel,
   programHref,
   title,
   description,
@@ -24,7 +37,6 @@ export function TerminDetails({
   timeRange,
   address,
 }: {
-  programLabel: string;
   programHref: string;
   title: string;
   description: string;
@@ -37,12 +49,15 @@ export function TerminDetails({
   const t = useTranslations("TerminDetails");
   return (
     <div>
-      <Breadcrumbs
-        items={[
-          { label: programLabel, href: programHref },
-          { label: title },
-        ]}
-      />
+      <Link
+        href={programHref}
+        className="inline-flex items-center gap-1.5 text-placeholder hover:text-paragraph hover:underline"
+      >
+        <ArrowLeftIcon />
+        <TextMedium as="span" className="text-inherit">
+          {t("backToTermini")}
+        </TextMedium>
+      </Link>
       <Heading2 className="mt-6">{title}</Heading2>
       <Text className="mt-4">{description}</Text>
       <Eyebrow className="mt-8">{t("detailsHeading")}</Eyebrow>
@@ -60,12 +75,10 @@ export function TerminDetails({
           </>
         ) : (
           <>
-            <div className="flex flex-col gap-2">
+            <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
+            <DetailRow icon="/icon-clock.svg">{timeRange}</DetailRow>
+            <div className="col-span-2">
               <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
-              <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
-            </div>
-            <div className="flex flex-col gap-2">
-              <DetailRow icon="/icon-clock.svg">{timeRange}</DetailRow>
             </div>
           </>
         )}

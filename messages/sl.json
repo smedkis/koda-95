@@ -49,6 +49,7 @@
   },
   "TerminDetails": {
     "home": "Domov",
+    "backToTermini": "Vsi termini",
     "detailsHeading": "Podrobnosti termina",
     "location": "Lokacija",
     "mapTitle": "Lokacija termina"

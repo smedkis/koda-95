@@ -16,7 +16,7 @@ export function NumbersSection() {
       <div className="mt-16 grid w-full grid-cols-5 gap-8">
         {NUMBERS.map((item) => (
           <div key={item.label} className="flex flex-col items-start gap-2 text-left">
-            <Heading1 as="span" className="text-secondary-dark">
+            <Heading1 as="span" className="text-[#006b5e]">
               {item.value}
             </Heading1>
             <TextMedium>{item.label}</TextMedium>

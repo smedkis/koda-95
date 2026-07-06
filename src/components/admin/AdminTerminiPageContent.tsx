@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import type { AdminTerminCardProps } from "./AdminTerminCard";
 import { AdminTerminiGrid } from "./AdminTerminiGrid";
-import { Button } from "@/components/ui/Button";
 import { Heading2 } from "@/components/ui/Typography";
+import { getAddedTermini, getTerminOverrides } from "@/lib/admin-termini-store";
 import { cn } from "@/lib/cn";
 
 type Program = "vsi" | "redna" | "zacetna";
@@ -51,13 +52,33 @@ export function AdminTerminiPageContent({
   pastTermini: TerminEntry[];
 }) {
   const [program, setProgram] = useState<Program>("vsi");
+  const [allTermini, setAllTermini] = useState<TerminEntry[]>(termini);
+  const [allPastTermini, setAllPastTermini] = useState<TerminEntry[]>(pastTermini);
+
+  useEffect(() => {
+    const overrides = getTerminOverrides();
+    const added = getAddedTermini() as TerminEntry[];
+
+    setAllTermini((current) => {
+      const withOverrides = current.map((termin) =>
+        overrides[termin.id] ? (overrides[termin.id] as TerminEntry) : termin,
+      );
+      const existingIds = new Set(withOverrides.map((termin) => termin.id));
+      const newOnes = added.filter((termin) => !existingIds.has(termin.id));
+      return [...withOverrides, ...newOnes];
+    });
+
+    setAllPastTermini((current) =>
+      current.map((termin) => (overrides[termin.id] ? (overrides[termin.id] as TerminEntry) : termin)),
+    );
+  }, []);
 
   const filteredTermini =
-    program === "vsi" ? termini : termini.filter((termin) => termin.program === program);
+    program === "vsi" ? allTermini : allTermini.filter((termin) => termin.program === program);
   const filteredPastTermini =
     program === "vsi"
-      ? pastTermini
-      : pastTermini.filter((termin) => termin.program === program);
+      ? allPastTermini
+      : allPastTermini.filter((termin) => termin.program === program);
 
   return (
     <div className="mt-32 mb-32">
@@ -65,13 +86,13 @@ export function AdminTerminiPageContent({
         <Heading2>Termini</Heading2>
         <div className="flex items-center gap-4">
           <ProgramToggle program={program} onChange={setProgram} />
-          <Button
-            type="button"
-            variant="primary"
-            icon={<Image src="/plus.svg" alt="" width={14} height={14} />}
+          <Link
+            href="/admin/termini/dodaj"
+            className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-black hover:text-white"
           >
+            <Image src="/plus.svg" alt="" width={14} height={14} className="size-4 shrink-0" />
             Dodaj termin
-          </Button>
+          </Link>
         </div>
       </div>
       <AdminTerminiGrid termini={filteredTermini} pastTermini={filteredPastTermini} />
