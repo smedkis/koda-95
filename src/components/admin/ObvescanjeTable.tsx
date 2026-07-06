@@ -33,7 +33,7 @@ const COLUMNS: { key: SortKey; label: string }[] = [
   { key: "phone", label: "Tel. št." },
   { key: "dateAdded", label: "Dodan" },
   { key: "source", label: "Vir" },
-  { key: "lastNotified", label: "Zadnje obv." },
+  { key: "lastNotified", label: "Poslano" },
 ];
 
 function formatDate(iso: string | null): string {

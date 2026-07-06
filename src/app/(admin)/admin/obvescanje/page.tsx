@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { ObvescanjePageContent } from "@/components/admin/ObvescanjePageContent";
 import type { ObvescanjeEntry } from "@/components/admin/ObvescanjeTable";
-import { Button } from "@/components/ui/Button";
-import { Heading2, Heading3 } from "@/components/ui/Typography";
 
 export const metadata: Metadata = {
   title: "Obveščanje | Koda 95 Admin",
@@ -138,26 +135,6 @@ const PLACEHOLDER_ENTRIES: ObvescanjeEntry[] = [
 export default function ObvescanjeListPage() {
   return (
     <div className="mt-32 mb-32">
-      <div className="flex items-center justify-between">
-        <Heading2>Obveščanje</Heading2>
-        <Button
-          type="button"
-          variant="primary"
-          icon={<Image src="/bell-white.svg" alt="" width={16} height={16} />}
-        >
-          Pošlji obvestilo
-        </Button>
-      </div>
-      <div className="mt-16 flex items-center justify-between">
-        <Heading3>Naročniki</Heading3>
-        <Button
-          type="button"
-          variant="action"
-          icon={<Image src="/plus.svg" alt="" width={13} height={13} />}
-        >
-          Dodaj
-        </Button>
-      </div>
       <ObvescanjePageContent initialEntries={PLACEHOLDER_ENTRIES} />
     </div>
   );
