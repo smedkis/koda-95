@@ -37,6 +37,24 @@ function ClearIcon() {
   );
 }
 
+function ChartIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={cn("size-5 shrink-0", className)}>
+      <path d="M7.16367 10.4277V16.4576" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="round" />
+      <path d="M12.0006 7.54297V16.4581" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="round" />
+      <path d="M16.8365 13.6143V16.4577" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="round" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M21.25 21.25L21.25 2.75L2.75 2.75L2.75 21.25L21.25 21.25Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function AdminNav() {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -145,13 +163,18 @@ export function AdminNav() {
                 </div>
               ) : null}
             </label>
+            <Link href="/admin/statistika" aria-label="Statistika" className="flex items-center">
+              <ChartIcon
+                className={pathname === "/admin/statistika" ? "text-primary" : "text-[#402E32]"}
+              />
+            </Link>
             <form action={logout}>
               <button
                 type="submit"
                 aria-label="Odjava"
                 className="flex cursor-pointer items-center"
               >
-                <Image src="/Logout.svg" alt="" width={24} height={24} className="size-4 shrink-0" />
+                <Image src="/Logout.svg" alt="" width={20} height={20} className="size-5 shrink-0" />
               </button>
             </form>
           </div>

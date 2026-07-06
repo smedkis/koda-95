@@ -11,6 +11,7 @@ export type TerminDriver = {
   driverName: string;
   email?: string;
   phone?: string;
+  registrationDate?: string;
   dateOfBirth?: string;
   birthPlace?: string;
   birthCountry?: string;

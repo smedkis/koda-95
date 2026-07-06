@@ -9,11 +9,22 @@ import { getAddedTermini, getTerminOverrides } from "@/lib/admin-termini-store";
 // termin detail page to a driver's edit page and back.
 const STORAGE_KEY = "koda95_admin_drivers";
 
+// Bump this whenever PLACEHOLDER_DRIVERS' shape changes (new fields, etc.) —
+// a mismatch wipes the stored cache so browsers with an older seed pick up
+// the new placeholder fields automatically instead of showing stale/missing
+// data until someone manually clears localStorage.
+const STORE_VERSION = 2;
+
+type StoredShape = { version: number; data: Record<string, TerminDriver[]> };
+
 function readAll(): Record<string, TerminDriver[]> {
   if (typeof window === "undefined") return {};
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Record<string, TerminDriver[]>) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as StoredShape;
+    if (parsed.version !== STORE_VERSION) return {};
+    return parsed.data;
   } catch {
     return {};
   }
@@ -21,7 +32,8 @@ function readAll(): Record<string, TerminDriver[]> {
 
 function writeAll(data: Record<string, TerminDriver[]>) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const stored: StoredShape = { version: STORE_VERSION, data };
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
 }
 
 // On first read for a termin, the placeholder seed is persisted so it can
@@ -100,4 +112,17 @@ export function searchDrivers(query: string): DriverSearchResult[] {
     }
   }
   return results.slice(0, 8);
+}
+
+// Every registration across every termin — used by the statistika page for
+// the monthly count and the PDF export.
+export function getAllRegistrations(): DriverSearchResult[] {
+  const results: DriverSearchResult[] = [];
+  for (const termin of getAllTermini()) {
+    const drivers = getDriversForTermin(termin.id, PLACEHOLDER_DRIVERS);
+    for (const driver of drivers) {
+      results.push({ driver, terminId: termin.id, terminTitle: formatTerminLabel(termin) });
+    }
+  }
+  return results;
 }

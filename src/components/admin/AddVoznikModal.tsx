@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Heading3, Text } from "@/components/ui/Typography";
 
+function formatToday(): string {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  return `${day}.${month}.${now.getFullYear()}`;
+}
+
 function CloseIcon() {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="size-4 shrink-0">
@@ -34,6 +41,7 @@ export function AddVoznikModal({
       driverName: fullName,
       email,
       phone,
+      registrationDate: formatToday(),
       formStatus: "manjka",
       paymentStatus: "caka",
       payer: "sam",
