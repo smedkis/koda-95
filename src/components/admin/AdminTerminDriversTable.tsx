@@ -110,7 +110,7 @@ export function AdminTerminDriversTable({
                   <Eyebrow className="text-[14px]">{label}</Eyebrow>
                 </th>
               ))}
-              <th className="sticky right-0 bg-white px-4 py-4" />
+              <th className="sticky right-0 bg-white px-4 py-4 sm:static sm:bg-transparent" />
             </tr>
           </thead>
           <tbody>
@@ -118,7 +118,7 @@ export function AdminTerminDriversTable({
               <tr
                 key={driver.id}
                 className={cn(
-                  "hover:bg-secondary-bg",
+                  "group hover:bg-secondary-bg",
                   index < paginatedDrivers.length - 1 && "border-b border-divider",
                 )}
               >
@@ -139,7 +139,7 @@ export function AdminTerminDriversTable({
                     {driver.payer === "sam" ? "Sam" : driver.payer}
                   </Text>
                 </td>
-                <td className="sticky right-0 bg-white px-4 py-4 text-right">
+                <td className="sticky right-0 bg-white px-4 py-4 text-right group-hover:bg-secondary-bg sm:static sm:bg-transparent">
                   <Link
                     href={`/admin/termini/${terminId}/vozniki/${driver.id}`}
                     aria-label={`Uredi ${driver.driverName}`}

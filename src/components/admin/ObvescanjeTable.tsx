@@ -172,7 +172,7 @@ export function ObvescanjeTable({
             <th className="px-4 py-4 text-left">
               <Eyebrow className="text-[14px]">Prijava</Eyebrow>
             </th>
-            <th className="sticky right-0 bg-white px-4 py-4" />
+            <th className="sticky right-0 bg-white px-4 py-4 sm:static sm:bg-transparent" />
           </tr>
         </thead>
         <tbody>
@@ -180,7 +180,7 @@ export function ObvescanjeTable({
             <tr
               key={row.id}
               className={cn(
-                "hover:bg-secondary-bg",
+                "group hover:bg-secondary-bg",
                 index < paginatedRows.length - 1 && "border-b border-divider",
               )}
             >
@@ -205,7 +205,7 @@ export function ObvescanjeTable({
               <td className="px-4 py-4 whitespace-nowrap">
                 <EnrollmentBadge enrollment={row.enrollment} />
               </td>
-              <td className="sticky right-0 bg-white px-4 py-4 text-right">
+              <td className="sticky right-0 bg-white px-4 py-4 text-right group-hover:bg-secondary-bg sm:static sm:bg-transparent">
                 <button
                   type="button"
                   onClick={() => setPendingDeleteId(row.id)}

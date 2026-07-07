@@ -66,6 +66,14 @@ export function updateDriverInTermin(terminId: string, driver: TerminDriver, see
   saveDriversForTermin(terminId, next);
 }
 
+export function removeDriverFromTermin(terminId: string, driverId: string, seed: TerminDriver[]) {
+  const current = getDriversForTermin(terminId, seed);
+  saveDriversForTermin(
+    terminId,
+    current.filter((entry) => entry.id !== driverId),
+  );
+}
+
 export type DriverSearchResult = {
   driver: TerminDriver;
   terminId: string;

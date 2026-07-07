@@ -4,12 +4,13 @@ import type { TerminDriver } from "@/components/admin/AdminTerminDriversTable";
 
 const FONT_FAMILY = "SourceSans3";
 const HEADER_HEIGHT = 46;
-// Clearance the signature footer (stamp circle + text) needs below its
-// baseline — not the same as the gap left between the table and that baseline.
-const FOOTER_CLEARANCE = 20;
-// Must exceed the stamp circle's radius (14mm) — otherwise the circle's top
-// edge lands exactly on the table's bottom border, looking glued to it.
-const TABLE_TO_FOOTER_GAP = 22;
+// Fixed page capacity so the footer's position is predictable and never has
+// to compete with an unbounded, naturally-paginated table for vertical space.
+const ROWS_PER_PAGE = 10;
+// Space reserved below the footer's baseline (e.g. the "Datum izvedbe" line)
+// before the physical page edge.
+const FOOTER_RESERVE = 14;
+const PAGE_BOTTOM_MARGIN = 8;
 
 async function loadImageAsDataUrl(src: string): Promise<string> {
   const response = await fetch(src);
@@ -105,98 +106,106 @@ export async function generateAttendancePdf({
   const tableWidth = pageWidth - marginX * 2;
   const signatureColWidth = (tableWidth - 12 - 55 - 32 - 32) / 2;
 
-  autoTable(doc, {
-    startY: HEADER_HEIGHT,
-    margin: { left: marginX, right: marginX, top: HEADER_HEIGHT },
-    head: [
-      [
-        "Št.",
-        "Ime in priimek",
-        "Datum rojstva",
-        "Telefon",
-        "Podpis na začetku usposabljanja",
-        "Podpis na koncu usposabljanja",
+  const rowChunks: TerminDriver[][] = [];
+  for (let i = 0; i < drivers.length; i += ROWS_PER_PAGE) {
+    rowChunks.push(drivers.slice(i, i + ROWS_PER_PAGE));
+  }
+  if (rowChunks.length === 0) rowChunks.push([]);
+
+  // Fixed regardless of how many rows a given page actually has, so the
+  // signature block lines up identically on every page. Capped at
+  // ROWS_PER_PAGE per page guarantees the table itself never grows tall
+  // enough to reach this far down.
+  const footerY = pageHeight - PAGE_BOTTOM_MARGIN - FOOTER_RESERVE;
+
+  rowChunks.forEach((chunk, chunkIndex) => {
+    if (chunkIndex > 0) doc.addPage();
+    drawHeader();
+
+    autoTable(doc, {
+      startY: HEADER_HEIGHT,
+      margin: { left: marginX, right: marginX, top: HEADER_HEIGHT, bottom: pageHeight - footerY },
+      head: [
+        [
+          "Št.",
+          "Ime in priimek",
+          "Datum rojstva",
+          "Telefon",
+          "Podpis na začetku usposabljanja",
+          "Podpis na koncu usposabljanja",
+        ],
       ],
-    ],
-    body: drivers.map((driver, index) => [
-      String(index + 1),
-      driver.driverName,
-      driver.dateOfBirth ?? "—",
-      driver.phone ?? "—",
-      "",
-      "",
-    ]),
-    styles: {
-      font: FONT_FAMILY,
-      fontSize: 9,
-      cellPadding: 3,
-      lineColor: [240, 240, 240],
-      lineWidth: 0.2,
-      valign: "middle",
-      minCellHeight: 12,
-    },
-    headStyles: {
-      font: FONT_FAMILY,
-      fillColor: [250, 250, 250],
-      textColor: [20, 20, 20],
-      fontStyle: "bold",
-      fontSize: 7.5,
-      valign: "middle",
-    },
-    columnStyles: {
-      0: { cellWidth: 12, halign: "center" },
-      1: { cellWidth: 55 },
-      2: { cellWidth: 32 },
-      3: { cellWidth: 32 },
-      4: { cellWidth: signatureColWidth },
-      5: { cellWidth: signatureColWidth },
-    },
-    theme: "grid",
-    didDrawPage: () => drawHeader(),
+      body: chunk.map((driver, index) => [
+        String(chunkIndex * ROWS_PER_PAGE + index + 1),
+        driver.driverName,
+        driver.dateOfBirth ?? "",
+        driver.phone ?? "—",
+        "",
+        "",
+      ]),
+      styles: {
+        font: FONT_FAMILY,
+        fontSize: 9,
+        cellPadding: 3,
+        lineColor: [240, 240, 240],
+        lineWidth: 0.2,
+        valign: "middle",
+        minCellHeight: 12,
+      },
+      headStyles: {
+        font: FONT_FAMILY,
+        fillColor: [250, 250, 250],
+        textColor: [20, 20, 20],
+        fontStyle: "bold",
+        fontSize: 7.5,
+        valign: "middle",
+      },
+      columnStyles: {
+        0: { cellWidth: 12, halign: "center" },
+        1: { cellWidth: 55 },
+        2: { cellWidth: 32 },
+        3: { cellWidth: 32 },
+        4: { cellWidth: signatureColWidth },
+        5: { cellWidth: signatureColWidth },
+      },
+      theme: "grid",
+      // Defensive: only fires if a chunk still doesn't fit on one page
+      // (e.g. an unusually long wrapped name), keeping the header intact.
+      didDrawPage: () => drawHeader(),
+    });
   });
 
-  let finalY =
-    (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY +
-    TABLE_TO_FOOTER_GAP;
-
-  if (finalY + FOOTER_CLEARANCE > pageHeight - 10) {
-    doc.addPage();
-    drawHeader();
-    finalY = HEADER_HEIGHT + TABLE_TO_FOOTER_GAP;
-  }
-
-  // Page numbers are only meaningful once every page (including a possible
-  // extra footer-only page above) has actually been created.
   const totalPages = doc.getNumberOfPages();
-  if (totalPages > 1) {
-    for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
-      doc.setPage(pageNumber);
+
+  // Signatories need to sign off on every page of attendees, not just the
+  // last one — so the footer (place/date/stamp/signature) repeats per page.
+  for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+    doc.setPage(pageNumber);
+
+    if (totalPages > 1) {
       doc.setFont(FONT_FAMILY, "normal");
       doc.setFontSize(9);
       doc.setTextColor(140);
       doc.text(`Stran ${pageNumber}/${totalPages}`, pageWidth - marginX, 40, { align: "right" });
       doc.setTextColor(0);
     }
-    doc.setPage(totalPages);
+
+    doc.setFont(FONT_FAMILY, "normal");
+    doc.setFontSize(10);
+    doc.text("Kraj izvedbe:", marginX, footerY);
+    doc.line(marginX + 24, footerY, marginX + 85, footerY);
+    doc.text("Datum izvedbe:", marginX, footerY + 12);
+    doc.line(marginX + 26, footerY + 12, marginX + 85, footerY + 12);
+
+    doc.text("ŽIG", pageWidth / 2, footerY, { align: "center" });
+
+    doc.setFontSize(10);
+    const sigLabel = "Podpis odgovorne osebe:";
+    const sigLabelWidth = doc.getTextWidth(sigLabel);
+    doc.text(sigLabel, pageWidth - marginX - 70, footerY);
+    doc.line(pageWidth - marginX - 70 + sigLabelWidth + 2, footerY, pageWidth - marginX, footerY);
   }
 
-  doc.setFont(FONT_FAMILY, "normal");
-  doc.setFontSize(10);
-  doc.text("Kraj izvedbe:", marginX, finalY);
-  doc.line(marginX + 24, finalY, marginX + 85, finalY);
-  doc.text("Datum izvedbe:", marginX, finalY + 12);
-  doc.line(marginX + 26, finalY + 12, marginX + 85, finalY + 12);
-
-  const stampX = pageWidth / 2;
-  doc.circle(stampX, finalY, 14);
-  doc.setFontSize(8);
-  doc.text("ŽIG", stampX, finalY, { align: "center" });
-
-  doc.setFontSize(10);
-  const sigLabel = "Podpis odgovorne osebe:";
-  const sigLabelWidth = doc.getTextWidth(sigLabel);
-  doc.text(sigLabel, pageWidth - marginX - 70, finalY);
-  doc.line(pageWidth - marginX - 70 + sigLabelWidth + 2, finalY, pageWidth - marginX, finalY);
-
+  doc.setPage(totalPages);
   doc.save(`priloga-14-${id}.pdf`);
 }

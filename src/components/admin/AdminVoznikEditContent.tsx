@@ -7,10 +7,10 @@ import type { TerminDriver } from "./AdminTerminDriversTable";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Eyebrow, Text, TextMedium } from "@/components/ui/Typography";
+import { Eyebrow, Heading3, Text, TextMedium } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
 import { PLACEHOLDER_DRIVERS } from "@/lib/admin-drivers-data";
-import { updateDriverInTermin } from "@/lib/admin-drivers-store";
+import { removeDriverFromTermin, updateDriverInTermin } from "@/lib/admin-drivers-store";
 
 function CardHeader({ icon, label }: { icon: string; label: string }) {
   return (
@@ -59,6 +59,14 @@ function YesNoToggle({
         </button>
       ))}
     </div>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="size-4 shrink-0">
+      <path d="M4 4L12 12M12 4L4 12" stroke="black" strokeWidth="1.25" strokeLinecap="round" />
+    </svg>
   );
 }
 
@@ -149,6 +157,8 @@ export function AdminVoznikEditContent({
   const [driver, setDriver] = useState(initialDriver);
   const [isSaving, setIsSaving] = useState(false);
   const [activityLog, setActivityLog] = useState<LogEntry[]>(() => buildInitialLog(initialDriver));
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
 
   const logEvent = (message: string) =>
     setActivityLog((current) => [...current, { message, timestamp: formatNow() }]);
@@ -159,6 +169,14 @@ export function AdminVoznikEditContent({
   const handleSave = () => {
     setIsSaving(true);
     updateDriverInTermin(terminId, driver, PLACEHOLDER_DRIVERS);
+    router.push(`/admin/termini/${terminId}`);
+  };
+
+  const canConfirmDelete = deleteConfirmText.trim() === driver.driverName;
+
+  const handleDelete = () => {
+    if (!canConfirmDelete) return;
+    removeDriverFromTermin(terminId, driver.id, PLACEHOLDER_DRIVERS);
     router.push(`/admin/termini/${terminId}`);
   };
 
@@ -282,15 +300,27 @@ export function AdminVoznikEditContent({
           </Box>
         </div>
 
-        <Button
-          type="button"
-          variant="primary"
-          className="self-start"
-          disabled={isSaving}
-          onClick={handleSave}
-        >
-          Shrani
-        </Button>
+        <div className="flex items-center justify-between">
+          <Button
+            type="button"
+            variant="primary"
+            disabled={isSaving}
+            onClick={handleSave}
+          >
+            Shrani
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            className="bg-white text-red-600 outline outline-1 outline-red-200 hover:bg-red-50"
+            onClick={() => {
+              setDeleteConfirmText("");
+              setIsDeleteModalOpen(true);
+            }}
+          >
+            Izbriši prijavo
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-8">
@@ -356,6 +386,51 @@ export function AdminVoznikEditContent({
           </Box>
         </div>
       </div>
+
+      {isDeleteModalOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setIsDeleteModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-[420px] rounded-lg border border-divider bg-white p-8"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsDeleteModalOpen(false)}
+              aria-label="Zapri"
+              className="absolute top-4 right-4 cursor-pointer"
+            >
+              <CloseIcon />
+            </button>
+            <Heading3>Izbriši prijavo</Heading3>
+            <Text className="mt-4">
+              Ali ste prepričani, da želite izbrisati prijavo za {driver.driverName}? Tega
+              dejanja ni mogoče razveljaviti.
+            </Text>
+            <Text className="mt-4">
+              Za potrditev vpišite ime in priimek voznika:{" "}
+              <span className="font-medium text-heading">{driver.driverName}</span>
+            </Text>
+            <Input
+              className="mt-2"
+              inputClassName={INPUT_BG}
+              value={deleteConfirmText}
+              onChange={(event) => setDeleteConfirmText(event.target.value)}
+            />
+            <Button
+              type="button"
+              variant="primary"
+              className="mt-8 w-full justify-center bg-red-600 hover:bg-red-700"
+              disabled={!canConfirmDelete}
+              onClick={handleDelete}
+            >
+              Izbriši prijavo
+            </Button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
