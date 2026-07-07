@@ -10,6 +10,7 @@ export function TerminRegistrationForm({ daysUntil }: { daysUntil?: number }) {
   const isNext = daysUntil !== undefined;
   return (
     <Box
+      id="termin-registration-form"
       className={
         isNext
           ? "relative flex flex-col border-2 border-transparent pb-6 shadow-[0_16px_36px_-20px_rgba(245,130,32,0.45)]"

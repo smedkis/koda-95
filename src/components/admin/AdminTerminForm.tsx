@@ -132,7 +132,7 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: StoredTermi
   };
 
   return (
-    <div className="mt-16 grid grid-cols-2 gap-16">
+    <div className="mt-16 grid grid-cols-1 gap-16 lg:grid-cols-2">
       <div>
         <Heading3>Podatki o terminu</Heading3>
         <div className="mt-6 flex flex-col gap-6">
@@ -223,7 +223,7 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: StoredTermi
           {isEdit ? "Shrani spremembe" : "Dodaj termin"}
         </Button>
       </div>
-      <div>
+      <div className="hidden lg:block">
         <Heading3>Predogled</Heading3>
         <div className="mt-6">
           <AdminTerminCard {...previewTermin} showActions={false} />

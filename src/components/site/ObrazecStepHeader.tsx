@@ -12,9 +12,9 @@ export function ObrazecStepHeader({
 }) {
   const t = useTranslations("Obrazec");
   return (
-    <div className="mx-auto mt-16 flex max-w-[680px] items-center justify-between">
+    <div className="mx-auto mt-16 flex max-w-[680px] items-center justify-between gap-4">
       <Eyebrow>{sectionTitle}</Eyebrow>
-      <Eyebrow>
+      <Eyebrow className="shrink-0 whitespace-nowrap">
         {t.rich("stepLabel", {
           highlight: (chunks) => <span className="text-primary">{chunks}</span>,
           step,

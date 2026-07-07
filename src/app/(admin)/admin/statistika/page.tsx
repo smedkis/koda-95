@@ -12,7 +12,7 @@ export default function StatistikaPage() {
   }, []);
 
   return (
-    <div className="mt-32 mb-32">
+    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
       <AdminStatistikaPageContent registrations={registrations} />
     </div>
   );

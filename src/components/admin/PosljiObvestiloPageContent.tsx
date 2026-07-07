@@ -77,7 +77,7 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
   };
 
   return (
-    <div className="mt-32 mb-32">
+    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
       <AdminBackLink href="/admin/obvescanje" label="Obveščanje" />
       <Heading2 className="mt-4">Pošlji obvestilo</Heading2>
 

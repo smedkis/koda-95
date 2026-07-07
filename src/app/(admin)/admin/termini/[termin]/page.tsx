@@ -34,7 +34,7 @@ export default async function AdminTerminDetailPage({
   const termin = getTermin(id);
 
   return (
-    <div className="mt-32 mb-32">
+    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
       <AdminBackLink href="/admin/termini" label="Termini" />
       <AdminTerminDetailContent id={id} baseTermin={termin} />
     </div>

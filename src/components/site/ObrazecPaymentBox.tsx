@@ -111,9 +111,9 @@ export function ObrazecPaymentBox({
 
   return (
     <Box className="flex flex-col gap-6">
-      <div className="flex gap-8">
+      <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-8">
         <QrCode dataUrl={qrDataUrl} />
-        <div className="flex flex-1 flex-col text-left">
+        <div className="flex w-full flex-1 flex-col text-left">
           <DetailRow label={t("recipient")} value={recipientName} />
           <DetailRow label={t("iban")} value={iban} />
           <DetailRow label={t("reference")} value={`SI00 ${reference}`} />

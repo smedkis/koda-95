@@ -88,7 +88,7 @@ export function TerminCard({
         </span>
       ) : null}
       <Heading3>{cleanTitle}</Heading3>
-      <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4">
+      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
         {modul ? <InfoRow icon="/Category.svg">Modul {modul}</InfoRow> : null}
         {price ? <InfoRow icon="/icon-ticket.svg">{price}</InfoRow> : null}
         <InfoRow icon="/icon-calendar.svg">{date}</InfoRow>
@@ -120,8 +120,8 @@ export function TerminCard({
         <span className="inline-flex w-fit items-center justify-center gap-2 self-start rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#2db896]">
           {t("reserve")}
         </span>
-        <Text className="whitespace-nowrap text-right text-[14px] font-medium text-[#006e5e]">
-          Prijavi se zdaj, plačaj kasneje
+        <Text className="text-right text-[14px] font-medium text-[#006e5e] sm:whitespace-nowrap">
+          Prijavi se zdaj,<br className="sm:hidden" /> plačaj kasneje
         </Text>
       </div>
     </Box>

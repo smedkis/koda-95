@@ -3,7 +3,7 @@
 // behind the actual content.
 export function ColumnGuides() {
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 grid grid-cols-5">
+    <div className="pointer-events-none absolute inset-0 z-0 hidden lg:grid lg:grid-cols-5">
       <div />
       <div />
       <div className="border-l border-divider" />

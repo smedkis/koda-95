@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { ColumnGuides } from "@/components/site/ColumnGuides";
 import { FaqSection } from "@/components/site/FaqSection";
 import { Footer } from "@/components/site/Footer";
+import { MobileStickyReserve } from "@/components/site/MobileStickyReserve";
 import { SectionDivider } from "@/components/site/SectionDivider";
 import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminDetails } from "@/components/site/TerminDetails";
@@ -56,13 +58,14 @@ export default async function TerminPage({
     PLACEHOLDER_TERMINI.map((entry) => entry.dateISO),
   );
   const daysUntil = isNext ? getDaysUntil(termin.dateISO) : undefined;
+  const t = await getTranslations("TerminRegistrationForm");
   return (
     <Container>
       <div className="relative">
         <ColumnGuides />
-        <div className="relative z-10 pt-32">
-          <div className="grid grid-cols-5 gap-24 pb-32">
-            <div className="col-span-2 min-w-0">
+        <div className="relative z-10 pt-24 lg:pt-32">
+          <div className="grid grid-cols-1 gap-16 pb-32 lg:grid-cols-5 lg:gap-24">
+            <div className="min-w-0 lg:col-span-2">
               <TerminDetails
                 programHref="/zacetna-koda-95"
                 title={termin.title}
@@ -73,7 +76,7 @@ export default async function TerminPage({
                 address={termin.address}
               />
             </div>
-            <div className="col-span-3">
+            <div className="lg:col-span-3">
               <TerminRegistrationForm daysUntil={daysUntil} />
             </div>
           </div>
@@ -83,6 +86,7 @@ export default async function TerminPage({
         </div>
       </div>
       <Footer />
+      <MobileStickyReserve targetId="termin-registration-form" label={t("submit")} />
     </Container>
   );
 }

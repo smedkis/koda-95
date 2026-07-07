@@ -20,7 +20,7 @@ export function NavLinks() {
   }
 
   return (
-    <div className="flex items-center gap-8">
+    <div className="hidden items-center gap-8 sm:flex">
       {LINKS.map((link) => (
         <Link key={link.href} href={link.href}>
           <TextMedium as="span" className={cn(pathname === link.href && "text-primary")}>

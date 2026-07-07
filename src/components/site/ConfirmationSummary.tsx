@@ -26,13 +26,14 @@ export function ConfirmationSummary({
 
   return (
     <div className="mx-auto mt-16 max-w-[680px] print:mt-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Eyebrow>{t("summaryHeading")}</Eyebrow>
         <div className="flex items-center gap-4 print:hidden">
           <Button
             type="button"
             variant="action"
             onClick={handleAddToCalendar}
+            className="whitespace-nowrap"
             icon={<Image src="/icon-calendar-white.svg" alt="" width={16} height={16} />}
           >
             {t("addToCalendar")}
@@ -41,6 +42,7 @@ export function ConfirmationSummary({
             type="button"
             variant="action"
             onClick={() => window.print()}
+            className="whitespace-nowrap"
             icon={<Image src="/icon-print.svg" alt="" width={16} height={16} />}
           >
             {t("print")}

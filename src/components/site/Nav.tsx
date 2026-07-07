@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Link } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { MobileProgramToggle } from "./MobileProgramToggle";
 import { NavLinks } from "./NavLinks";
 
 export function Nav() {
@@ -14,12 +15,15 @@ export function Nav() {
             alt="Tahografi Cuderman"
             width={266}
             height={100}
-            className="h-12 w-auto"
+            className="h-10 w-auto sm:h-12"
             priority
           />
         </Link>
         <NavLinks />
-        <LanguageSwitcher />
+        <div className="flex items-center gap-3">
+          <MobileProgramToggle />
+          <LanguageSwitcher />
+        </div>
       </Container>
     </div>
   );

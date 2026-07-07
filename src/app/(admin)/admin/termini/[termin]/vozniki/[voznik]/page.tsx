@@ -24,7 +24,7 @@ export default function UrediVoznikPage() {
 
   if (driver === null) {
     return (
-      <div className="mt-32 mb-32">
+      <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
         <AdminBackLink href={`/admin/termini/${terminId}`} label="Termin" />
         <Heading2 className="mt-4">Voznik ne obstaja</Heading2>
         <Text className="mt-4">Voznika s to povezavo ni bilo mogoče najti.</Text>
@@ -33,7 +33,7 @@ export default function UrediVoznikPage() {
   }
 
   return (
-    <div className="mt-32 mb-32">
+    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
       <AdminBackLink href={`/admin/termini/${terminId}`} label="Termin" />
       <Heading2 className="mt-4">{driver.driverName}</Heading2>
       <AdminVoznikEditContent terminId={terminId} initialDriver={driver} />

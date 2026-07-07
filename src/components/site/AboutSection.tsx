@@ -6,7 +6,7 @@ import { Heading2, Text, TextBig } from "@/components/ui/Typography";
 export function AboutSection() {
   const t = useTranslations("About");
   return (
-    <div className="mt-32 flex flex-col items-center">
+    <div className="mt-24 lg:mt-32 flex flex-col items-center">
       <div className="flex max-w-[680px] flex-col items-center text-center">
         <div className="flex items-center gap-2">
           <Image src="/google.svg" alt="Google" width={40} height={40} />

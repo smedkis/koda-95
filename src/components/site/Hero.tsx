@@ -17,7 +17,7 @@ export function Hero({
   description: string;
 }) {
   return (
-    <div className="mx-auto mt-32 flex max-w-[680px] flex-col items-center gap-4 text-center">
+    <div className="mx-auto mt-24 lg:mt-32 flex max-w-[680px] flex-col items-center gap-4 text-center">
       {breadcrumbs ? <Breadcrumbs items={breadcrumbs} className="justify-center" /> : null}
       <Heading1>{title}</Heading1>
       <TextBig>{description}</TextBig>

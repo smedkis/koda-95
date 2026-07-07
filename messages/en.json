@@ -1,7 +1,9 @@
 {
   "Nav": {
     "redna": "Periodic Training – Koda 95",
-    "zacetna": "Initial Qualification – Koda 95"
+    "zacetna": "Initial Qualification – Koda 95",
+    "rednaShort": "Periodic",
+    "zacetnaShort": "Initial"
   },
   "Footer": {
     "copyright": "Tahografi Cuderman d.o.o. ©2026",

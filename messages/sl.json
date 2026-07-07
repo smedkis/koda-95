@@ -1,7 +1,9 @@
 {
   "Nav": {
     "redna": "Redna Koda 95",
-    "zacetna": "Začetna Koda 95"
+    "zacetna": "Začetna Koda 95",
+    "rednaShort": "Redno",
+    "zacetnaShort": "Začetno"
   },
   "Footer": {
     "copyright": "Tahografi Cuderman d.o.o. ©2026",

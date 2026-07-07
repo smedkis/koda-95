@@ -70,7 +70,7 @@ export function AdminTerminCard({
           </span>
         ) : null}
       </div>
-      <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4">
+      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
         {modul ? <InfoRow icon="/Category.svg">Modul {modul}</InfoRow> : null}
         {price ? <InfoRow icon="/icon-ticket.svg">{price}</InfoRow> : null}
         <InfoRow icon="/icon-calendar.svg">{date}</InfoRow>

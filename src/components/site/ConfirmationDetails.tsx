@@ -34,7 +34,7 @@ function DetailRow({
           {icon}
           <Eyebrow>{label}</Eyebrow>
         </div>
-        <Text>{value}</Text>
+        <Text className="text-right">{value}</Text>
       </div>
       {showDivider ? <div className="mt-4 mb-4 border-t border-divider" /> : null}
     </div>

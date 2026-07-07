@@ -31,7 +31,7 @@ export function TerminiSection({ termini }: { termini: TerminEntry[] }) {
   return (
     <div id="termini" className="mt-16 flex flex-col items-center gap-8">
       <Eyebrow>{t("heading")}</Eyebrow>
-      <div className="grid w-full grid-cols-2 gap-8">
+      <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
         {sortedTermini.map(({ dateISO, ...cardProps }) => (
           <TerminCard
             key={cardProps.href}

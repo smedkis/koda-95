@@ -89,7 +89,7 @@ export function ObrazecForm() {
           onBack={handleBack}
         />
         <ConfirmationHelp />
-        <div className="mt-32">
+        <div className="mt-24 lg:mt-32">
           <SectionDivider />
           <Footer />
         </div>

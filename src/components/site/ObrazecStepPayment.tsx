@@ -14,7 +14,7 @@ export function ObrazecStepPayment({
   const t = useTranslations("Obrazec");
   return (
     <Box className="flex flex-col gap-6">
-      <div className="flex items-center gap-8">
+      <div className="flex flex-col gap-4">
         <Radio
           name="payerType"
           value="self"
@@ -33,23 +33,21 @@ export function ObrazecStepPayment({
 
       {value.payerType === "company" ? (
         <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              label={t("companyName")}
-              placeholder={t("companyName")}
-              name="companyName"
-              required
-              value={value.companyName}
-              onChange={(e) => onChange({ companyName: e.target.value })}
-            />
-            <Input
-              label={t("companyTaxNumber")}
-              placeholder={t("companyTaxNumber")}
-              name="companyTaxNumber"
-              value={value.companyTaxNumber}
-              onChange={(e) => onChange({ companyTaxNumber: e.target.value })}
-            />
-          </div>
+          <Input
+            label={t("companyName")}
+            placeholder={t("companyName")}
+            name="companyName"
+            required
+            value={value.companyName}
+            onChange={(e) => onChange({ companyName: e.target.value })}
+          />
+          <Input
+            label={t("companyTaxNumber")}
+            placeholder={t("companyTaxNumber")}
+            name="companyTaxNumber"
+            value={value.companyTaxNumber}
+            onChange={(e) => onChange({ companyTaxNumber: e.target.value })}
+          />
           <Input
             label={t("companyEmail")}
             placeholder={t("companyEmail")}

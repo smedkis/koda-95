@@ -115,11 +115,11 @@ export function AdminStatistikaPageContent({
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Heading2>Statistika prijav</Heading2>
         <div className="flex items-center gap-3">
           <Select
-            className="w-48"
+            className="w-full sm:w-48"
             value={exportMonth}
             onChange={(event) => setExportMonth(event.target.value)}
           >
@@ -133,6 +133,7 @@ export function AdminStatistikaPageContent({
           <Button
             type="button"
             variant="action"
+            className="shrink-0 whitespace-nowrap"
             icon={<Image src="/icon-print.svg" alt="" width={16} height={16} />}
             onClick={handleExport}
             disabled={isExporting}
@@ -170,8 +171,8 @@ export function AdminStatistikaPageContent({
 
       <div className="mt-16">
         <Heading3>Vse prijave ({sortedRegistrations.length})</Heading3>
-        <div className="mt-6 overflow-hidden rounded-lg border border-divider bg-white">
-          <table className="w-full border-collapse">
+        <div className="mt-6 overflow-x-auto rounded-lg border border-divider bg-white">
+          <table className="w-full min-w-[560px] border-collapse">
             <thead>
               <tr className="border-b border-divider">
                 {["Št.", "Voznik", "Datum prijave", "Termin"].map((label) => (
@@ -216,7 +217,7 @@ export function AdminStatistikaPageContent({
           ) : null}
         </div>
         {sortedRegistrations.length > 0 ? (
-          <div className="mt-4 flex items-center justify-between">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-1 rounded border border-divider bg-[#F0F0F0] p-1">
               {PAGE_SIZE_OPTIONS.map((size) => (
                 <button

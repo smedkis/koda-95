@@ -11,11 +11,11 @@ export type FaqItemData = {
 export function FaqSection({ faqs }: { faqs: FaqItemData[] }) {
   const t = useTranslations("Faq");
   return (
-    <div className="mt-32 grid grid-cols-5 gap-24">
-      <div className="col-span-2 flex flex-col">
+    <div className="mt-32 grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-24">
+      <div className="flex flex-col lg:col-span-2">
         <Heading2>{t("heading")}</Heading2>
         <TextBig className="mt-4">{t("intro")}</TextBig>
-        <div className="mt-8 grid grid-cols-2 gap-8">
+        <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
           <ContactMethod
             icon="/icon-call.svg"
             label={t("callUs")}
@@ -30,7 +30,7 @@ export function FaqSection({ faqs }: { faqs: FaqItemData[] }) {
           />
         </div>
       </div>
-      <div className="col-span-3 flex flex-col gap-4">
+      <div className="flex flex-col gap-4 lg:col-span-3">
         {faqs.map((item) => (
           <FaqItem key={item.question} question={item.question} answer={item.answer} />
         ))}

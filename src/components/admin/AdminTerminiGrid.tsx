@@ -14,7 +14,7 @@ export function AdminTerminiGrid({
   const [showPast, setShowPast] = useState(false);
 
   return (
-    <div className="mt-16 grid grid-cols-2 gap-8">
+    <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2">
       {termini.map((termin) => (
         <AdminTerminCard key={termin.id} {...termin} />
       ))}
@@ -23,7 +23,7 @@ export function AdminTerminiGrid({
             <AdminTerminCard key={termin.id} {...termin} isPast />
           ))
         : (
-            <div className="col-span-2 flex justify-center">
+            <div className="flex justify-center lg:col-span-2">
               <button
                 type="button"
                 onClick={() => setShowPast(true)}

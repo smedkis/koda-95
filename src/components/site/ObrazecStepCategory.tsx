@@ -13,7 +13,7 @@ export function ObrazecStepCategory({
   const t = useTranslations("Obrazec");
   return (
     <Box className="flex flex-col gap-4">
-      <div className="flex items-center gap-8">
+      <div className="flex flex-col gap-4">
         <Checkbox
           name="categoryC"
           label={t("categoryC")}

@@ -85,7 +85,7 @@ export function ObrazecStepPersonal({
 
       <div className="flex flex-col gap-2">
         <Eyebrow>{t("residenceType")}</Eyebrow>
-        <div className="mt-2 flex items-center gap-8">
+        <div className="mt-2 flex flex-col gap-4">
           <Radio
             name="residenceType"
             value="permanent"

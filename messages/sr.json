@@ -1,7 +1,9 @@
 {
   "Nav": {
     "redna": "Periodična obuka – Koda 95",
-    "zacetna": "Osnovna kvalifikacija – Koda 95"
+    "zacetna": "Osnovna kvalifikacija – Koda 95",
+    "rednaShort": "Periodična",
+    "zacetnaShort": "Osnovna"
   },
   "Footer": {
     "copyright": "Tahografi Cuderman d.o.o. ©2026",

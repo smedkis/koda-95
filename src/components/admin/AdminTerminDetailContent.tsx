@@ -78,11 +78,11 @@ export function AdminTerminDetailContent({
 
   return (
     <>
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Heading2>{cleanTitle}</Heading2>
         <Link
           href={`/admin/termini/${id}/uredi`}
-          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-[#d06e1b]"
+          className="inline-flex w-fit shrink-0 cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium whitespace-nowrap text-white transition-colors hover:bg-[#d06e1b]"
         >
           <Image
             src="/Edit-white.svg"
@@ -94,7 +94,7 @@ export function AdminTerminDetailContent({
           Uredi
         </Link>
       </div>
-      <div className="mt-4 flex items-center gap-6">
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
         {modul ? (
           <div className="flex items-center gap-2">
             <Image src="/Category.svg" alt="" width={20} height={20} className="size-5" />
@@ -114,7 +114,7 @@ export function AdminTerminDetailContent({
           <Text>{termin.address}</Text>
         </div>
       </div>
-      <div className="mt-16 flex items-center justify-between">
+      <div className="mt-16 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Heading3>Prijavljeni vozniki ({drivers.length})</Heading3>
         <div className="flex items-center gap-4">
           <Button

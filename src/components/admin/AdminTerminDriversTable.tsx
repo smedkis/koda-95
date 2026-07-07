@@ -101,8 +101,8 @@ export function AdminTerminDriversTable({
 
   return (
     <div>
-      <div className="overflow-hidden rounded-lg border border-divider bg-white">
-        <table className="w-full border-collapse">
+      <div className="overflow-x-auto rounded-lg border border-divider bg-white">
+        <table className="w-full min-w-[640px] border-collapse">
           <thead>
             <tr className="border-b border-divider">
               {COLUMNS.map((label) => (
@@ -110,7 +110,7 @@ export function AdminTerminDriversTable({
                   <Eyebrow className="text-[14px]">{label}</Eyebrow>
                 </th>
               ))}
-              <th className="px-4 py-4" />
+              <th className="sticky right-0 bg-white px-4 py-4" />
             </tr>
           </thead>
           <tbody>
@@ -139,7 +139,7 @@ export function AdminTerminDriversTable({
                     {driver.payer === "sam" ? "Sam" : driver.payer}
                   </Text>
                 </td>
-                <td className="px-4 py-4 text-right">
+                <td className="sticky right-0 bg-white px-4 py-4 text-right">
                   <Link
                     href={`/admin/termini/${terminId}/vozniki/${driver.id}`}
                     aria-label={`Uredi ${driver.driverName}`}
@@ -165,7 +165,7 @@ export function AdminTerminDriversTable({
         ) : null}
       </div>
       {drivers.length > 0 ? (
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-1 rounded border border-divider bg-[#F0F0F0] p-1">
             {PAGE_SIZE_OPTIONS.map((size) => (
               <button

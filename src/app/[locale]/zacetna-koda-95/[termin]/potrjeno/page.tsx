@@ -40,7 +40,7 @@ export default function PotrjenoPage() {
       />
       <ConfirmationDetails {...PLACEHOLDER_PRIJAVA} />
       <ConfirmationHelp />
-      <div className="mt-32 print:mt-6">
+      <div className="mt-24 lg:mt-32 print:mt-6">
         <SectionDivider />
         <Footer />
         <SectionDivider className="hidden print:block" />

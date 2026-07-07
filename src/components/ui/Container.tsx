@@ -11,7 +11,7 @@ export function Container({
   return (
     <div
       className={cn(
-        "mx-auto w-full max-w-[1224px] border-x border-container-border px-8",
+        "mx-auto w-full max-w-[1224px] border-container-border px-4 sm:border-x sm:px-8",
         className,
       )}
     >

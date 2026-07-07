@@ -4,9 +4,9 @@ import { Text, TextMedium } from "@/components/ui/Typography";
 export function Footer() {
   const t = useTranslations("Footer");
   return (
-    <div className="flex items-center justify-between py-6 print:justify-center">
+    <div className="flex flex-col items-start gap-3 py-6 sm:flex-row sm:items-center sm:justify-between print:items-center print:justify-center">
       <Text>{t("copyright")}</Text>
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
         <a
           href="https://www.tahograficuderman.si/pogoji-poslovanja-in-politika-zasebnosti"
           target="_blank"

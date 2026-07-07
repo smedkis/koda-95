@@ -11,7 +11,7 @@ export function Heading1({ as: Tag = "h1", children, className }: TypographyProp
   return (
     <Tag
       className={cn(
-        "font-heading text-[48px] leading-[58px] font-semibold text-heading",
+        "font-heading text-[32px] leading-[40px] font-semibold text-heading sm:text-[48px] sm:leading-[58px]",
         className,
       )}
     >
@@ -24,7 +24,7 @@ export function Heading2({ as: Tag = "h2", children, className }: TypographyProp
   return (
     <Tag
       className={cn(
-        "font-heading text-[36px] leading-[46px] font-semibold text-heading",
+        "font-heading text-[26px] leading-[34px] font-semibold text-heading sm:text-[36px] sm:leading-[46px]",
         className,
       )}
     >
@@ -37,7 +37,7 @@ export function Heading3({ as: Tag = "h3", children, className }: TypographyProp
   return (
     <Tag
       className={cn(
-        "font-heading text-[24px] leading-[34px] font-semibold text-heading",
+        "font-heading text-[20px] leading-[28px] font-semibold text-heading sm:text-[24px] sm:leading-[34px]",
         className,
       )}
     >

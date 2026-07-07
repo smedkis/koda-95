@@ -14,8 +14,8 @@ type TerminEntry = AdminTerminCardProps & { program: Exclude<Program, "vsi"> };
 
 const PROGRAM_OPTIONS: { value: Program; label: string }[] = [
   { value: "vsi", label: "Vsi termini" },
-  { value: "redna", label: "Redna Koda 95" },
-  { value: "zacetna", label: "Začetna Koda 95" },
+  { value: "redna", label: "Redno" },
+  { value: "zacetna", label: "Začetno" },
 ];
 
 function ProgramToggle({
@@ -26,14 +26,14 @@ function ProgramToggle({
   onChange: (program: Program) => void;
 }) {
   return (
-    <div className="flex h-11 items-center gap-1 rounded border border-divider bg-[#F0F0F0] p-1">
+    <div className="flex h-11 items-center gap-1 overflow-x-auto rounded border border-divider bg-[#F0F0F0] p-1">
       {PROGRAM_OPTIONS.map((option) => (
         <button
           key={option.value}
           type="button"
           onClick={() => onChange(option.value)}
           className={cn(
-            "flex h-full cursor-pointer items-center rounded px-4 font-body text-[16px] font-medium",
+            "flex h-full shrink-0 cursor-pointer items-center rounded px-4 font-body text-[16px] font-medium whitespace-nowrap",
             program === option.value ? "bg-white text-heading" : "text-placeholder",
           )}
         >
@@ -81,19 +81,19 @@ export function AdminTerminiPageContent({
       : allPastTermini.filter((termin) => termin.program === program);
 
   return (
-    <div className="mt-32 mb-32">
+    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
       <div className="flex items-center justify-between">
         <Heading2>Termini</Heading2>
-        <div className="flex items-center gap-4">
-          <ProgramToggle program={program} onChange={setProgram} />
-          <Link
-            href="/admin/termini/dodaj"
-            className="inline-flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium text-white transition-colors hover:bg-[#d06e1b]"
-          >
-            <Image src="/plus.svg" alt="" width={14} height={14} className="size-4 shrink-0" />
-            Dodaj termin
-          </Link>
-        </div>
+        <Link
+          href="/admin/termini/dodaj"
+          className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded bg-primary px-[14px] py-[10px] font-body text-[16px] font-medium whitespace-nowrap text-white transition-colors hover:bg-[#d06e1b]"
+        >
+          <Image src="/plus.svg" alt="" width={14} height={14} className="size-4 shrink-0" />
+          Dodaj termin
+        </Link>
+      </div>
+      <div className="mt-8 flex justify-start">
+        <ProgramToggle program={program} onChange={setProgram} />
       </div>
       <AdminTerminiGrid termini={filteredTermini} pastTermini={filteredPastTermini} />
     </div>
