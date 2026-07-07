@@ -1,29 +1,51 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Heading2, Text } from "@/components/ui/Typography";
-import { ADMIN_SESSION_COOKIE, computeSessionToken, verifyCredentials } from "@/lib/admin-auth";
+import {
+  ADMIN_SESSION_COOKIE,
+  clearLoginAttempts,
+  createSession,
+  isLoginRateLimited,
+  recordFailedLogin,
+  verifyCredentials,
+} from "@/lib/admin-auth";
 
 export const metadata: Metadata = {
   title: "Prijava | Koda 95 Admin",
   robots: { index: false, follow: false },
 };
 
+async function getClientIdentifier() {
+  const headerStore = await headers();
+  return headerStore.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+}
+
 async function login(formData: FormData) {
   "use server";
+
+  const identifier = await getClientIdentifier();
+
+  if (isLoginRateLimited(identifier)) {
+    redirect("/prijava?error=ratelimited");
+  }
 
   const username = String(formData.get("username") ?? "");
   const password = String(formData.get("password") ?? "");
 
   if (!verifyCredentials(username, password)) {
+    recordFailedLogin(identifier);
     redirect("/prijava?error=1");
   }
 
+  clearLoginAttempts(identifier);
+
   const cookieStore = await cookies();
-  cookieStore.set(ADMIN_SESSION_COOKIE, await computeSessionToken(), {
+  cookieStore.set(ADMIN_SESSION_COOKIE, createSession(), {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
@@ -31,6 +53,10 @@ async function login(formData: FormData) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
+  // Every /admin/* page was cached client-side while still redirecting to
+  // /prijava (unauthenticated) — without this, navigating there right after
+  // login can render that stale cached content instead of the real page.
+  revalidatePath("/", "layout");
   redirect("/admin/termini");
 }
 
@@ -51,7 +77,13 @@ export default async function LoginPage({
         <Box className="flex flex-col gap-6 bg-white">
           <Input label="Uporabniško ime" placeholder="Uporabniško ime" name="username" />
           <Input label="Geslo" placeholder="Geslo" name="password" type="password" />
-          {error ? <Text className="text-primary">Napačno uporabniško ime ali geslo.</Text> : null}
+          {error === "ratelimited" ? (
+            <Text className="text-primary">
+              Preveč neuspešnih poskusov. Poskusite znova čez 15 minut.
+            </Text>
+          ) : error ? (
+            <Text className="text-primary">Napačno uporabniško ime ali geslo.</Text>
+          ) : null}
           <Button type="submit" variant="primary" className="w-full">
             Prijavi se
           </Button>
