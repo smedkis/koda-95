@@ -4,12 +4,15 @@ import { cn } from "@/lib/cn";
 
 type ButtonVariant = "primary" | "secondary" | "action";
 
-// Hover shades are each variant's own color darkened ~15% — a filter-based
-// hover:brightness-90 also dims the (often white) text/icon along with the
-// background, which reads as muddy rather than as a pressed-state darken.
+// Hover shades are each variant's own color shifted ~15% — a filter-based
+// hover:brightness-90/110 also dims/washes the (often white) text/icon along
+// with the background, which reads as muddy rather than as a clean
+// pressed-state change. Primary/action (dark-on-light) darken on hover;
+// secondary (dark text on a light/bright fill) lightens instead, since
+// darkening it toward the paragraph text color would kill the contrast.
 const variantClasses: Record<ButtonVariant, string> = {
   primary: "bg-primary text-white px-[14px] py-[10px] hover:bg-[#d06e1b]",
-  secondary: "bg-secondary text-paragraph px-[14px] py-[10px] hover:bg-[#2db896]",
+  secondary: "bg-secondary text-paragraph px-[14px] py-[10px] hover:bg-[#5de0c0]",
   action: "bg-paragraph text-white px-[10px] py-[6px] hover:bg-[#36272b]",
 };
 

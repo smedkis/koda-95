@@ -96,7 +96,7 @@ export function AdminTerminCard({
         <Link
           href={`/admin/termini/${id}`}
           className={cn(
-            "mt-6 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#2db896]",
+            "mt-6 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]",
           )}
         >
           Odpri

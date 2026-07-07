@@ -117,7 +117,7 @@ export function TerminCard({
         </div>
       ) : null}
       <div className="mt-6 flex items-center justify-between gap-3">
-        <span className="inline-flex w-fit items-center justify-center gap-2 self-start rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#2db896]">
+        <span className="inline-flex w-fit items-center justify-center gap-2 self-start rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
           {t("reserve")}
         </span>
         <Text className="text-right text-[14px] font-medium text-[#006e5e] sm:whitespace-nowrap">
