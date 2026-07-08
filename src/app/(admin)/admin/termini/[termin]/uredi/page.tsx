@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AdminBackLink } from "@/components/admin/AdminBackLink";
+import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { AdminTerminForm } from "@/components/admin/AdminTerminForm";
 import {
   getAddedTermini,
@@ -51,18 +51,26 @@ export default function UrediTerminPage() {
 
   if (termin === null) {
     return (
-      <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
-        <AdminBackLink href="/admin/termini" label="Termini" />
-        <Heading2 className="mt-4">Termin ne obstaja</Heading2>
+      <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
+        <AdminBreadcrumbs items={[{ label: "Termini", href: "/admin/termini" }]} />
+        <Heading2>Termin ne obstaja</Heading2>
         <Text className="mt-4">Termina s to povezavo ni bilo mogoče najti.</Text>
       </div>
     );
   }
 
+  const cleanTitle = termin.title.replace(/\s*\([^)]*\)\s*$/, "");
+
   return (
-    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
-      <AdminBackLink href="/admin/termini" label="Termini" />
-      <Heading2 className="mt-4">Uredi termin</Heading2>
+    <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
+      <AdminBreadcrumbs
+        items={[
+          { label: "Termini", href: "/admin/termini" },
+          { label: cleanTitle, href: `/admin/termini/${id}` },
+          { label: "Uredi" },
+        ]}
+      />
+      <Heading2>Uredi termin</Heading2>
       <AdminTerminForm initialTermin={termin} />
     </div>
   );

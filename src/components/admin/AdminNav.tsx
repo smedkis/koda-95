@@ -55,6 +55,23 @@ function ChartIcon({ className }: { className?: string }) {
   );
 }
 
+function BellIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={cn("size-5 shrink-0", className)}>
+      <path
+        d="M5.81186 8.93778C5.81186 5.52036 8.58222 2.75 11.9996 2.75C15.417 2.75 18.1874 5.52036 18.1874 8.93777V13.5184L19.8 17.8572H4.19922L5.81186 13.5184V8.93778Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M15.1673 17.8574V18.0834C15.1673 19.8323 13.7496 21.2501 12.0007 21.2501C10.2517 21.2501 8.83398 19.8323 8.83398 18.0834V17.8574"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+}
+
 function MenuIcon({ open }: { open: boolean }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="size-5 shrink-0">
@@ -116,7 +133,7 @@ export function AdminNav() {
         className={
           isLoginPage
             ? "flex items-center justify-center py-6"
-            : "flex items-center justify-between py-6 lg:grid lg:grid-cols-3"
+            : "flex items-center justify-between py-6"
         }
       >
         {isLoginPage ? (
@@ -129,39 +146,19 @@ export function AdminNav() {
             priority
           />
         ) : (
-          <>
-            <Link href="/admin/termini" className="shrink-0 lg:justify-self-start">
-              <Image
-                src="/logo.png"
-                alt="Tahografi Cuderman"
-                width={266}
-                height={100}
-                className="h-10 w-auto lg:h-12"
-                priority
-              />
-            </Link>
-            <div className="hidden items-center justify-self-center gap-8 lg:flex">
-              <Link href="/admin/termini">
-                <TextMedium
-                  as="span"
-                  className={cn(pathname === "/admin/termini" && "text-primary")}
-                >
-                  Termini
-                </TextMedium>
-              </Link>
-              <Link href="/admin/obvescanje">
-                <TextMedium
-                  as="span"
-                  className={cn(pathname === "/admin/obvescanje" && "text-primary")}
-                >
-                  Obveščanje
-                </TextMedium>
-              </Link>
-            </div>
-          </>
+          <Link href="/admin/termini" className="shrink-0">
+            <Image
+              src="/logo.png"
+              alt="Tahografi Cuderman"
+              width={266}
+              height={100}
+              className="h-10 w-auto lg:h-12"
+              priority
+            />
+          </Link>
         )}
         {isLoginPage ? null : (
-          <div className="flex items-center gap-4 lg:justify-self-end lg:gap-8">
+          <div className="flex items-center gap-4 lg:gap-8">
             <label className="relative hidden items-center gap-2 rounded border border-divider bg-secondary-bg px-[14px] py-[10px] lg:flex">
               <SearchIcon />
               <input
@@ -183,6 +180,11 @@ export function AdminNav() {
               </button>
               {searchResultsDropdown}
             </label>
+            <Link href="/admin/obvescanje" aria-label="Obveščanje" className="flex items-center">
+              <BellIcon
+                className={pathname === "/admin/obvescanje" ? "text-primary" : "text-[#402E32]"}
+              />
+            </Link>
             <Link href="/admin/statistika" aria-label="Statistika" className="flex items-center">
               <ChartIcon
                 className={pathname === "/admin/statistika" ? "text-primary" : "text-[#402E32]"}
@@ -231,18 +233,6 @@ export function AdminNav() {
             </button>
             {searchResultsDropdown}
           </label>
-          <div className="mt-4 flex flex-col gap-4">
-            <Link href="/admin/termini" onClick={() => setIsMobileMenuOpen(false)}>
-              <TextMedium as="span" className={cn(pathname === "/admin/termini" && "text-primary")}>
-                Termini
-              </TextMedium>
-            </Link>
-            <Link href="/admin/obvescanje" onClick={() => setIsMobileMenuOpen(false)}>
-              <TextMedium as="span" className={cn(pathname === "/admin/obvescanje" && "text-primary")}>
-                Obveščanje
-              </TextMedium>
-            </Link>
-          </div>
         </div>
       ) : null}
     </div>

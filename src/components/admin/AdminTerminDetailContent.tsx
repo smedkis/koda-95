@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AddVoznikModal } from "./AddVoznikModal";
+import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import type { AdminTerminCardProps } from "./AdminTerminCard";
 import {
   AdminTerminDriversTable,
@@ -54,7 +55,12 @@ export function AdminTerminDetailContent({
   }, [id]);
 
   if (!termin) {
-    return <Text className="mt-4">Termina ni bilo mogoče najti.</Text>;
+    return (
+      <>
+        <AdminBreadcrumbs items={[{ label: "Termini", href: "/admin/termini" }]} />
+        <Text className="mt-4">Termina ni bilo mogoče najti.</Text>
+      </>
+    );
   }
 
   const cleanTitle = termin.title.replace(/\s*\([^)]*\)\s*$/, "");
@@ -78,7 +84,10 @@ export function AdminTerminDetailContent({
 
   return (
     <>
-      <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <AdminBreadcrumbs
+        items={[{ label: "Termini", href: "/admin/termini" }, { label: cleanTitle }]}
+      />
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Heading2>{cleanTitle}</Heading2>
         <Link
           href={`/admin/termini/${id}/uredi`}

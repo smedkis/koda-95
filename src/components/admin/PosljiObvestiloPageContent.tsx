@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { AdminBackLink } from "./AdminBackLink";
+import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
@@ -77,9 +77,15 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
   };
 
   return (
-    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
-      <AdminBackLink href="/admin/obvescanje" label="Obveščanje" />
-      <Heading2 className="mt-4">Pošlji obvestilo</Heading2>
+    <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
+      <AdminBreadcrumbs
+        items={[
+          { label: "Termini", href: "/admin/termini" },
+          { label: "Obveščanje", href: "/admin/obvescanje" },
+          { label: "Pošlji obvestilo" },
+        ]}
+      />
+      <Heading2>Pošlji obvestilo</Heading2>
 
       <Heading3 className="mt-8">1. Komu</Heading3>
       <Box className="mt-4 flex flex-col bg-white">

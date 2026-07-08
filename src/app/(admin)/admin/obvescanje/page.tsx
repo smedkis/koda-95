@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { ObvescanjePageContent } from "@/components/admin/ObvescanjePageContent";
 import type { ObvescanjeEntry } from "@/components/admin/ObvescanjeTable";
 
@@ -134,7 +135,10 @@ const PLACEHOLDER_ENTRIES: ObvescanjeEntry[] = [
 
 export default function ObvescanjeListPage() {
   return (
-    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
+    <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
+      <AdminBreadcrumbs
+        items={[{ label: "Termini", href: "/admin/termini" }, { label: "Obveščanje" }]}
+      />
       <ObvescanjePageContent initialEntries={PLACEHOLDER_ENTRIES} />
     </div>
   );

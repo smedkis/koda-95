@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { AdminBackLink } from "@/components/admin/AdminBackLink";
 import { AdminTerminDetailContent } from "@/components/admin/AdminTerminDetailContent";
 import { PLACEHOLDER_PAST_TERMINI, PLACEHOLDER_TERMINI } from "@/lib/admin-termini-data";
 
@@ -34,8 +33,7 @@ export default async function AdminTerminDetailPage({
   const termin = getTermin(id);
 
   return (
-    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
-      <AdminBackLink href="/admin/termini" label="Termini" />
+    <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
       <AdminTerminDetailContent id={id} baseTermin={termin} />
     </div>
   );

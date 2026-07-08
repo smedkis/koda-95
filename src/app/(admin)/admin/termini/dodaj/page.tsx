@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AdminBackLink } from "@/components/admin/AdminBackLink";
+import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { AdminTerminForm } from "@/components/admin/AdminTerminForm";
 import { Heading2 } from "@/components/ui/Typography";
 
@@ -10,9 +10,11 @@ export const metadata: Metadata = {
 
 export default function DodajTerminPage() {
   return (
-    <div className="mt-24 mb-24 lg:mt-32 lg:mb-32">
-      <AdminBackLink href="/admin/termini" label="Termini" />
-      <Heading2 className="mt-4">Dodaj termin</Heading2>
+    <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
+      <AdminBreadcrumbs
+        items={[{ label: "Termini", href: "/admin/termini" }, { label: "Dodaj termin" }]}
+      />
+      <Heading2>Dodaj termin</Heading2>
       <AdminTerminForm />
     </div>
   );
