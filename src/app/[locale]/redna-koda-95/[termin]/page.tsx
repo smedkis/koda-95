@@ -104,7 +104,9 @@ export default async function TerminPage({
             <div className="lg:col-span-3">
               <TerminRegistrationForm
                 daysUntil={daysUntil}
-                obrazecHref={`/redna-koda-95/${slug}/obrazec`}
+                program={PROGRAM}
+                dateISO={termin.dateISO}
+                terminPath={`/redna-koda-95/${slug}`}
               />
             </div>
           </div>

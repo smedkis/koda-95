@@ -8,14 +8,19 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { Text } from "@/components/ui/Typography";
 import { useRouter } from "@/i18n/navigation";
-import { saveQuickFormData } from "@/lib/obrazec-quick-data";
+import { submitQuickRegistrationAction } from "@/app/[locale]/actions";
+import type { ProgramKey } from "@/lib/supabase/database.types";
 
 export function TerminRegistrationForm({
   daysUntil,
-  obrazecHref,
+  program,
+  dateISO,
+  terminPath,
 }: {
   daysUntil?: number;
-  obrazecHref: string;
+  program: ProgramKey;
+  dateISO: string;
+  terminPath: string;
 }) {
   const t = useTranslations("TerminRegistrationForm");
   const router = useRouter();
@@ -26,6 +31,8 @@ export function TerminRegistrationForm({
   const [phone, setPhone] = useState("");
   const [consentMarketing, setConsentMarketing] = useState(false);
   const [consentTerms, setConsentTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const isValid =
     fullName.trim().length > 0 &&
@@ -33,10 +40,25 @@ export function TerminRegistrationForm({
     phone.trim().length > 0 &&
     consentTerms;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isValid) return;
-    saveQuickFormData({ fullName, email, phone, consentMarketing, consentTerms });
-    router.push(obrazecHref);
+    setIsSubmitting(true);
+    setError(null);
+    const result = await submitQuickRegistrationAction({
+      program,
+      dateISO,
+      fullName,
+      email,
+      phone,
+      consentMarketing,
+      consentTerms,
+    });
+    setIsSubmitting(false);
+    if ("error" in result) {
+      setError(result.error);
+      return;
+    }
+    router.push(`${terminPath}/potrjeno?prijava=${result.code}`);
   };
 
   return (
@@ -108,8 +130,14 @@ export function TerminRegistrationForm({
         checked={consentTerms}
         onChange={(e) => setConsentTerms(e.target.checked)}
       />
-      <Button variant="secondary" className="mt-8 w-full" disabled={!isValid} onClick={handleSubmit}>
-        {t("submit")}
+      {error ? <Text className="mt-4 text-red-600">{error}</Text> : null}
+      <Button
+        variant="secondary"
+        className="mt-8 w-full"
+        disabled={!isValid || isSubmitting}
+        onClick={handleSubmit}
+      >
+        {isSubmitting ? "…" : t("submit")}
       </Button>
       <Text className="mt-2 text-center text-[14px] font-medium text-[#006e5e]">
         Prijavi se zdaj, plačaj kasneje

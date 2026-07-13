@@ -79,7 +79,8 @@
     "registrationNumber": "Registration number",
     "location": "Location",
     "mapTitle": "Session location",
-    "pageTitle": "Registration confirmed"
+    "pageTitle": "Registration confirmed",
+    "completeRegistration": "Fill out the form"
   },
   "ConfirmationHelp": {
     "heading": "Need help?"

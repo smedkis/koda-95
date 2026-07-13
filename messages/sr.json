@@ -79,7 +79,8 @@
     "registrationNumber": "Broj prijave",
     "location": "Lokacija",
     "mapTitle": "Lokacija termina",
-    "pageTitle": "Prijava potvrđena"
+    "pageTitle": "Prijava potvrđena",
+    "completeRegistration": "Popuni obrazac"
   },
   "ConfirmationHelp": {
     "heading": "Potrebna vam je pomoć?"

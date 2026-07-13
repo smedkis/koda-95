@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Text } from "@/components/ui/Typography";
@@ -16,22 +17,8 @@ import { SectionDivider } from "@/components/site/SectionDivider";
 import { Footer } from "@/components/site/Footer";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { INITIAL_OBRAZEC_FORM_DATA, type ObrazecFormData } from "@/lib/obrazec-form";
-import { loadQuickFormData, clearQuickFormData } from "@/lib/obrazec-quick-data";
-import { submitRegistrationAction } from "@/app/[locale]/actions";
-import type { LicenceCategory, ProgramKey } from "@/lib/supabase/database.types";
-
-// Parses "/redna-koda-95/usposabljanje-2026-05-20/obrazec" into the program
-// key and ISO date, both needed to resolve the real termin on submit.
-function parseObrazecPathname(
-  pathname: string,
-): { program: ProgramKey; dateISO: string; terminPath: string } | null {
-  const segments = pathname.split("/").filter(Boolean);
-  const [program, terminSlug] = segments;
-  if (program !== "redna-koda-95" && program !== "zacetna-koda-95") return null;
-  const match = terminSlug?.match(/^usposabljanje-(\d{4}-\d{2}-\d{2})$/);
-  if (!match) return null;
-  return { program, dateISO: match[1], terminPath: `/${program}/${terminSlug}` };
-}
+import { completeRegistrationAction } from "@/app/[locale]/actions";
+import type { LicenceCategory } from "@/lib/supabase/database.types";
 
 export function ObrazecForm() {
   const t = useTranslations("Obrazec");
@@ -41,14 +28,19 @@ export function ObrazecForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const parsed = parseObrazecPathname(pathname);
+  // /obrazec is only reachable with a code from the quick-form confirmation
+  // (or, eventually, its email) — the registration itself already exists at
+  // this point, this form only fills in the rest of it.
+  const code = searchParams.get("prijava");
+  const terminPath = pathname.replace(/\/obrazec$/, "");
 
   useEffect(() => {
-    if (!loadQuickFormData() && parsed) {
-      router.replace(parsed.terminPath);
+    if (!code) {
+      router.replace(terminPath);
     }
-    // Only needs to run once on mount — pathname doesn't change under this page.
+    // Only needs to run once on mount — pathname/code don't change under this page.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -67,9 +59,8 @@ export function ObrazecForm() {
       return;
     }
 
-    const quickData = loadQuickFormData();
-    if (!quickData || !parsed) {
-      router.replace(parsed?.terminPath ?? "/");
+    if (!code) {
+      router.replace(terminPath);
       return;
     }
 
@@ -80,14 +71,7 @@ export function ObrazecForm() {
 
     setIsSubmitting(true);
     setSubmitError(null);
-    const result = await submitRegistrationAction({
-      program: parsed.program,
-      dateISO: parsed.dateISO,
-      fullName: quickData.fullName,
-      email: quickData.email,
-      phone: quickData.phone,
-      consentMarketing: quickData.consentMarketing,
-      consentTerms: quickData.consentTerms,
+    const result = await completeRegistrationAction(code, {
       licenceCategories,
       placeOfBirth: formData.placeOfBirth,
       countryOfBirth: formData.countryOfBirth,
@@ -110,8 +94,7 @@ export function ObrazecForm() {
       return;
     }
 
-    clearQuickFormData();
-    router.push(`${parsed.terminPath}/obrazec/potrjeno?prijava=${result.code}`);
+    router.push(`${terminPath}/obrazec/potrjeno?prijava=${code}`);
   };
 
   const handleBack = () => {

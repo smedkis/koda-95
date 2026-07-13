@@ -79,7 +79,8 @@
     "registrationNumber": "Številka prijave",
     "location": "Lokacija",
     "mapTitle": "Lokacija termina",
-    "pageTitle": "Prijava potrjena"
+    "pageTitle": "Prijava potrjena",
+    "completeRegistration": "Izpolni obrazec"
   },
   "ConfirmationHelp": {
     "heading": "Potrebujete pomoč?"
