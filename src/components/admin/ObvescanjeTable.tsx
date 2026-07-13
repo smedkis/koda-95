@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow, Heading3, Text } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
+import { getPaginationRange } from "@/lib/pagination";
 
 export type ObvescanjeEnrollment =
   | { status: "enrolled"; date: string }
@@ -129,6 +130,11 @@ export function ObvescanjeTable({
     return sortedRows.slice(start, start + pageSize);
   }, [sortedRows, clampedPage, pageSize]);
 
+  const paginationRange = useMemo(
+    () => getPaginationRange(clampedPage, totalPages),
+    [clampedPage, totalPages],
+  );
+
   const handleSort = (key: SortKey) => {
     if (key === sortKey) {
       setSortDirection((direction) => (direction === "asc" ? "desc" : "asc"));
@@ -243,21 +249,30 @@ export function ObvescanjeTable({
             ))}
           </div>
           <div className="flex items-center gap-1">
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-              <button
-                key={page}
-                type="button"
-                onClick={() => setCurrentPage(page)}
-                className={cn(
-                  "flex size-8 cursor-pointer items-center justify-center rounded font-body text-[14px] font-medium",
-                  page === clampedPage
-                    ? "bg-paragraph text-white"
-                    : "text-paragraph hover:bg-secondary-bg",
-                )}
-              >
-                {page}
-              </button>
-            ))}
+            {paginationRange.map((page, index) =>
+              page === "dots" ? (
+                <span
+                  key={`dots-${index}`}
+                  className="flex size-8 items-center justify-center font-body text-[14px] font-medium text-placeholder"
+                >
+                  …
+                </span>
+              ) : (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(page)}
+                  className={cn(
+                    "flex size-8 cursor-pointer items-center justify-center rounded font-body text-[14px] font-medium",
+                    page === clampedPage
+                      ? "bg-paragraph text-white"
+                      : "text-paragraph hover:bg-secondary-bg",
+                  )}
+                >
+                  {page}
+                </button>
+              ),
+            )}
           </div>
         </div>
       ) : null}
