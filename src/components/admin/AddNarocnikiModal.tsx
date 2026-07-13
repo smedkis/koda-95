@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow, Heading3, Text } from "@/components/ui/Typography";
-import type { ObvescanjeEntry } from "./ObvescanjeTable";
+import type { AddNarocnikInput } from "@/lib/data/narocniki";
 
 function CloseIcon() {
   return (
@@ -58,31 +58,24 @@ function parsePastedText(
 }
 
 export function AddNarocnikiModal({
+  error,
   onAdd,
   onClose,
 }: {
-  onAdd: (entries: ObvescanjeEntry[]) => void;
+  error?: string | null;
+  onAdd: (entries: AddNarocnikInput[]) => Promise<void>;
   onClose: () => void;
 }) {
   const [pastedText, setPastedText] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const parsedRows = useMemo(() => parsePastedText(pastedText), [pastedText]);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (parsedRows.length === 0) return;
-    const today = new Date().toISOString().slice(0, 10);
-    const newEntries: ObvescanjeEntry[] = parsedRows.map((row, index) => ({
-      id: `manual-${Date.now()}-${index}`,
-      driverName: row.name,
-      email: row.email,
-      phone: row.phone,
-      dateAdded: today,
-      source: row.source,
-      lastNotified: null,
-      enrollment: { status: "never" },
-    }));
-    onAdd(newEntries);
-    onClose();
+    setIsSubmitting(true);
+    await onAdd(parsedRows);
+    setIsSubmitting(false);
   };
 
   return (
@@ -153,14 +146,15 @@ export function AddNarocnikiModal({
             </div>
           </div>
         ) : null}
+        {error ? <Text className="mt-4 text-red-600">{error}</Text> : null}
         <Button
           type="button"
           variant="primary"
           className="mt-8 w-full justify-center"
-          disabled={parsedRows.length === 0}
+          disabled={parsedRows.length === 0 || isSubmitting}
           onClick={handleConfirm}
         >
-          Dodaj {parsedRows.length > 0 ? `(${parsedRows.length})` : ""}
+          {isSubmitting ? "Dodajam …" : `Dodaj ${parsedRows.length > 0 ? `(${parsedRows.length})` : ""}`}
         </Button>
       </div>
     </div>

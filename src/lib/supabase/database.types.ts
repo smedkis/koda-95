@@ -1,8 +1,8 @@
 // Hand-written to mirror supabase/migrations/20260701083219_initial_schema.sql,
 // 20260701085511_termini_price_optional.sql,
-// 20260713100000_termini_capacity_modul.sql, and
-// 20260713110000_termini_location_time_partial_prijave.sql. Keep in sync
-// with any new migration.
+// 20260713100000_termini_capacity_modul.sql,
+// 20260713110000_termini_location_time_partial_prijave.sql, and
+// 20260713120000_narocniki.sql. Keep in sync with any new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -74,6 +74,17 @@ export type ObvescanjeRow = {
   created_at: string;
 };
 
+export type NarocnikiRow = {
+  id: string;
+  full_name: string | null;
+  email: string;
+  phone: string | null;
+  source: string | null;
+  voznik_id: string | null;
+  last_notified_at: string | null;
+  created_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -100,6 +111,12 @@ export interface Database {
         Update: Partial<
           Omit<PrijaveRow, "id" | "registration_code" | "created_at" | "updated_at">
         >;
+        Relationships: [];
+      };
+      narocniki: {
+        Row: NarocnikiRow;
+        Insert: Partial<Omit<NarocnikiRow, "id" | "created_at">> & Pick<NarocnikiRow, "email">;
+        Update: Partial<Omit<NarocnikiRow, "id" | "created_at">>;
         Relationships: [];
       };
     };

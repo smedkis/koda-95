@@ -7,6 +7,8 @@ import { AddNarocnikiModal } from "./AddNarocnikiModal";
 import { ObvescanjeTable, type ObvescanjeEntry } from "./ObvescanjeTable";
 import { Button } from "@/components/ui/Button";
 import { Heading2, Heading3 } from "@/components/ui/Typography";
+import { addNarocnikiAction, deleteNarocnikAction } from "@/app/(admin)/admin/obvescanje/actions";
+import type { AddNarocnikInput } from "@/lib/data/narocniki";
 
 export function ObvescanjePageContent({
   initialEntries,
@@ -15,13 +17,24 @@ export function ObvescanjePageContent({
 }) {
   const [entries, setEntries] = useState(initialEntries);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
+    const previous = entries;
     setEntries((current) => current.filter((entry) => entry.id !== id));
+    const result = await deleteNarocnikAction(id);
+    if (result.error) setEntries(previous);
   };
 
-  const handleAdd = (newEntries: ObvescanjeEntry[]) => {
-    setEntries((current) => [...newEntries, ...current]);
+  const handleAdd = async (parsedRows: AddNarocnikInput[]) => {
+    setAddError(null);
+    const result = await addNarocnikiAction(parsedRows);
+    if ("error" in result) {
+      setAddError(result.error);
+      return;
+    }
+    setEntries((current) => [...result.entries, ...current]);
+    setIsAddOpen(false);
   };
 
   return (
@@ -51,7 +64,14 @@ export function ObvescanjePageContent({
         <ObvescanjeTable entries={entries} onDelete={handleDelete} />
       </div>
       {isAddOpen ? (
-        <AddNarocnikiModal onAdd={handleAdd} onClose={() => setIsAddOpen(false)} />
+        <AddNarocnikiModal
+          error={addError}
+          onAdd={handleAdd}
+          onClose={() => {
+            setAddError(null);
+            setIsAddOpen(false);
+          }}
+        />
       ) : null}
     </div>
   );

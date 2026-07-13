@@ -3,12 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { logout } from "@/app/(admin)/actions";
+import { useEffect, useState } from "react";
+import { logout, searchDriversAction } from "@/app/(admin)/actions";
 import { Container } from "@/components/ui/Container";
 import { Text, TextMedium } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
-import { searchDrivers } from "@/lib/admin-drivers-store";
+import type { DriverSearchResult } from "@/lib/data/registrations";
 
 function SearchIcon() {
   return (
@@ -92,11 +92,21 @@ export function AdminNav() {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [results, setResults] = useState<DriverSearchResult[]>([]);
   const pathname = usePathname();
   const router = useRouter();
   const isLoginPage = pathname === "/prijava";
 
-  const results = useMemo(() => searchDrivers(search), [search]);
+  useEffect(() => {
+    const trimmed = search.trim();
+    if (!trimmed) return;
+    const timeout = setTimeout(() => {
+      searchDriversAction(trimmed).then(setResults);
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  const visibleResults = search.trim() ? results : [];
 
   const handleSelect = (terminId: string, driverId: string) => {
     setSearch("");
@@ -107,8 +117,8 @@ export function AdminNav() {
 
   const searchResultsDropdown = isFocused && search.trim() ? (
     <div className="absolute top-full right-0 left-0 z-50 mt-2 max-h-80 overflow-y-auto rounded border border-divider bg-white shadow-lg lg:right-0 lg:left-auto lg:w-80">
-      {results.length > 0 ? (
-        results.map(({ driver, terminId, terminTitle }) => (
+      {visibleResults.length > 0 ? (
+        visibleResults.map(({ driver, terminId, terminTitle }) => (
           <button
             key={`${terminId}-${driver.id}`}
             type="button"

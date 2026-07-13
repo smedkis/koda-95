@@ -1,9 +1,11 @@
 import "server-only";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { getTerminRowBySlug } from "./termini";
-import type { PrijaveRow, VozniciRow } from "@/lib/supabase/database.types";
+import { getTerminRowBySlug, programKeyToShort, terminSlug } from "./termini";
+import { syncNarocnikFromRegistration } from "./narocniki";
+import type { PrijaveRow, TerminiRow, VozniciRow } from "@/lib/supabase/database.types";
 import type { TerminDriver } from "@/components/admin/AdminTerminDriversTable";
 import { dmyToIso, isoToDmy } from "@/lib/date-format";
+import { buildTerminTitle } from "@/lib/termini-format";
 
 type JoinedPrijava = PrijaveRow & { vozniki: VozniciRow };
 
@@ -102,6 +104,14 @@ export async function createRegistration(
     return { error: prijavaError.message };
   }
 
+  await syncNarocnikFromRegistration({
+    fullName: input.fullName,
+    email: input.email,
+    phone: input.phone,
+    voznikId: voznik.id,
+    source: "Ročno dodano",
+  });
+
   return { id: prijava.id };
 }
 
@@ -174,4 +184,53 @@ export async function deleteRegistration(
     .eq("termin_id", termin.id);
   if (error) return { error: error.message };
   return {};
+}
+
+export type DriverSearchResult = { driver: TerminDriver; terminId: string; terminTitle: string };
+
+type FullyJoinedPrijava = PrijaveRow & { vozniki: VozniciRow; termini: TerminiRow };
+
+// Multiple termini can share the exact same title (e.g. every "Redno
+// usposabljanje Koda 95" module), so results show the date alongside it to
+// tell them apart.
+function formatTerminLabel(termin: TerminiRow): string {
+  const title = buildTerminTitle(programKeyToShort(termin.program), termin.modul);
+  return `${title.replace(/\s*\([^)]*\)\s*$/, "")} (${termin.date})`;
+}
+
+async function getAllJoinedRegistrations(): Promise<DriverSearchResult[]> {
+  const client = getSupabaseServerClient();
+  const { data, error } = await client
+    .from("prijave")
+    .select("*, vozniki(*), termini(*)")
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+
+  return (data as unknown as FullyJoinedPrijava[]).map((row) => ({
+    driver: toTerminDriver(row, row.termini.price_eur),
+    terminId: terminSlug(row.termini.program, row.termini.date),
+    terminTitle: formatTerminLabel(row.termini),
+  }));
+}
+
+// Searches every registration by name, email or phone — used by the global
+// nav search.
+export async function searchDrivers(query: string): Promise<DriverSearchResult[]> {
+  const trimmed = query.trim().toLowerCase();
+  if (!trimmed) return [];
+
+  const all = await getAllJoinedRegistrations();
+  return all
+    .filter(({ driver }) => {
+      const haystack =
+        `${driver.driverName} ${driver.email ?? ""} ${driver.phone ?? ""}`.toLowerCase();
+      return haystack.includes(trimmed);
+    })
+    .slice(0, 8);
+}
+
+// Every registration across every termin — used by the statistika page for
+// the monthly count and the PDF export.
+export async function getAllRegistrations(): Promise<DriverSearchResult[]> {
+  return getAllJoinedRegistrations();
 }

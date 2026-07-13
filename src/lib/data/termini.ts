@@ -26,6 +26,10 @@ export function terminSlug(program: ProgramKey, date: string): string {
   return `${KEY_TO_PROGRAM[program]}-${date}`;
 }
 
+export function programKeyToShort(program: ProgramKey): Program {
+  return KEY_TO_PROGRAM[program];
+}
+
 const SLUG_PATTERN = /^(redna|zacetna)-(\d{4}-\d{2}-\d{2})$/;
 
 export function parseTerminSlug(slug: string): { program: ProgramKey; date: string } | null {
