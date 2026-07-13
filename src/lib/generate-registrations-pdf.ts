@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import type { DriverSearchResult } from "@/lib/admin-drivers-store";
+import type { DriverSearchResult } from "@/lib/data/registrations";
 
 const FONT_FAMILY = "SourceSans3";
 

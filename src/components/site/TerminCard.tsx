@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { Box } from "@/components/ui/Box";
 import { Heading3, Text } from "@/components/ui/Typography";
 import { Link } from "@/i18n/navigation";
-import { parseModul } from "@/lib/admin-termini-store";
+import { parseModul } from "@/lib/termini-format";
 import { cn } from "@/lib/cn";
 
 function InfoRow({ icon, children }: { icon: string; children: ReactNode }) {
