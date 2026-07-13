@@ -50,7 +50,7 @@ export function ObvescanjePageContent({
         </Link>
       </div>
       <div className="mt-16 flex items-center justify-between">
-        <Heading3>Naročniki</Heading3>
+        <Heading3>Naročniki ({entries.length})</Heading3>
         <Button
           type="button"
           variant="action"
