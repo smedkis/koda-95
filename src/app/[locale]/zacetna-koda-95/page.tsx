@@ -10,42 +10,7 @@ import { NumbersSection } from "@/components/site/NumbersSection";
 import { SectionDivider } from "@/components/site/SectionDivider";
 import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminiSection } from "@/components/site/TerminiSection";
-
-// Placeholder data — will be replaced with a real Supabase query.
-export const PLACEHOLDER_TERMINI = [
-  {
-    title: "Začetno usposabljanje Koda 95",
-    date: "Ponedeljek, 08.06. 2026",
-    dateISO: "2026-06-08",
-    address: "Pot za krajem 35, 4000 Kranj",
-    timeRange: "08.00 - 16.00",
-    href: "/zacetna-koda-95/usposabljanje-2026-06-08",
-  },
-  {
-    title: "Začetno usposabljanje Koda 95",
-    date: "Ponedeljek, 13.07. 2026",
-    dateISO: "2026-07-13",
-    address: "Pot za krajem 35, 4000 Kranj",
-    timeRange: "08.00 - 16.00",
-    href: "/zacetna-koda-95/usposabljanje-2026-07-13",
-  },
-  {
-    title: "Začetno usposabljanje Koda 95",
-    date: "Ponedeljek, 10.08. 2026",
-    dateISO: "2026-08-10",
-    address: "Pot za krajem 35, 4000 Kranj",
-    timeRange: "08.00 - 16.00",
-    href: "/zacetna-koda-95/usposabljanje-2026-08-10",
-  },
-  {
-    title: "Začetno usposabljanje Koda 95",
-    date: "Ponedeljek, 14.09. 2026",
-    dateISO: "2026-09-14",
-    address: "Pot za krajem 35, 4000 Kranj",
-    timeRange: "08.00 - 16.00",
-    href: "/zacetna-koda-95/usposabljanje-2026-09-14",
-  },
-];
+import { listPublicTermini } from "@/lib/data/termini";
 
 // Placeholder questions — real content to follow later.
 const PLACEHOLDER_FAQ = [
@@ -81,10 +46,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ZacetnaKoda95Page() {
   const t = await getTranslations("Programs.zacetna");
+  const termini = await listPublicTermini("zacetna-koda-95");
   return (
     <Container>
       <Hero title={t("heroTitle")} description={t("heroDescription")} />
-      <TerminiSection termini={PLACEHOLDER_TERMINI} />
+      <TerminiSection termini={termini} />
       <LogosSection />
       <SectionDivider />
       <AboutSection />

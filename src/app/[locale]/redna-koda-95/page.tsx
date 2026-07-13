@@ -10,54 +10,7 @@ import { NumbersSection } from "@/components/site/NumbersSection";
 import { SectionDivider } from "@/components/site/SectionDivider";
 import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminiSection } from "@/components/site/TerminiSection";
-
-// Placeholder data — will be replaced with a real Supabase query.
-export const PLACEHOLDER_TERMINI = [
-  {
-    title: "Redno usposabljanje Koda 95 (2026)",
-    date: "Sreda, 20.05. 2026",
-    dateISO: "2026-05-20",
-    address: "Pot za krajem 35, 4000 Kranj",
-    timeRange: "15.00 - 21.00",
-    price: "50 EUR z DDV",
-    attendeeCount: 16,
-    capacity: 24,
-    href: "/redna-koda-95/usposabljanje-2026-05-20",
-  },
-  {
-    title: "Redno usposabljanje Koda 95 (2026)",
-    date: "Sreda, 17.06. 2026",
-    dateISO: "2026-06-17",
-    address: "Pot za krajem 35, 4000 Kranj",
-    timeRange: "15.00 - 21.00",
-    price: "50 EUR z DDV",
-    attendeeCount: 9,
-    capacity: 24,
-    href: "/redna-koda-95/usposabljanje-2026-06-17",
-  },
-  {
-    title: "Redno usposabljanje Koda 95 (2026)",
-    date: "Sreda, 15.07. 2026",
-    dateISO: "2026-07-15",
-    address: "Pot za krajem 35, 4000 Kranj",
-    timeRange: "15.00 - 21.00",
-    price: "50 EUR z DDV",
-    attendeeCount: 22,
-    capacity: 24,
-    href: "/redna-koda-95/usposabljanje-2026-07-15",
-  },
-  {
-    title: "Redno usposabljanje Koda 95 (2026)",
-    date: "Sreda, 19.08. 2026",
-    dateISO: "2026-08-19",
-    address: "Pot za krajem 35, 4000 Kranj",
-    timeRange: "15.00 - 21.00",
-    price: "50 EUR z DDV",
-    attendeeCount: 3,
-    capacity: 24,
-    href: "/redna-koda-95/usposabljanje-2026-08-19",
-  },
-];
+import { listPublicTermini } from "@/lib/data/termini";
 
 const PLACEHOLDER_FAQ = [
   {
@@ -91,10 +44,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RednaKoda95Page() {
   const t = await getTranslations("Programs.redna");
+  const termini = await listPublicTermini("redna-koda-95");
   return (
     <Container>
       <Hero title={t("heroTitle")} description={t("heroDescription")} />
-      <TerminiSection termini={PLACEHOLDER_TERMINI} />
+      <TerminiSection termini={termini} />
       <LogosSection />
       <SectionDivider />
       <AboutSection />

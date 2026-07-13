@@ -84,7 +84,9 @@ function toFormData(row: TerminiRow): TerminFormData {
   };
 }
 
-async function countsByTermin(terminIds: string[]): Promise<Map<string, RegistrationCounts>> {
+export async function countsByTermin(
+  terminIds: string[],
+): Promise<Map<string, RegistrationCounts>> {
   const counts = new Map<string, RegistrationCounts>();
   if (terminIds.length === 0) return counts;
 
@@ -199,6 +201,76 @@ export async function createTermin(input: TerminInput): Promise<TerminMutationRe
     return { error: error.message };
   }
   return { slug: terminSlug(data.program, data.date) };
+}
+
+// --- Public site (redna/zacetna landing + termin pages) -------------------
+
+export function publicTerminHref(program: ProgramKey, date: string): string {
+  return `/${program}/usposabljanje-${date}`;
+}
+
+const PUBLIC_SLUG_PATTERN = /^usposabljanje-(\d{4}-\d{2}-\d{2})$/;
+
+export function parsePublicTerminSlug(slug: string): string | null {
+  const match = slug.match(PUBLIC_SLUG_PATTERN);
+  return match ? match[1] : null;
+}
+
+export type PublicTerminEntry = {
+  title: string;
+  date: string;
+  dateISO: string;
+  address: string;
+  timeRange: string;
+  price?: string;
+  attendeeCount?: number;
+  capacity?: number;
+  href: string;
+};
+
+function toPublicEntry(row: TerminiRow, registeredCount: number): PublicTerminEntry {
+  const hasCapacity = row.capacity !== null;
+  return {
+    title: buildTerminTitle(KEY_TO_PROGRAM[row.program], row.modul),
+    date: formatSlovenianDate(row.date),
+    dateISO: row.date,
+    address: row.address,
+    timeRange: formatTimeRange(row.start_time, row.end_time),
+    price: formatPriceEur(row.price_eur),
+    attendeeCount: hasCapacity ? registeredCount : undefined,
+    capacity: row.capacity ?? undefined,
+    href: publicTerminHref(row.program, row.date),
+  };
+}
+
+export async function listPublicTermini(program: ProgramKey): Promise<PublicTerminEntry[]> {
+  const client = getSupabaseServerClient();
+  const { data, error } = await client
+    .from("termini")
+    .select("*")
+    .eq("program", program)
+    .gte("date", todayIso())
+    .order("date", { ascending: true });
+  if (error) throw new Error(error.message);
+
+  const rows = data ?? [];
+  const counts = await countsByTermin(rows.map((row) => row.id));
+  return rows.map((row) => toPublicEntry(row, counts.get(row.id)?.registered ?? 0));
+}
+
+export async function getPublicTermin(
+  program: ProgramKey,
+  dateISO: string,
+): Promise<TerminiRow | null> {
+  const client = getSupabaseServerClient();
+  const { data, error } = await client
+    .from("termini")
+    .select("*")
+    .eq("program", program)
+    .eq("date", dateISO)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data;
 }
 
 export async function updateTermin(

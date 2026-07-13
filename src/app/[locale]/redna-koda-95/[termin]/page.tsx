@@ -12,20 +12,44 @@ import { TerminDetails } from "@/components/site/TerminDetails";
 import { TerminRegistrationForm } from "@/components/site/TerminRegistrationForm";
 import { getDaysUntil, isNextTermin } from "@/lib/termin-dates";
 import { TERMIN_FAQ } from "@/lib/termin-faq";
-import { PLACEHOLDER_TERMINI } from "../page";
+import {
+  buildTerminTitle,
+  formatPriceEur,
+  formatSlovenianDate,
+  formatTimeRange,
+} from "@/lib/termini-format";
+import {
+  countsByTermin,
+  getPublicTermin,
+  listPublicTermini,
+  parsePublicTerminSlug,
+} from "@/lib/data/termini";
 
-// Description text isn't part of the listing card data, so it's kept here
-// and merged with the matching PLACEHOLDER_TERMINI entry by slug.
+const PROGRAM = "redna-koda-95" as const;
+
+// Description text isn't part of the listing card data, so it's kept here.
 const DESCRIPTION =
   "Redno usposabljanje za podaljšanje kode 95 po predpisanem programu za leto 2026. Usposabljanje traja 7 ur in je namenjeno vsem poklicnim voznikom kategorij C in D, ki morajo podaljšati veljavnost temeljne kvalifikacije.";
 
-function getTermin(slug: string) {
-  const termin = PLACEHOLDER_TERMINI.find((entry) => entry.href.endsWith(slug));
-  if (!termin) return null;
+async function getTermin(slug: string) {
+  const dateISO = parsePublicTerminSlug(slug);
+  if (!dateISO) return null;
+  const row = await getPublicTermin(PROGRAM, dateISO);
+  if (!row) return null;
+
+  const counts = await countsByTermin([row.id]);
+  const registered = counts.get(row.id)?.registered ?? 0;
+  const hasCapacity = row.capacity !== null;
+
   return {
-    ...termin,
+    title: buildTerminTitle("redna", row.modul),
     description: DESCRIPTION,
-    spotsLabel: `${termin.attendeeCount}/${termin.capacity} prostih mest`,
+    price: formatPriceEur(row.price_eur),
+    spotsLabel: hasCapacity ? `${registered}/${row.capacity} prostih mest` : "Neomejeno prostih mest",
+    date: formatSlovenianDate(row.date),
+    dateISO: row.date,
+    timeRange: formatTimeRange(row.start_time, row.end_time),
+    address: row.address,
   };
 }
 
@@ -35,7 +59,7 @@ export async function generateMetadata({
   params: Promise<{ termin: string }>;
 }): Promise<Metadata> {
   const { termin: slug } = await params;
-  const termin = getTermin(slug);
+  const termin = await getTermin(slug);
   if (!termin) return {};
   return {
     title: `${termin.title} | Tahografi Cuderman`,
@@ -49,12 +73,13 @@ export default async function TerminPage({
   params: Promise<{ termin: string }>;
 }) {
   const { termin: slug } = await params;
-  const termin = getTermin(slug);
+  const termin = await getTermin(slug);
   if (!termin) notFound();
 
+  const allUpcoming = await listPublicTermini(PROGRAM);
   const isNext = isNextTermin(
     termin.dateISO,
-    PLACEHOLDER_TERMINI.map((entry) => entry.dateISO),
+    allUpcoming.map((entry) => entry.dateISO),
   );
   const daysUntil = isNext ? getDaysUntil(termin.dateISO) : undefined;
   const t = await getTranslations("TerminRegistrationForm");
@@ -77,7 +102,10 @@ export default async function TerminPage({
               />
             </div>
             <div className="lg:col-span-3">
-              <TerminRegistrationForm daysUntil={daysUntil} />
+              <TerminRegistrationForm
+                daysUntil={daysUntil}
+                obrazecHref={`/redna-koda-95/${slug}/obrazec`}
+              />
             </div>
           </div>
           <SectionDivider />
