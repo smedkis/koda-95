@@ -47,7 +47,9 @@
     "phone": "Phone number",
     "email": "Email address",
     "submit": "Subscribe",
-    "consent": "I agree to the general terms of business and privacy policy."
+    "consent": "I agree to the general terms of business and privacy policy.",
+    "success": "You're subscribed! We'll let you know about new sessions.",
+    "error": "Something went wrong. Please try again."
   },
   "TerminDetails": {
     "home": "Home",

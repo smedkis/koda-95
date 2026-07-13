@@ -47,7 +47,9 @@
     "phone": "Broj telefona",
     "email": "E-mail adresa",
     "submit": "Prijavi se",
-    "consent": "Slažem se sa opštim uslovima poslovanja i politikom privatnosti."
+    "consent": "Slažem se sa opštim uslovima poslovanja i politikom privatnosti.",
+    "success": "Uspešno ste se prijavili! Obavestićemo vas o novim terminima.",
+    "error": "Došlo je do greške. Pokušajte ponovo."
   },
   "TerminDetails": {
     "home": "Početna",
