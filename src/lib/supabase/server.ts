@@ -1,14 +1,15 @@
 import "server-only";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
 
 // Service-role client — bypasses RLS entirely, so this must only ever be
 // imported from server-side code (Server Components / Server Actions). The
 // `server-only` import above throws at build time if a client bundle tries
 // to pull this module in.
-let client: SupabaseClient<Database> | undefined;
+type SupabaseServerClient = ReturnType<typeof createClient<Database>>;
+let client: SupabaseServerClient | undefined;
 
-export function getSupabaseServerClient(): SupabaseClient<Database> {
+export function getSupabaseServerClient(): SupabaseServerClient {
   if (client) return client;
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

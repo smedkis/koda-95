@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Box } from "@/components/ui/Box";
 import { Eyebrow, Heading3, Text } from "@/components/ui/Typography";
-import { parseModul } from "@/lib/admin-termini-store";
+import { parseModul } from "@/lib/termini-format";
 import { cn } from "@/lib/cn";
 
 function InfoRow({ icon, children }: { icon: string; children: ReactNode }) {

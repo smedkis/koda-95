@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AddVoznikModal } from "./AddVoznikModal";
 import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
-import type { AdminTerminCardProps } from "./AdminTerminCard";
 import {
   AdminTerminDriversTable,
   type TerminDriver,
@@ -14,41 +13,20 @@ import { Button } from "@/components/ui/Button";
 import { Heading2, Heading3, Text } from "@/components/ui/Typography";
 import { addDriverToTermin, getDriversForTermin } from "@/lib/admin-drivers-store";
 import { PLACEHOLDER_DRIVERS } from "@/lib/admin-drivers-data";
-import {
-  getAddedTermini,
-  getTerminOverrides,
-  parseModul,
-  type StoredTermin,
-} from "@/lib/admin-termini-store";
+import { parseModul } from "@/lib/termini-format";
 import { generateAttendancePdf } from "@/lib/generate-attendance-pdf";
-
-type BaseTermin = AdminTerminCardProps & { program: "redna" | "zacetna" };
+import type { TerminFormData } from "@/lib/data/termini";
 
 export function AdminTerminDetailContent({
   id,
-  baseTermin,
+  termin,
 }: {
   id: string;
-  baseTermin: BaseTermin | null;
+  termin: TerminFormData | null;
 }) {
-  const [termin, setTermin] = useState<BaseTermin | StoredTermin | null>(baseTermin);
   const [drivers, setDrivers] = useState<TerminDriver[]>(PLACEHOLDER_DRIVERS);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-
-  useEffect(() => {
-    const overrides = getTerminOverrides();
-    if (overrides[id]) {
-      setTermin(overrides[id]);
-      return;
-    }
-    const added = getAddedTermini().find((entry) => entry.id === id);
-    if (added) {
-      setTermin(added);
-      return;
-    }
-    setTermin(baseTermin);
-  }, [id, baseTermin]);
 
   useEffect(() => {
     setDrivers(getDriversForTermin(id, PLACEHOLDER_DRIVERS));

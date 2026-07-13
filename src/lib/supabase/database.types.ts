@@ -1,6 +1,8 @@
-// Hand-written to mirror supabase/migrations/20260701083219_initial_schema.sql
-// and 20260701085511_termini_price_optional.sql. Keep in sync with any new
-// migration.
+// Hand-written to mirror supabase/migrations/20260701083219_initial_schema.sql,
+// 20260701085511_termini_price_optional.sql,
+// 20260713100000_termini_capacity_modul.sql, and
+// 20260713110000_termini_location_time_partial_prijave.sql. Keep in sync
+// with any new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -8,17 +10,21 @@ export type LicenceCategory = "C" | "D";
 export type PayerType = "self" | "company";
 export type PaymentStatus = "pending" | "paid";
 
-export interface TerminiRow {
+export type TerminiRow = {
   id: string;
   program: ProgramKey;
   date: string;
-  capacity: number;
+  address: string;
+  start_time: string;
+  end_time: string;
+  modul: number | null;
+  capacity: number | null;
   price_eur: number | null;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface VozniciRow {
+export type VozniciRow = {
   id: string;
   full_name: string;
   email: string | null;
@@ -34,25 +40,26 @@ export interface VozniciRow {
   street_address: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface PrijaveRow {
+export type PrijaveRow = {
   id: string;
   registration_code: string;
   termin_id: string;
   voznik_id: string;
-  licence_categories: LicenceCategory[];
+  licence_categories: LicenceCategory[] | null;
   payer_type: PayerType;
   company_name: string | null;
   company_tax_number: string | null;
+  company_email: string | null;
   consent_marketing: boolean;
-  consent_terms: boolean;
+  consent_terms: boolean | null;
   payment_status: PaymentStatus;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface ObvescanjeRow {
+export type ObvescanjeRow = {
   id: string;
   registration_code: string;
   full_name: string;
@@ -65,7 +72,7 @@ export interface ObvescanjeRow {
   payment_status: PaymentStatus;
   consent_marketing: boolean;
   created_at: string;
-}
+};
 
 export interface Database {
   public: {
@@ -73,30 +80,35 @@ export interface Database {
       termini: {
         Row: TerminiRow;
         Insert: Partial<Omit<TerminiRow, "id" | "created_at" | "updated_at">> &
-          Pick<TerminiRow, "program" | "date" | "capacity">;
+          Pick<TerminiRow, "program" | "date" | "address" | "start_time" | "end_time">;
         Update: Partial<Omit<TerminiRow, "id" | "created_at" | "updated_at">>;
+        Relationships: [];
       };
       vozniki: {
         Row: VozniciRow;
         Insert: Partial<Omit<VozniciRow, "id" | "created_at" | "updated_at">> &
           Pick<VozniciRow, "full_name">;
         Update: Partial<Omit<VozniciRow, "id" | "created_at" | "updated_at">>;
+        Relationships: [];
       };
       prijave: {
         Row: PrijaveRow;
         Insert: Partial<
           Omit<PrijaveRow, "id" | "registration_code" | "created_at" | "updated_at">
         > &
-          Pick<PrijaveRow, "termin_id" | "voznik_id" | "licence_categories" | "consent_terms">;
+          Pick<PrijaveRow, "termin_id" | "voznik_id">;
         Update: Partial<
           Omit<PrijaveRow, "id" | "registration_code" | "created_at" | "updated_at">
         >;
+        Relationships: [];
       };
     };
     Views: {
       obvescanje: {
         Row: ObvescanjeRow;
+        Relationships: [];
       };
     };
+    Functions: Record<string, never>;
   };
 }

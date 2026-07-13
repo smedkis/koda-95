@@ -3,17 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { AdminTerminCard } from "./AdminTerminCard";
-import {
-  addTermin,
-  formatSlovenianDate,
-  formatTimeRange,
-  saveTerminEdit,
-  type StoredTermin,
-} from "@/lib/admin-termini-store";
+import { createTerminAction, updateTerminAction } from "@/app/(admin)/admin/termini/actions";
+import type { TerminFormData } from "@/lib/data/termini";
+import { formatSlovenianDate, formatTimeRange } from "@/lib/termini-format";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { Eyebrow, Heading3 } from "@/components/ui/Typography";
+import { Eyebrow, Heading3, Text } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
 
 type Program = "redna" | "zacetna";
@@ -62,7 +58,7 @@ function ProgramToggle({
   );
 }
 
-export function AdminTerminForm({ initialTermin }: { initialTermin?: StoredTermin }) {
+export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormData }) {
   const router = useRouter();
   const isEdit = !!initialTermin;
 
@@ -80,12 +76,15 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: StoredTermi
   );
   const address = locationChoice === CUSTOM_LOCATION ? customAddress : locationChoice;
   const [capacity, setCapacity] = useState(initialTermin?.capacity ?? 24);
-  const [price, setPrice] = useState(initialTermin?.price ?? "50 EUR z DDV");
+  const [price, setPrice] = useState(initialTermin?.price?.match(/\d+/)?.[0] ?? "50");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const isValid =
     date.length > 0 &&
     startTime.length > 0 &&
     endTime.length > 0 &&
+    address.trim().length > 0 &&
     (program === "zacetna" || capacity > 0);
 
   const title =
@@ -107,28 +106,36 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: StoredTermi
       formsCompletedCount: initialTermin?.formsCompletedCount ?? 0,
       paidCount: initialTermin?.paidCount ?? 0,
       isPast: initialTermin?.isPast,
-      price: program === "redna" ? price : undefined,
+      price: program === "redna" ? `${price} EUR z DDV` : undefined,
     };
   }, [initialTermin, program, title, date, address, startTime, endTime, capacity, price]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isValid) return;
-    const termin: StoredTermin = {
-      ...previewTermin,
-      price: program === "redna" ? price : undefined,
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    const input = {
       program,
       dateISO: date,
       startTime,
       endTime,
-      modul: program === "redna" ? modul : undefined,
+      address,
+      capacity: program === "redna" ? capacity : undefined,
+      price: program === "redna" ? Number(price) : undefined,
+      modul: program === "redna" ? Number(modul) : undefined,
     };
-    if (isEdit) {
-      saveTerminEdit(termin);
-      router.push(`/admin/termini/${termin.id}`);
-    } else {
-      addTermin(termin);
-      router.push("/admin/termini");
+
+    const result = isEdit
+      ? await updateTerminAction(initialTermin.id, input)
+      : await createTerminAction(input);
+
+    setIsSubmitting(false);
+    if ("error" in result) {
+      setErrorMessage(result.error);
+      return;
     }
+    router.push(isEdit ? `/admin/termini/${result.slug}` : "/admin/termini");
   };
 
   return (
@@ -210,17 +217,25 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: StoredTermi
             />
           ) : null}
           {program === "redna" ? (
-            <Input label="Cena" value={price} onChange={(event) => setPrice(event.target.value)} />
+            <Input
+              label="Cena (EUR)"
+              type="number"
+              min={0}
+              step="0.01"
+              value={price}
+              onChange={(event) => setPrice(event.target.value)}
+            />
           ) : null}
         </div>
+        {errorMessage ? <Text className="mt-4 text-red-600">{errorMessage}</Text> : null}
         <Button
           type="button"
           variant="primary"
           className="mt-8"
-          disabled={!isValid}
+          disabled={!isValid || isSubmitting}
           onClick={handleSubmit}
         >
-          {isEdit ? "Shrani spremembe" : "Dodaj termin"}
+          {isSubmitting ? "Shranjujem …" : isEdit ? "Shrani spremembe" : "Dodaj termin"}
         </Button>
       </div>
       <div className="hidden lg:block">

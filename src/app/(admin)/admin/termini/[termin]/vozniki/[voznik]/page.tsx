@@ -11,6 +11,8 @@ import { getDriversForTermin } from "@/lib/admin-drivers-store";
 import { PLACEHOLDER_PAST_TERMINI, PLACEHOLDER_TERMINI } from "@/lib/admin-termini-data";
 import { getAddedTermini, getTerminOverrides } from "@/lib/admin-termini-store";
 
+// TODO(stage 3): this whole page still resolves termin + drivers from the
+// localStorage placeholders — will be rewired alongside the driver table.
 function resolveTerminTitle(id: string): string | null {
   const overrides = getTerminOverrides();
   if (overrides[id]) return overrides[id].title;

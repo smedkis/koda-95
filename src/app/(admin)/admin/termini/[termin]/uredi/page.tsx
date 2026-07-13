@@ -1,55 +1,17 @@
-"use client";
-
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { AdminTerminForm } from "@/components/admin/AdminTerminForm";
-import {
-  getAddedTermini,
-  getTerminOverrides,
-  parseModul,
-  parseSlovenianDate,
-  parseTimeRange,
-  type StoredTermin,
-} from "@/lib/admin-termini-store";
 import { Heading2, Text } from "@/components/ui/Typography";
-import { PLACEHOLDER_PAST_TERMINI, PLACEHOLDER_TERMINI } from "@/lib/admin-termini-data";
+import { getTerminBySlug } from "@/lib/data/termini";
 
-function resolveTermin(id: string): StoredTermin | null {
-  const overrides = getTerminOverrides();
-  if (overrides[id]) return overrides[id];
+export default async function UrediTerminPage({
+  params,
+}: {
+  params: Promise<{ termin: string }>;
+}) {
+  const { termin: id } = await params;
+  const termin = await getTerminBySlug(id);
 
-  const added = getAddedTermini().find((entry) => entry.id === id);
-  if (added) return added;
-
-  const base =
-    PLACEHOLDER_TERMINI.find((entry) => entry.id === id) ??
-    PLACEHOLDER_PAST_TERMINI.find((entry) => entry.id === id) ??
-    null;
-  if (!base) return null;
-
-  const { start, end } = parseTimeRange(base.timeRange);
-  return {
-    ...base,
-    dateISO: parseSlovenianDate(base.date),
-    startTime: start,
-    endTime: end,
-    modul: base.program === "redna" ? parseModul(base.title) : undefined,
-  };
-}
-
-export default function UrediTerminPage() {
-  const params = useParams<{ termin: string }>();
-  const id = params.termin;
-  const [termin, setTermin] = useState<StoredTermin | null | undefined>(undefined);
-
-  useEffect(() => {
-    setTermin(resolveTermin(id));
-  }, [id]);
-
-  if (termin === undefined) return null;
-
-  if (termin === null) {
+  if (!termin) {
     return (
       <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
         <AdminBreadcrumbs items={[{ label: "Termini", href: "/admin/termini" }]} />

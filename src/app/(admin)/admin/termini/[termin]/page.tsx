@@ -1,14 +1,6 @@
 import type { Metadata } from "next";
 import { AdminTerminDetailContent } from "@/components/admin/AdminTerminDetailContent";
-import { PLACEHOLDER_PAST_TERMINI, PLACEHOLDER_TERMINI } from "@/lib/admin-termini-data";
-
-function getTermin(id: string) {
-  return (
-    PLACEHOLDER_TERMINI.find((entry) => entry.id === id) ??
-    PLACEHOLDER_PAST_TERMINI.find((entry) => entry.id === id) ??
-    null
-  );
-}
+import { getTerminBySlug } from "@/lib/data/termini";
 
 export async function generateMetadata({
   params,
@@ -16,7 +8,7 @@ export async function generateMetadata({
   params: Promise<{ termin: string }>;
 }): Promise<Metadata> {
   const { termin: id } = await params;
-  const termin = getTermin(id);
+  const termin = await getTerminBySlug(id);
   if (!termin) return {};
   return {
     title: `${termin.title} | Koda 95 Admin`,
@@ -30,11 +22,11 @@ export default async function AdminTerminDetailPage({
   params: Promise<{ termin: string }>;
 }) {
   const { termin: id } = await params;
-  const termin = getTermin(id);
+  const termin = await getTerminBySlug(id);
 
   return (
     <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
-      <AdminTerminDetailContent id={id} baseTermin={termin} />
+      <AdminTerminDetailContent id={id} termin={termin} />
     </div>
   );
 }
