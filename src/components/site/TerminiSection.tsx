@@ -27,17 +27,25 @@ export function TerminiSection({ termini }: { termini: TerminEntry[] }) {
   });
 
   const nextHref = sortedTermini.find((termin) => getDaysUntil(termin.dateISO) >= 0)?.href;
+  const isSingle = sortedTermini.length === 1;
 
   return (
     <div id="termini" className="mt-16 flex flex-col items-center gap-8">
       <Eyebrow>{t("heading")}</Eyebrow>
-      <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
+      <div
+        className={
+          isSingle
+            ? "flex w-full justify-center"
+            : "grid w-full grid-cols-1 gap-8 lg:grid-cols-2"
+        }
+      >
         {sortedTermini.map(({ dateISO, ...cardProps }) => (
-          <TerminCard
-            key={cardProps.href}
-            {...cardProps}
-            daysUntil={cardProps.href === nextHref ? getDaysUntil(dateISO) : undefined}
-          />
+          <div key={cardProps.href} className={isSingle ? "w-full lg:max-w-[calc(50%-1rem)]" : undefined}>
+            <TerminCard
+              {...cardProps}
+              daysUntil={cardProps.href === nextHref ? getDaysUntil(dateISO) : undefined}
+            />
+          </div>
         ))}
       </div>
     </div>
