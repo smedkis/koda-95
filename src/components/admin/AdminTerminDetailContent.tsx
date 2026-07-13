@@ -51,7 +51,7 @@ export function AdminTerminDetailContent({
         title: cleanTitle,
         modul,
         date: termin.date,
-        address: termin.address,
+        address: termin.address ?? "Po dogovoru",
         drivers,
       });
     } finally {
@@ -93,11 +93,11 @@ export function AdminTerminDetailContent({
         </div>
         <div className="flex items-center gap-2">
           <Image src="/icon-clock.svg" alt="" width={20} height={20} className="size-5" />
-          <Text>{termin.timeRange}</Text>
+          <Text>{termin.timeRange ?? "Po dogovoru"}</Text>
         </div>
         <div className="flex items-center gap-2">
           <Image src="/icon-location.svg" alt="" width={20} height={20} className="size-5" />
-          <Text>{termin.address}</Text>
+          <Text>{termin.address ?? "Po dogovoru"}</Text>
         </div>
       </div>
       <div className="mt-16 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

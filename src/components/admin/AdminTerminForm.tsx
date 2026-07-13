@@ -65,27 +65,29 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormD
   const [program, setProgram] = useState<Program>(initialTermin?.program ?? "redna");
   const [modul, setModul] = useState(initialTermin?.modul ?? MODUL_OPTIONS[0]);
   const [date, setDate] = useState(initialTermin?.dateISO ?? "");
-  const [startTime, setStartTime] = useState(initialTermin?.startTime ?? "15:00");
-  const [endTime, setEndTime] = useState(initialTermin?.endTime ?? "21:00");
+  const [startTime, setStartTime] = useState(initialTermin?.startTime || "15:00");
+  const [endTime, setEndTime] = useState(initialTermin?.endTime || "21:00");
   const [locationChoice, setLocationChoice] = useState(() => {
-    if (initialTermin && !LOCATION_PRESETS.includes(initialTermin.address)) return CUSTOM_LOCATION;
-    return initialTermin?.address ?? LOCATION_PRESETS[0];
+    const initialAddress = initialTermin?.address;
+    if (initialAddress && !LOCATION_PRESETS.includes(initialAddress)) return CUSTOM_LOCATION;
+    return initialAddress ?? LOCATION_PRESETS[0];
   });
-  const [customAddress, setCustomAddress] = useState(() =>
-    initialTermin && !LOCATION_PRESETS.includes(initialTermin.address) ? initialTermin.address : "",
-  );
+  const [customAddress, setCustomAddress] = useState(() => {
+    const initialAddress = initialTermin?.address;
+    return initialAddress && !LOCATION_PRESETS.includes(initialAddress) ? initialAddress : "";
+  });
   const address = locationChoice === CUSTOM_LOCATION ? customAddress : locationChoice;
   const [capacity, setCapacity] = useState(initialTermin?.capacity ?? 24);
   const [price, setPrice] = useState(initialTermin?.price?.match(/\d+/)?.[0] ?? "50");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Začetna Koda 95 has no fixed location, time, capacity or price — all
+  // agreed individually — so none of those fields apply/are required.
   const isValid =
     date.length > 0 &&
-    startTime.length > 0 &&
-    endTime.length > 0 &&
-    address.trim().length > 0 &&
-    (program === "zacetna" || capacity > 0);
+    (program === "zacetna" ||
+      (startTime.length > 0 && endTime.length > 0 && address.trim().length > 0 && capacity > 0));
 
   const title =
     program === "redna"
@@ -98,8 +100,8 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormD
       program,
       title,
       date: date ? formatSlovenianDate(date) : "Izberi datum",
-      address: address || "Vnesi lokacijo",
-      timeRange: formatTimeRange(startTime, endTime),
+      address: program === "redna" ? address || "Vnesi lokacijo" : undefined,
+      timeRange: program === "redna" ? formatTimeRange(startTime, endTime) : undefined,
       attendeeCount: program === "zacetna" ? undefined : (initialTermin?.attendeeCount ?? 0),
       capacity: program === "zacetna" ? undefined : capacity || 0,
       registeredCount: initialTermin?.registeredCount ?? 0,
@@ -118,9 +120,9 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormD
     const input = {
       program,
       dateISO: date,
-      startTime,
-      endTime,
-      address,
+      startTime: program === "redna" ? startTime : undefined,
+      endTime: program === "redna" ? endTime : undefined,
+      address: program === "redna" ? address : undefined,
       capacity: program === "redna" ? capacity : undefined,
       price: program === "redna" ? Number(price) : undefined,
       modul: program === "redna" ? Number(modul) : undefined,
@@ -168,64 +170,68 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormD
             value={date}
             onChange={(event) => setDate(event.target.value)}
           />
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="Začetek"
-              type="time"
-              required
-              value={startTime}
-              onChange={(event) => setStartTime(event.target.value)}
-            />
-            <Input
-              label="Konec"
-              type="time"
-              required
-              value={endTime}
-              onChange={(event) => setEndTime(event.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-4">
-            <Select
-              label="Lokacija"
-              value={locationChoice}
-              onChange={(event) => setLocationChoice(event.target.value)}
-            >
-              {LOCATION_PRESETS.map((preset) => (
-                <option key={preset} value={preset}>
-                  {preset}
-                </option>
-              ))}
-              <option value={CUSTOM_LOCATION}>Drugo …</option>
-            </Select>
-            {locationChoice === CUSTOM_LOCATION ? (
+          {program === "redna" ? (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Začetek"
+                  type="time"
+                  required
+                  value={startTime}
+                  onChange={(event) => setStartTime(event.target.value)}
+                />
+                <Input
+                  label="Konec"
+                  type="time"
+                  required
+                  value={endTime}
+                  onChange={(event) => setEndTime(event.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-4">
+                <Select
+                  label="Lokacija"
+                  value={locationChoice}
+                  onChange={(event) => setLocationChoice(event.target.value)}
+                >
+                  {LOCATION_PRESETS.map((preset) => (
+                    <option key={preset} value={preset}>
+                      {preset}
+                    </option>
+                  ))}
+                  <option value={CUSTOM_LOCATION}>Drugo …</option>
+                </Select>
+                {locationChoice === CUSTOM_LOCATION ? (
+                  <Input
+                    label="Naslov"
+                    placeholder="Vnesi naslov"
+                    value={customAddress}
+                    onChange={(event) => setCustomAddress(event.target.value)}
+                  />
+                ) : null}
+              </div>
               <Input
-                label="Naslov"
-                placeholder="Vnesi naslov"
-                value={customAddress}
-                onChange={(event) => setCustomAddress(event.target.value)}
+                label="Kapaciteta"
+                type="number"
+                min={1}
+                required
+                value={capacity}
+                onChange={(event) => setCapacity(Number(event.target.value))}
               />
-            ) : null}
-          </div>
-          {program === "redna" ? (
-            <Input
-              label="Kapaciteta"
-              type="number"
-              min={1}
-              required
-              value={capacity}
-              onChange={(event) => setCapacity(Number(event.target.value))}
-            />
-          ) : null}
-          {program === "redna" ? (
-            <Input
-              label="Cena (EUR)"
-              type="number"
-              min={0}
-              step="0.01"
-              value={price}
-              onChange={(event) => setPrice(event.target.value)}
-            />
-          ) : null}
+              <Input
+                label="Cena (EUR)"
+                type="number"
+                min={0}
+                step="0.01"
+                value={price}
+                onChange={(event) => setPrice(event.target.value)}
+              />
+            </>
+          ) : (
+            <Text className="text-placeholder">
+              Lokacija, ura, kapaciteta in cena so pri Začetni Kodi 95 po dogovoru.
+            </Text>
+          )}
         </div>
         {errorMessage ? <Text className="mt-4 text-red-600">{errorMessage}</Text> : null}
         <Button

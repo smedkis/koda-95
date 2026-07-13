@@ -54,7 +54,7 @@ export function ConfirmationDetails({
   time: string;
   price: string;
   registrationCode: string;
-  location: string;
+  location?: string;
 }) {
   const t = useTranslations("Confirmation");
   const rows = [
@@ -63,7 +63,11 @@ export function ConfirmationDetails({
     { icon: <DetailIcon src="/icon-clock.svg" />, label: t("time"), value: time },
     { icon: <DetailIcon src="/icon-ticket.svg" />, label: t("price"), value: price },
     { icon: <HashIcon />, label: t("registrationNumber"), value: registrationCode },
-    { icon: <DetailIcon src="/icon-location.svg" />, label: t("location"), value: location },
+    {
+      icon: <DetailIcon src="/icon-location.svg" />,
+      label: t("location"),
+      value: location ?? "Po dogovoru",
+    },
   ];
 
   return (
@@ -72,14 +76,16 @@ export function ConfirmationDetails({
         {rows.map((row, index) => (
           <DetailRow key={row.label} {...row} showDivider={index < rows.length - 1} />
         ))}
-        <div className="-mx-8 -mb-8 mt-4 aspect-video overflow-hidden rounded-b-lg print:hidden">
-          <iframe
-            src={`https://www.google.com/maps?q=${encodeURIComponent(location)}&output=embed`}
-            className="h-full w-full border-0"
-            loading="lazy"
-            title={t("mapTitle")}
-          />
-        </div>
+        {location ? (
+          <div className="-mx-8 -mb-8 mt-4 aspect-video overflow-hidden rounded-b-lg print:hidden">
+            <iframe
+              src={`https://www.google.com/maps?q=${encodeURIComponent(location)}&output=embed`}
+              className="h-full w-full border-0"
+              loading="lazy"
+              title={t("mapTitle")}
+            />
+          </div>
+        ) : null}
       </Box>
     </div>
   );

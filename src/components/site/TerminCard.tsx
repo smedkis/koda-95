@@ -30,8 +30,8 @@ function formatProstaMesta(count: number): string {
 export type TerminCardProps = {
   title: string;
   date: string;
-  address: string;
-  timeRange: string;
+  address?: string;
+  timeRange?: string;
   price?: string;
   attendeeCount?: number;
   capacity?: number;
@@ -92,8 +92,8 @@ export function TerminCard({
         {modul ? <InfoRow icon="/Category.svg">Modul {modul}</InfoRow> : null}
         {price ? <InfoRow icon="/icon-ticket.svg">{price}</InfoRow> : null}
         <InfoRow icon="/icon-calendar.svg">{date}</InfoRow>
-        <InfoRow icon="/icon-clock.svg">{timeRange}</InfoRow>
-        <InfoRow icon="/icon-location.svg">{address}</InfoRow>
+        <InfoRow icon="/icon-clock.svg">{timeRange ?? "Po dogovoru"}</InfoRow>
+        <InfoRow icon="/icon-location.svg">{address ?? "Po dogovoru"}</InfoRow>
         {hasCapacity ? (
           <InfoRow icon="/icon-profile.svg">
             {attendeeCount}/{capacity}

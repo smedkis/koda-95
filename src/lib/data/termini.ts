@@ -61,7 +61,7 @@ function toCardData(
     program,
     title: buildTerminTitle(program, row.modul),
     date: formatSlovenianDate(row.date),
-    address: row.address,
+    address: row.address ?? undefined,
     timeRange: formatTimeRange(row.start_time, row.end_time),
     price: formatPriceEur(row.price_eur),
     attendeeCount: hasCapacity ? counts.registered : undefined,
@@ -78,8 +78,8 @@ function toFormData(row: TerminiRow): TerminFormData {
   return {
     ...card,
     dateISO: row.date,
-    startTime: toHoursMinutes(row.start_time),
-    endTime: toHoursMinutes(row.end_time),
+    startTime: row.start_time ? toHoursMinutes(row.start_time) : "",
+    endTime: row.end_time ? toHoursMinutes(row.end_time) : "",
     modul: row.modul !== null ? String(row.modul) : undefined,
   };
 }
@@ -167,9 +167,9 @@ export async function getTerminRowBySlug(slug: string): Promise<TerminiRow | nul
 export type TerminInput = {
   program: Program;
   dateISO: string;
-  startTime: string;
-  endTime: string;
-  address: string;
+  startTime?: string;
+  endTime?: string;
+  address?: string;
   capacity?: number;
   price?: number;
   modul?: number;
@@ -184,9 +184,9 @@ export async function createTermin(input: TerminInput): Promise<TerminMutationRe
     .insert({
       program: PROGRAM_TO_KEY[input.program],
       date: input.dateISO,
-      address: input.address,
-      start_time: input.startTime,
-      end_time: input.endTime,
+      address: input.address ?? null,
+      start_time: input.startTime ?? null,
+      end_time: input.endTime ?? null,
       capacity: input.capacity ?? null,
       price_eur: input.price ?? null,
       modul: input.modul ?? null,
@@ -220,8 +220,8 @@ export type PublicTerminEntry = {
   title: string;
   date: string;
   dateISO: string;
-  address: string;
-  timeRange: string;
+  address?: string;
+  timeRange?: string;
   price?: string;
   attendeeCount?: number;
   capacity?: number;
@@ -234,7 +234,7 @@ function toPublicEntry(row: TerminiRow, registeredCount: number): PublicTerminEn
     title: buildTerminTitle(KEY_TO_PROGRAM[row.program], row.modul),
     date: formatSlovenianDate(row.date),
     dateISO: row.date,
-    address: row.address,
+    address: row.address ?? undefined,
     timeRange: formatTimeRange(row.start_time, row.end_time),
     price: formatPriceEur(row.price_eur),
     attendeeCount: hasCapacity ? registeredCount : undefined,
@@ -286,9 +286,9 @@ export async function updateTermin(
     .update({
       program: PROGRAM_TO_KEY[input.program],
       date: input.dateISO,
-      address: input.address,
-      start_time: input.startTime,
-      end_time: input.endTime,
+      address: input.address ?? null,
+      start_time: input.startTime ?? null,
+      end_time: input.endTime ?? null,
       capacity: input.capacity ?? null,
       price_eur: input.price ?? null,
       modul: input.modul ?? null,

@@ -1,8 +1,10 @@
 // Hand-written to mirror supabase/migrations/20260701083219_initial_schema.sql,
 // 20260701085511_termini_price_optional.sql,
 // 20260713100000_termini_capacity_modul.sql,
-// 20260713110000_termini_location_time_partial_prijave.sql, and
-// 20260713120000_narocniki.sql. Keep in sync with any new migration.
+// 20260713110000_termini_location_time_partial_prijave.sql,
+// 20260713120000_narocniki.sql, and
+// 20260713140000_zacetna_location_time_optional.sql. Keep in sync with any
+// new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -14,9 +16,9 @@ export type TerminiRow = {
   id: string;
   program: ProgramKey;
   date: string;
-  address: string;
-  start_time: string;
-  end_time: string;
+  address: string | null;
+  start_time: string | null;
+  end_time: string | null;
   modul: number | null;
   capacity: number | null;
   price_eur: number | null;
@@ -91,7 +93,7 @@ export interface Database {
       termini: {
         Row: TerminiRow;
         Insert: Partial<Omit<TerminiRow, "id" | "created_at" | "updated_at">> &
-          Pick<TerminiRow, "program" | "date" | "address" | "start_time" | "end_time">;
+          Pick<TerminiRow, "program" | "date">;
         Update: Partial<Omit<TerminiRow, "id" | "created_at" | "updated_at">>;
         Relationships: [];
       };

@@ -49,7 +49,7 @@ async function getTermin(slug: string) {
     date: formatSlovenianDate(row.date),
     dateISO: row.date,
     timeRange: formatTimeRange(row.start_time, row.end_time),
-    address: row.address,
+    address: row.address ?? undefined,
   };
 }
 

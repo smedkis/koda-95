@@ -18,7 +18,11 @@ export function toHoursMinutes(time: string): string {
   return time.slice(0, 5);
 }
 
-export function formatTimeRange(start: string, end: string): string {
+export function formatTimeRange(
+  start: string | null,
+  end: string | null,
+): string | undefined {
+  if (start === null || end === null) return undefined;
   return `${toHoursMinutes(start).replace(":", ".")} - ${toHoursMinutes(end).replace(":", ".")}`;
 }
 

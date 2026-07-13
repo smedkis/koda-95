@@ -167,8 +167,8 @@ export type RegistrationDetails = {
   driverName: string;
   terminTitle: string;
   dateISO: string;
-  timeRange: string;
-  address: string;
+  timeRange?: string;
+  address?: string;
   priceEur: number | null;
   payerType: PayerType;
   companyName: string | null;
@@ -194,7 +194,7 @@ export async function getRegistrationByCode(code: string): Promise<RegistrationD
     terminTitle: buildTerminTitle(programKeyToShort(row.termini.program), row.termini.modul),
     dateISO: row.termini.date,
     timeRange: formatTimeRange(row.termini.start_time, row.termini.end_time),
-    address: row.termini.address,
+    address: row.termini.address ?? undefined,
     priceEur: row.termini.price_eur,
     payerType: row.payer_type,
     companyName: row.company_name,

@@ -43,8 +43,8 @@ export function TerminDetails({
   price?: string;
   spotsLabel: string;
   date: string;
-  timeRange: string;
-  address: string;
+  timeRange?: string;
+  address?: string;
 }) {
   const t = useTranslations("TerminDetails");
   return (
@@ -70,13 +70,13 @@ export function TerminDetails({
             </div>
             <div className="flex flex-col gap-2">
               <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
-              <DetailRow icon="/icon-clock.svg">{timeRange}</DetailRow>
+              <DetailRow icon="/icon-clock.svg">{timeRange ?? "Po dogovoru"}</DetailRow>
             </div>
           </>
         ) : (
           <>
             <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
-            <DetailRow icon="/icon-clock.svg">{timeRange}</DetailRow>
+            <DetailRow icon="/icon-clock.svg">{timeRange ?? "Po dogovoru"}</DetailRow>
             <div className="col-span-2">
               <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
             </div>
@@ -85,21 +85,23 @@ export function TerminDetails({
       </div>
       <Eyebrow className="mt-6">{t("location")}</Eyebrow>
       <div className="mt-4">
-        <DetailRow icon="/icon-location.svg">{address}</DetailRow>
+        <DetailRow icon="/icon-location.svg">{address ?? "Po dogovoru"}</DetailRow>
       </div>
-      <div className="mt-4 aspect-video w-full overflow-hidden rounded-lg border border-divider">
-        {/* The address is already shown as text above — this embed is a
-            visual reference only, so pointer-events are disabled. Otherwise
-            the iframe can intercept taps meant for anything rendered on top
-            of it (e.g. the mobile sticky reserve bar), a known browser quirk
-            that plain z-index/stacking fixes don't reliably solve. */}
-        <iframe
-          src={`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`}
-          className="pointer-events-none h-full w-full border-0"
-          loading="lazy"
-          title={t("mapTitle")}
-        />
-      </div>
+      {address ? (
+        <div className="mt-4 aspect-video w-full overflow-hidden rounded-lg border border-divider">
+          {/* The address is already shown as text above — this embed is a
+              visual reference only, so pointer-events are disabled. Otherwise
+              the iframe can intercept taps meant for anything rendered on top
+              of it (e.g. the mobile sticky reserve bar), a known browser quirk
+              that plain z-index/stacking fixes don't reliably solve. */}
+          <iframe
+            src={`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`}
+            className="pointer-events-none h-full w-full border-0"
+            loading="lazy"
+            title={t("mapTitle")}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
