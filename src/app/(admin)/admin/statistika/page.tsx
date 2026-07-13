@@ -1,16 +1,9 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { AdminStatistikaPageContent } from "@/components/admin/AdminStatistikaPageContent";
-import { getAllRegistrations, type DriverSearchResult } from "@/lib/admin-drivers-store";
+import { getAllRegistrations } from "@/lib/data/registrations";
 
-export default function StatistikaPage() {
-  const [registrations, setRegistrations] = useState<DriverSearchResult[]>([]);
-
-  useEffect(() => {
-    setRegistrations(getAllRegistrations());
-  }, []);
+export default async function StatistikaPage() {
+  const registrations = await getAllRegistrations();
 
   return (
     <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">

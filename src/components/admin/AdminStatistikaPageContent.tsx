@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { Eyebrow, Heading2, Heading3, Text } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
-import type { DriverSearchResult } from "@/lib/admin-drivers-store";
+import type { DriverSearchResult } from "@/lib/data/registrations";
 import { generateRegistrationsPdf } from "@/lib/generate-registrations-pdf";
 
 const PAGE_SIZE_OPTIONS = [10, 50, 100];
