@@ -17,8 +17,10 @@ export type TerminDriver = {
   birthCountry?: string;
   citizenship?: string;
   emso?: string;
-  address?: string;
-  tempAddress?: string;
+  residenceType?: "permanent" | "temporary";
+  streetAddress?: string;
+  postalCode?: string;
+  city?: string;
   categoryC?: boolean;
   categoryD?: boolean;
   paymentMethod?: string;

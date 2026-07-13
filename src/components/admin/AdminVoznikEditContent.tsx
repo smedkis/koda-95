@@ -7,10 +7,14 @@ import type { TerminDriver } from "./AdminTerminDriversTable";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
 import { Eyebrow, Heading3, Text, TextMedium } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
-import { PLACEHOLDER_DRIVERS } from "@/lib/admin-drivers-data";
-import { removeDriverFromTermin, updateDriverInTermin } from "@/lib/admin-drivers-store";
+import { dmyToIso, isoToDmy } from "@/lib/date-format";
+import {
+  deleteRegistrationAction,
+  updateRegistrationAction,
+} from "@/app/(admin)/admin/termini/[termin]/actions";
 
 function CardHeader({ icon, label }: { icon: string; label: string }) {
   return (
@@ -156,9 +160,11 @@ export function AdminVoznikEditContent({
   const router = useRouter();
   const [driver, setDriver] = useState(initialDriver);
   const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [activityLog, setActivityLog] = useState<LogEntry[]>(() => buildInitialLog(initialDriver));
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const logEvent = (message: string) =>
     setActivityLog((current) => [...current, { message, timestamp: formatNow() }]);
@@ -166,17 +172,30 @@ export function AdminVoznikEditContent({
   const update = <K extends keyof TerminDriver>(key: K, value: TerminDriver[K]) =>
     setDriver((current) => ({ ...current, [key]: value }));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
-    updateDriverInTermin(terminId, driver, PLACEHOLDER_DRIVERS);
+    setSaveError(null);
+    const result = await updateRegistrationAction(terminId, driver.id, driver);
+    setIsSaving(false);
+    if ("error" in result) {
+      setSaveError(result.error);
+      return;
+    }
     router.push(`/admin/termini/${terminId}`);
   };
 
   const canConfirmDelete = deleteConfirmText.trim() === driver.driverName;
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!canConfirmDelete) return;
-    removeDriverFromTermin(terminId, driver.id, PLACEHOLDER_DRIVERS);
+    setIsDeleting(true);
+    const result = await deleteRegistrationAction(terminId, driver.id);
+    setIsDeleting(false);
+    if (result.error) {
+      setSaveError(result.error);
+      setIsDeleteModalOpen(false);
+      return;
+    }
     router.push(`/admin/termini/${terminId}`);
   };
 
@@ -200,10 +219,15 @@ export function AdminVoznikEditContent({
               <div className="grid grid-cols-2 gap-4">
                 <Input
                   label="Datum rojstva"
-                  placeholder="DD.MM.LLLL"
+                  type="date"
                   inputClassName={INPUT_BG}
-                  value={driver.dateOfBirth ?? ""}
-                  onChange={(event) => update("dateOfBirth", event.target.value)}
+                  value={driver.dateOfBirth ? (dmyToIso(driver.dateOfBirth) ?? "") : ""}
+                  onChange={(event) =>
+                    update(
+                      "dateOfBirth",
+                      event.target.value ? isoToDmy(event.target.value) : undefined,
+                    )
+                  }
                 />
                 <Input
                   label="Kraj rojstva"
@@ -262,18 +286,40 @@ export function AdminVoznikEditContent({
           <CardHeader icon="/icon-location.svg" label="Naslov" />
           <Box className="bg-white">
             <div className="flex flex-col gap-6">
+              <Select
+                label="Vrsta prebivališča"
+                value={driver.residenceType ?? ""}
+                onChange={(event) =>
+                  update(
+                    "residenceType",
+                    event.target.value ? (event.target.value as "permanent" | "temporary") : undefined,
+                  )
+                }
+              >
+                <option value="">—</option>
+                <option value="permanent">Stalno prebivališče</option>
+                <option value="temporary">Začasno prebivališče</option>
+              </Select>
               <Input
-                label="Stalno prebivališče"
+                label="Naslov"
                 inputClassName={INPUT_BG}
-                value={driver.address ?? ""}
-                onChange={(event) => update("address", event.target.value)}
+                value={driver.streetAddress ?? ""}
+                onChange={(event) => update("streetAddress", event.target.value)}
               />
-              <Input
-                label="Začasno prebivališče"
-                inputClassName={INPUT_BG}
-                value={driver.tempAddress ?? ""}
-                onChange={(event) => update("tempAddress", event.target.value)}
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Poštna številka"
+                  inputClassName={INPUT_BG}
+                  value={driver.postalCode ?? ""}
+                  onChange={(event) => update("postalCode", event.target.value)}
+                />
+                <Input
+                  label="Kraj"
+                  inputClassName={INPUT_BG}
+                  value={driver.city ?? ""}
+                  onChange={(event) => update("city", event.target.value)}
+                />
+              </div>
             </div>
           </Box>
         </div>
@@ -300,6 +346,7 @@ export function AdminVoznikEditContent({
           </Box>
         </div>
 
+        {saveError ? <Text className="text-red-600">{saveError}</Text> : null}
         <div className="flex items-center justify-between">
           <Button
             type="button"
@@ -307,7 +354,7 @@ export function AdminVoznikEditContent({
             disabled={isSaving}
             onClick={handleSave}
           >
-            Shrani
+            {isSaving ? "Shranjujem …" : "Shrani"}
           </Button>
           <Button
             type="button"
@@ -423,10 +470,10 @@ export function AdminVoznikEditContent({
               type="button"
               variant="primary"
               className="mt-8 w-full justify-center bg-red-600 hover:bg-red-700"
-              disabled={!canConfirmDelete}
+              disabled={!canConfirmDelete || isDeleting}
               onClick={handleDelete}
             >
-              Izbriši prijavo
+              {isDeleting ? "Brišem …" : "Izbriši prijavo"}
             </Button>
           </div>
         </div>

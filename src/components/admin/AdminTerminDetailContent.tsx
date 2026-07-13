@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AddVoznikModal } from "./AddVoznikModal";
 import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import {
@@ -11,26 +11,25 @@ import {
 } from "./AdminTerminDriversTable";
 import { Button } from "@/components/ui/Button";
 import { Heading2, Heading3, Text } from "@/components/ui/Typography";
-import { addDriverToTermin, getDriversForTermin } from "@/lib/admin-drivers-store";
-import { PLACEHOLDER_DRIVERS } from "@/lib/admin-drivers-data";
 import { parseModul } from "@/lib/termini-format";
+import { formatToday } from "@/lib/date-format";
 import { generateAttendancePdf } from "@/lib/generate-attendance-pdf";
 import type { TerminFormData } from "@/lib/data/termini";
+import { createRegistrationAction } from "@/app/(admin)/admin/termini/[termin]/actions";
 
 export function AdminTerminDetailContent({
   id,
   termin,
+  initialDrivers,
 }: {
   id: string;
   termin: TerminFormData | null;
+  initialDrivers: TerminDriver[];
 }) {
-  const [drivers, setDrivers] = useState<TerminDriver[]>(PLACEHOLDER_DRIVERS);
+  const [drivers, setDrivers] = useState<TerminDriver[]>(initialDrivers);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
-
-  useEffect(() => {
-    setDrivers(getDriversForTermin(id, PLACEHOLDER_DRIVERS));
-  }, [id]);
 
   if (!termin) {
     return (
@@ -128,11 +127,33 @@ export function AdminTerminDetailContent({
       </div>
       {isAddOpen ? (
         <AddVoznikModal
-          onAdd={(driver) => {
-            addDriverToTermin(id, driver, PLACEHOLDER_DRIVERS);
-            setDrivers((current) => [driver, ...current]);
+          error={addError}
+          onAdd={async (input) => {
+            setAddError(null);
+            const result = await createRegistrationAction(id, input);
+            if ("error" in result) {
+              setAddError(result.error);
+              return;
+            }
+            setDrivers((current) => [
+              {
+                id: result.id,
+                driverName: input.fullName,
+                email: input.email,
+                phone: input.phone,
+                registrationDate: formatToday(),
+                formStatus: "manjka",
+                paymentStatus: "caka",
+                payer: "sam",
+              },
+              ...current,
+            ]);
+            setIsAddOpen(false);
           }}
-          onClose={() => setIsAddOpen(false)}
+          onClose={() => {
+            setAddError(null);
+            setIsAddOpen(false);
+          }}
         />
       ) : null}
     </>

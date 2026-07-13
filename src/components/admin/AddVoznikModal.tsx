@@ -1,17 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { TerminDriver } from "./AdminTerminDriversTable";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Heading3, Text } from "@/components/ui/Typography";
-
-function formatToday(): string {
-  const now = new Date();
-  const day = String(now.getDate()).padStart(2, "0");
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  return `${day}.${month}.${now.getFullYear()}`;
-}
 
 function CloseIcon() {
   return (
@@ -22,31 +14,26 @@ function CloseIcon() {
 }
 
 export function AddVoznikModal({
+  error,
   onAdd,
   onClose,
 }: {
-  onAdd: (driver: TerminDriver) => void;
+  error?: string | null;
+  onAdd: (input: { fullName: string; email: string; phone: string }) => Promise<void>;
   onClose: () => void;
 }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isValid = fullName.trim().length > 0 && email.trim().length > 0 && phone.trim().length > 0;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isValid) return;
-    onAdd({
-      id: `manual-${Date.now()}`,
-      driverName: fullName,
-      email,
-      phone,
-      registrationDate: formatToday(),
-      formStatus: "manjka",
-      paymentStatus: "caka",
-      payer: "sam",
-    });
-    onClose();
+    setIsSubmitting(true);
+    await onAdd({ fullName, email, phone });
+    setIsSubmitting(false);
   };
 
   return (
@@ -99,14 +86,15 @@ export function AddVoznikModal({
             onChange={(event) => setPhone(event.target.value)}
           />
         </div>
+        {error ? <Text className="mt-4 text-red-600">{error}</Text> : null}
         <Button
           type="button"
           variant="primary"
           className="mt-8 w-full justify-center"
-          disabled={!isValid}
+          disabled={!isValid || isSubmitting}
           onClick={handleSubmit}
         >
-          Dodaj voznika
+          {isSubmitting ? "Dodajam …" : "Dodaj voznika"}
         </Button>
       </div>
     </div>

@@ -1,50 +1,20 @@
-"use client";
-
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { AdminVoznikEditContent } from "@/components/admin/AdminVoznikEditContent";
-import type { TerminDriver } from "@/components/admin/AdminTerminDriversTable";
 import { Heading2, Text } from "@/components/ui/Typography";
-import { PLACEHOLDER_DRIVERS } from "@/lib/admin-drivers-data";
-import { getDriversForTermin } from "@/lib/admin-drivers-store";
-import { PLACEHOLDER_PAST_TERMINI, PLACEHOLDER_TERMINI } from "@/lib/admin-termini-data";
-import { getAddedTermini, getTerminOverrides } from "@/lib/admin-termini-store";
+import { getTerminBySlug } from "@/lib/data/termini";
+import { getRegistration } from "@/lib/data/registrations";
 
-// TODO(stage 3): this whole page still resolves termin + drivers from the
-// localStorage placeholders — will be rewired alongside the driver table.
-function resolveTerminTitle(id: string): string | null {
-  const overrides = getTerminOverrides();
-  if (overrides[id]) return overrides[id].title;
+export default async function UrediVoznikPage({
+  params,
+}: {
+  params: Promise<{ termin: string; voznik: string }>;
+}) {
+  const { termin: terminId, voznik: voznikId } = await params;
+  const termin = await getTerminBySlug(terminId);
+  const driver = termin ? await getRegistration(terminId, voznikId) : null;
+  const cleanTerminTitle = termin?.title.replace(/\s*\([^)]*\)\s*$/, "") ?? "Termin";
 
-  const added = getAddedTermini().find((entry) => entry.id === id);
-  if (added) return added.title;
-
-  const base =
-    PLACEHOLDER_TERMINI.find((entry) => entry.id === id) ??
-    PLACEHOLDER_PAST_TERMINI.find((entry) => entry.id === id) ??
-    null;
-  return base?.title ?? null;
-}
-
-export default function UrediVoznikPage() {
-  const params = useParams<{ termin: string; voznik: string }>();
-  const terminId = params.termin;
-  const voznikId = params.voznik;
-  const [driver, setDriver] = useState<TerminDriver | null | undefined>(undefined);
-  const [terminTitle, setTerminTitle] = useState<string | null>(null);
-
-  useEffect(() => {
-    const drivers = getDriversForTermin(terminId, PLACEHOLDER_DRIVERS);
-    setDriver(drivers.find((entry) => entry.id === voznikId) ?? null);
-    setTerminTitle(resolveTerminTitle(terminId));
-  }, [terminId, voznikId]);
-
-  if (driver === undefined) return null;
-
-  const cleanTerminTitle = terminTitle?.replace(/\s*\([^)]*\)\s*$/, "") ?? "Termin";
-
-  if (driver === null) {
+  if (!driver) {
     return (
       <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
         <AdminBreadcrumbs
