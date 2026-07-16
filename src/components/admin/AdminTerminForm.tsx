@@ -3,7 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { AdminTerminCard } from "./AdminTerminCard";
-import { createTerminAction, updateTerminAction } from "@/app/(admin)/admin/termini/actions";
+import {
+  createTerminAction,
+  deleteTerminAction,
+  updateTerminAction,
+} from "@/app/(admin)/admin/termini/actions";
 import type { TerminFormData } from "@/lib/data/termini";
 import { formatSlovenianDate, formatTimeRange } from "@/lib/termini-format";
 import { Button } from "@/components/ui/Button";
@@ -81,6 +85,9 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormD
   const [price, setPrice] = useState(initialTermin?.price?.match(/\d+/)?.[0] ?? "50");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   // Začetna Koda 95 has no fixed location, time, capacity or price — all
   // agreed individually — so none of those fields apply/are required.
@@ -138,6 +145,19 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormD
       return;
     }
     router.push(isEdit ? `/admin/termini/${result.slug}` : "/admin/termini");
+  };
+
+  const handleDelete = async () => {
+    if (!initialTermin) return;
+    setIsDeleting(true);
+    setDeleteError(null);
+    const result = await deleteTerminAction(initialTermin.id);
+    setIsDeleting(false);
+    if (result.error) {
+      setDeleteError(result.error);
+      return;
+    }
+    router.push("/admin/termini");
   };
 
   return (
@@ -234,15 +254,29 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormD
           )}
         </div>
         {errorMessage ? <Text className="mt-4 text-red-600">{errorMessage}</Text> : null}
-        <Button
-          type="button"
-          variant="primary"
-          className="mt-8"
-          disabled={!isValid || isSubmitting}
-          onClick={handleSubmit}
-        >
-          {isSubmitting ? "Shranjujem …" : isEdit ? "Shrani spremembe" : "Dodaj termin"}
-        </Button>
+        <div className="mt-8 flex items-center justify-between">
+          <Button
+            type="button"
+            variant="primary"
+            disabled={!isValid || isSubmitting}
+            onClick={handleSubmit}
+          >
+            {isSubmitting ? "Shranjujem …" : isEdit ? "Shrani spremembe" : "Dodaj termin"}
+          </Button>
+          {isEdit ? (
+            <Button
+              type="button"
+              variant="secondary"
+              className="bg-white text-red-600 outline outline-1 outline-red-200 hover:bg-red-50"
+              onClick={() => {
+                setDeleteError(null);
+                setIsDeleteModalOpen(true);
+              }}
+            >
+              Izbriši termin
+            </Button>
+          ) : null}
+        </div>
       </div>
       <div className="hidden lg:block">
         <Heading3>Predogled</Heading3>
@@ -250,6 +284,42 @@ export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormD
           <AdminTerminCard {...previewTermin} showActions={false} />
         </div>
       </div>
+      {isDeleteModalOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setIsDeleteModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-[420px] rounded-lg border border-divider bg-white p-8"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <Heading3>Izbriši termin</Heading3>
+            <Text className="mt-4">
+              Ali ste prepričani, da želite izbrisati ta termin? Tega dejanja ni mogoče
+              razveljaviti.
+            </Text>
+            {deleteError ? <Text className="mt-4 text-red-600">{deleteError}</Text> : null}
+            <div className="mt-8 flex items-center justify-end gap-4">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setIsDeleteModalOpen(false)}
+              >
+                Prekliči
+              </Button>
+              <Button
+                type="button"
+                variant="primary"
+                className="bg-red-600 hover:bg-red-700"
+                disabled={isDeleting}
+                onClick={handleDelete}
+              >
+                {isDeleting ? "Brišem …" : "Izbriši termin"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

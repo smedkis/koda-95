@@ -306,3 +306,26 @@ export async function updateTermin(
   }
   return { slug: terminSlug(data.program, data.date) };
 }
+
+export async function deleteTermin(slug: string): Promise<{ error?: string }> {
+  const parsed = parseTerminSlug(slug);
+  if (!parsed) return { error: "Termin ne obstaja." };
+
+  const client = getSupabaseServerClient();
+  const { error } = await client
+    .from("termini")
+    .delete()
+    .eq("program", parsed.program)
+    .eq("date", parsed.date);
+
+  if (error) {
+    // prijave.termin_id references termini `on delete restrict`, on
+    // purpose — a termin with real registrations should never silently
+    // take their data down with it.
+    if (error.code === "23503") {
+      return { error: "Termina ni mogoče izbrisati, ker ima prijavljene voznike." };
+    }
+    return { error: error.message };
+  }
+  return {};
+}
