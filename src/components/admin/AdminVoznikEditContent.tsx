@@ -400,7 +400,7 @@ export function AdminVoznikEditContent({
                 setIsDeleteModalOpen(true);
               }}
             >
-              Izbriši prijavo
+              Izbriši
             </Button>
           </div>
         </div>
