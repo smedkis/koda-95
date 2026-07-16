@@ -113,28 +113,11 @@ export function TerminCard({
       href={href}
       className={cn(
         "relative flex flex-col transition-shadow hover:shadow-md",
-        isNext && "border-2 border-transparent",
+        isNext && "border-2 border-primary",
       )}
-      style={
-        isNext
-          ? {
-              // Same flat fill as a regular card's bg-secondary-bg — only
-              // the border keeps its orange gradient to mark this as "next".
-              backgroundImage: "linear-gradient(#FAFAFA, #FAFAFA), linear-gradient(90deg, #f58220, #ffab5c)",
-              backgroundOrigin: "border-box",
-              backgroundClip: "padding-box, border-box",
-            }
-          : undefined
-      }
     >
       {isNext ? (
-        <span
-          className="absolute left-6 top-0 inline-flex w-fit -translate-y-1/2 items-center rounded-full px-3 py-1.5 font-body text-[12px] font-semibold text-white"
-          // Plain sRGB linear-gradient, same as the card border below —
-          // Tailwind's bg-gradient-to-r interpolates in OKLab by default,
-          // which visibly differs from this even with identical stops.
-          style={{ backgroundImage: "linear-gradient(90deg, #f58220, #ffab5c)" }}
-        >
+        <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-1/2 items-center rounded-full bg-primary px-3 py-1.5 font-body text-[12px] font-semibold text-white">
           Naslednji termin · Čez {daysUntil} {daysUntil === 1 ? "dan" : "dni"}
         </span>
       ) : null}
