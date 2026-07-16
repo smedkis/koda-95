@@ -113,7 +113,7 @@ export function TerminCard({
       href={href}
       className={cn(
         "relative flex flex-col transition-shadow hover:shadow-md",
-        isNext && "border border-primary",
+        isNext && "border-2 border-primary",
       )}
     >
       {isNext ? (

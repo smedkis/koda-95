@@ -66,7 +66,7 @@ export function TerminRegistrationForm({
       id="termin-registration-form"
       className={
         isNext
-          ? "relative flex flex-col border border-primary pb-6"
+          ? "relative flex flex-col border-2 border-primary pb-6"
           : "flex flex-col pb-6"
       }
     >
