@@ -25,12 +25,8 @@ export function Hero({
       {breadcrumbs ? <Breadcrumbs items={breadcrumbs} className="justify-center" /> : null}
       <Heading1>
         {titlePrefix ? `${titlePrefix} ` : null}
-        <span className="relative inline-block">
+        <span className="underline decoration-primary decoration-4 underline-offset-4">
           {titleHighlight}
-          <span
-            aria-hidden="true"
-            className="animate-underline-grow absolute inset-x-0 -bottom-2 h-1 origin-left scale-x-0 bg-primary"
-          />
         </span>
         {titleSuffix ? ` ${titleSuffix}` : null}
       </Heading1>
