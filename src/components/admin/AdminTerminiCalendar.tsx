@@ -163,7 +163,7 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
           Dodaj termin
         </Link>
       </div>
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+      <div className="mt-16 flex flex-wrap items-center justify-between gap-4">
         <ProgramToggle program={program} onChange={setProgram} />
         <div className="flex items-center gap-4">
           <button
