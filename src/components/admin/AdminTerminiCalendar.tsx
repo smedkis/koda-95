@@ -203,15 +203,19 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
             const isPast = dateIso < todayIso;
             const isToday = dateIso === todayIso;
             const dayTermini = byDate.get(dateIso) ?? [];
+            // A day with no termin yet can be clicked anywhere to add one;
+            // a day that already has a chip keeps just the small + button,
+            // since nesting a link inside the chip's own link isn't valid.
+            const isEmptyAddableDay = dayTermini.length === 0 && !isPast;
 
-            return (
-              <div
-                key={dateIso}
-                className={cn(
-                  "group flex min-h-[104px] flex-col gap-1 border-r border-b border-divider p-1.5 last:border-r-0 sm:min-h-[140px] sm:p-2",
-                  !isCurrentMonth && "bg-[#FAFAFA]",
-                )}
-              >
+            const cellClassName = cn(
+              "group flex min-h-[104px] flex-col gap-1 border-r border-b border-divider p-1.5 last:border-r-0 sm:min-h-[140px] sm:p-2",
+              !isCurrentMonth && "bg-[#FAFAFA]",
+              isEmptyAddableDay && "cursor-pointer hover:bg-secondary-bg",
+            );
+
+            const cellContent = (
+              <>
                 <div className="flex items-center justify-between">
                   <span
                     className={cn(
@@ -225,7 +229,7 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
                   >
                     {day.getDate()}
                   </span>
-                  {!isPast && dayTermini.length < 2 ? (
+                  {!isEmptyAddableDay && !isPast && dayTermini.length < 2 ? (
                     <Link
                       href={`/admin/termini/dodaj?date=${dateIso}`}
                       aria-label={`Dodaj termin ${dateIso}`}
@@ -233,6 +237,10 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
                     >
                       <Image src="/plus.svg" alt="" width={11} height={11} className="size-2.5" />
                     </Link>
+                  ) : isEmptyAddableDay ? (
+                    <span className="flex size-6 items-center justify-center rounded text-placeholder opacity-0 transition-opacity group-hover:opacity-100">
+                      <Image src="/plus.svg" alt="" width={11} height={11} className="size-2.5" />
+                    </span>
                   ) : null}
                 </div>
                 <div className="flex flex-col gap-1">
@@ -240,6 +248,24 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
                     <DayChip key={termin.id} termin={termin} />
                   ))}
                 </div>
+              </>
+            );
+
+            if (isEmptyAddableDay) {
+              return (
+                <Link
+                  key={dateIso}
+                  href={`/admin/termini/dodaj?date=${dateIso}`}
+                  className={cellClassName}
+                >
+                  {cellContent}
+                </Link>
+              );
+            }
+
+            return (
+              <div key={dateIso} className={cellClassName}>
+                {cellContent}
               </div>
             );
           })}
