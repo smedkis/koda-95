@@ -121,9 +121,10 @@ export function TerminCard({
       style={
         isNext
           ? {
-              // Same flat fill as a regular card's bg-secondary-bg — only the
-              // border keeps its orange gradient to mark this as "next".
-              backgroundImage: "linear-gradient(#FAFAFA, #FAFAFA), linear-gradient(90deg, #f58220, #ffab5c)",
+              // Warm-tinted fill (instead of the flat #FAFAFA regular cards
+              // use) so the "next" card stands out on its own, not just via
+              // the border.
+              backgroundImage: "linear-gradient(#FFF4E8, #FFF4E8), linear-gradient(90deg, #f58220, #ffab5c)",
               backgroundOrigin: "border-box",
               backgroundClip: "padding-box, border-box",
             }
