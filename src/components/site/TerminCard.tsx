@@ -28,10 +28,25 @@ function formatProstaMesta(count: number): string {
   return `${count} prostih mest`;
 }
 
-function HeroChip({ icon, label, value }: { icon: string; label: string; value: string }) {
+function HeroChip({
+  icon,
+  label,
+  value,
+  isNext,
+}: {
+  icon: string;
+  label: string;
+  value: string;
+  isNext: boolean;
+}) {
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#FFEEDD]">
+      <span
+        className={cn(
+          "flex size-10 shrink-0 items-center justify-center rounded-full",
+          isNext ? "bg-white" : "bg-[#FFEEDD]",
+        )}
+      >
         <Image src={icon} alt="" width={18} height={18} className="size-[18px]" />
       </span>
       <div className="min-w-0">
@@ -42,10 +57,23 @@ function HeroChip({ icon, label, value }: { icon: string; label: string; value: 
   );
 }
 
-function SecondaryItem({ icon, children }: { icon: string; children: string }) {
+function SecondaryItem({
+  icon,
+  isNext,
+  children,
+}: {
+  icon: string;
+  isNext: boolean;
+  children: string;
+}) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary-bg">
+      <span
+        className={cn(
+          "flex size-6 shrink-0 items-center justify-center rounded-full",
+          isNext ? "bg-white" : "bg-secondary-bg",
+        )}
+      >
         <Image src={icon} alt="" width={12} height={12} className="size-3" />
       </span>
       <Text className="text-[14px] text-paragraph">{children}</Text>
@@ -96,16 +124,16 @@ export function TerminCard({
   const isScarce = hasCapacity && spotsLeft < 10;
 
   // The two facts someone scans a termin card for first: when it is, and
-  // either what it costs or whether there's still room. Everything else
-  // (time, location, modul, exact headcount) is secondary detail below.
-  const heroRight = price
-    ? { icon: "/icon-ticket.svg", label: "Cena", value: price }
+  // either which module it is or whether there's still room. Price moves
+  // down to the secondary row instead (client wanted these two swapped).
+  const heroRight = modul
+    ? { icon: "/Category.svg", label: "Modul", value: modul }
     : hasCapacity
       ? { icon: "/icon-profile.svg", label: "Prosta mesta", value: `${attendeeCount}/${capacity}` }
       : { icon: "/icon-profile.svg", label: "Prosta mesta", value: "Neomejeno" };
 
   const secondaryItems: { icon: string; label: string }[] = [];
-  if (modul) secondaryItems.push({ icon: "/Category.svg", label: `Modul ${modul}` });
+  if (price) secondaryItems.push({ icon: "/icon-ticket.svg", label: price });
   secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? "Po dogovoru" });
   secondaryItems.push({ icon: "/icon-location.svg", label: address ?? "Po dogovoru" });
 
@@ -139,13 +167,13 @@ export function TerminCard({
       <Heading3>{cleanTitle}</Heading3>
 
       <div className="mt-6 grid grid-cols-2 gap-4">
-        <HeroChip icon="/icon-calendar.svg" label="Datum" value={date} />
-        <HeroChip icon={heroRight.icon} label={heroRight.label} value={heroRight.value} />
+        <HeroChip icon="/icon-calendar.svg" label="Datum" value={date} isNext={isNext} />
+        <HeroChip icon={heroRight.icon} label={heroRight.label} value={heroRight.value} isNext={isNext} />
       </div>
 
       <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-divider pt-4">
         {secondaryItems.map((item) => (
-          <SecondaryItem key={item.label} icon={item.icon}>
+          <SecondaryItem key={item.label} icon={item.icon} isNext={isNext}>
             {item.label}
           </SecondaryItem>
         ))}
