@@ -70,8 +70,11 @@ export function TerminCard({
   const modul = parseModul(title);
   const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, "");
   const hasCapacity = capacity !== undefined && attendeeCount !== undefined;
+  // Never show a near-empty bar — a session with 0-2 signups shouldn't
+  // visually read as "nobody wants this", so the bar itself has a 33%
+  // floor. The real count is still what's written out below it.
   const percentage = hasCapacity
-    ? Math.min(100, Math.round(((attendeeCount as number) / (capacity as number)) * 100))
+    ? Math.max(33, Math.min(100, Math.round(((attendeeCount as number) / (capacity as number)) * 100)))
     : 0;
   const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - (attendeeCount as number)) : 0;
   const isScarce = hasCapacity && spotsLeft < 10;
