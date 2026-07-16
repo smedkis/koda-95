@@ -203,20 +203,32 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
             const isPast = dateIso < todayIso;
             const isToday = dateIso === todayIso;
             const dayTermini = byDate.get(dateIso) ?? [];
-            // A day with no termin yet can be clicked anywhere to add one;
-            // a day that already has a chip keeps just the small + button,
-            // since nesting a link inside the chip's own link isn't valid.
-            const isEmptyAddableDay = dayTermini.length === 0 && !isPast;
+            // Past days can't have a termin added. A day with room for one
+            // more gets a full-cell "add" link *underneath* the real
+            // content (absolute, z-0) — the date number and any chip sit
+            // above it (relative, z-10), so clicking a chip still opens
+            // that termin, while clicking anywhere else in the cell adds
+            // a new one. Sibling links, not nested, so this stays valid
+            // HTML even when a chip (its own link) is already present.
+            const isAddable = !isPast && dayTermini.length < 2;
 
-            const cellClassName = cn(
-              "group flex min-h-[104px] flex-col gap-1 border-r border-b border-divider p-1.5 last:border-r-0 sm:min-h-[140px] sm:p-2",
-              !isCurrentMonth && "bg-[#FAFAFA]",
-              isEmptyAddableDay && "cursor-pointer hover:bg-secondary-bg",
-            );
-
-            const cellContent = (
-              <>
-                <div className="flex items-center justify-between">
+            return (
+              <div
+                key={dateIso}
+                className={cn(
+                  "group relative flex min-h-[104px] flex-col gap-1 border-r border-b border-divider p-1.5 last:border-r-0 sm:min-h-[140px] sm:p-2",
+                  !isCurrentMonth && "bg-[#FAFAFA]",
+                  isAddable && "hover:bg-secondary-bg",
+                )}
+              >
+                {isAddable ? (
+                  <Link
+                    href={`/admin/termini/dodaj?date=${dateIso}`}
+                    aria-label={`Dodaj termin ${dateIso}`}
+                    className="absolute inset-0 z-0"
+                  />
+                ) : null}
+                <div className="relative z-10 flex items-center justify-between">
                   <span
                     className={cn(
                       "flex size-6 items-center justify-center rounded-full font-body text-[12px] font-medium sm:text-[14px]",
@@ -229,43 +241,17 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
                   >
                     {day.getDate()}
                   </span>
-                  {!isEmptyAddableDay && !isPast && dayTermini.length < 2 ? (
-                    <Link
-                      href={`/admin/termini/dodaj?date=${dateIso}`}
-                      aria-label={`Dodaj termin ${dateIso}`}
-                      className="flex size-6 cursor-pointer items-center justify-center rounded text-placeholder opacity-0 transition-opacity hover:bg-secondary-bg hover:text-heading group-hover:opacity-100"
-                    >
-                      <Image src="/plus.svg" alt="" width={11} height={11} className="size-2.5" />
-                    </Link>
-                  ) : isEmptyAddableDay ? (
-                    <span className="flex size-6 items-center justify-center rounded text-placeholder opacity-0 transition-opacity group-hover:opacity-100">
+                  {isAddable ? (
+                    <span className="pointer-events-none flex size-6 items-center justify-center rounded text-placeholder opacity-0 transition-opacity group-hover:opacity-100">
                       <Image src="/plus.svg" alt="" width={11} height={11} className="size-2.5" />
                     </span>
                   ) : null}
                 </div>
-                <div className="flex flex-col gap-1">
+                <div className="relative z-10 flex flex-col gap-1">
                   {dayTermini.map((termin) => (
                     <DayChip key={termin.id} termin={termin} />
                   ))}
                 </div>
-              </>
-            );
-
-            if (isEmptyAddableDay) {
-              return (
-                <Link
-                  key={dateIso}
-                  href={`/admin/termini/dodaj?date=${dateIso}`}
-                  className={cellClassName}
-                >
-                  {cellContent}
-                </Link>
-              );
-            }
-
-            return (
-              <div key={dateIso} className={cellClassName}>
-                {cellContent}
               </div>
             );
           })}
