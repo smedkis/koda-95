@@ -217,7 +217,7 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
                     className={cn(
                       "flex size-6 items-center justify-center rounded-full font-body text-[12px] font-medium sm:text-[14px]",
                       isToday
-                        ? "bg-primary text-white"
+                        ? "bg-paragraph text-white"
                         : isCurrentMonth
                           ? "text-heading"
                           : "text-placeholder",
