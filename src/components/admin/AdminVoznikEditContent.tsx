@@ -13,6 +13,7 @@ import { cn } from "@/lib/cn";
 import { dmyToIso, isoToDmy } from "@/lib/date-format";
 import {
   deleteRegistrationAction,
+  moveRegistrationAction,
   updateRegistrationAction,
 } from "@/app/(admin)/admin/termini/[termin]/actions";
 
@@ -153,9 +154,11 @@ function StatusStep({
 export function AdminVoznikEditContent({
   terminId,
   initialDriver,
+  otherTermini,
 }: {
   terminId: string;
   initialDriver: TerminDriver;
+  otherTermini: { slug: string; label: string }[];
 }) {
   const router = useRouter();
   const [driver, setDriver] = useState(initialDriver);
@@ -165,6 +168,10 @@ export function AdminVoznikEditContent({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
+  const [targetTerminSlug, setTargetTerminSlug] = useState(otherTermini[0]?.slug ?? "");
+  const [isMoving, setIsMoving] = useState(false);
+  const [moveError, setMoveError] = useState<string | null>(null);
 
   const logEvent = (message: string) =>
     setActivityLog((current) => [...current, { message, timestamp: formatNow() }]);
@@ -197,6 +204,19 @@ export function AdminVoznikEditContent({
       return;
     }
     router.push(`/admin/termini/${terminId}`);
+  };
+
+  const handleMove = async () => {
+    if (!targetTerminSlug) return;
+    setIsMoving(true);
+    setMoveError(null);
+    const result = await moveRegistrationAction(terminId, driver.id, targetTerminSlug);
+    setIsMoving(false);
+    if ("error" in result) {
+      setMoveError(result.error);
+      return;
+    }
+    router.push(`/admin/termini/${targetTerminSlug}/vozniki/${driver.id}`);
   };
 
   const step1Done = true;
@@ -356,17 +376,32 @@ export function AdminVoznikEditContent({
           >
             {isSaving ? "Shranjujem …" : "Shrani"}
           </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            className="bg-white text-red-600 outline outline-1 outline-red-200 hover:bg-red-50"
-            onClick={() => {
-              setDeleteConfirmText("");
-              setIsDeleteModalOpen(true);
-            }}
-          >
-            Izbriši prijavo
-          </Button>
+          <div className="flex items-center gap-3">
+            {otherTermini.length > 0 ? (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setMoveError(null);
+                  setTargetTerminSlug(otherTermini[0]?.slug ?? "");
+                  setIsMoveModalOpen(true);
+                }}
+              >
+                Prestavi na drug termin
+              </Button>
+            ) : null}
+            <Button
+              type="button"
+              variant="secondary"
+              className="bg-white text-red-600 outline outline-1 outline-red-200 hover:bg-red-50"
+              onClick={() => {
+                setDeleteConfirmText("");
+                setIsDeleteModalOpen(true);
+              }}
+            >
+              Izbriši prijavo
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -433,6 +468,52 @@ export function AdminVoznikEditContent({
           </Box>
         </div>
       </div>
+
+      {isMoveModalOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setIsMoveModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-[420px] rounded-lg border border-divider bg-white p-8"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsMoveModalOpen(false)}
+              aria-label="Zapri"
+              className="absolute top-4 right-4 cursor-pointer"
+            >
+              <CloseIcon />
+            </button>
+            <Heading3>Prestavi na drug termin</Heading3>
+            <Text className="mt-4">
+              Izberite termin, na katerega želite prestaviti {driver.driverName}.
+            </Text>
+            <Select
+              className="mt-4"
+              value={targetTerminSlug}
+              onChange={(event) => setTargetTerminSlug(event.target.value)}
+            >
+              {otherTermini.map((termin) => (
+                <option key={termin.slug} value={termin.slug}>
+                  {termin.label}
+                </option>
+              ))}
+            </Select>
+            {moveError ? <Text className="mt-4 text-red-600">{moveError}</Text> : null}
+            <Button
+              type="button"
+              variant="primary"
+              className="mt-8 w-full justify-center"
+              disabled={!targetTerminSlug || isMoving}
+              onClick={handleMove}
+            >
+              {isMoving ? "Prestavljam …" : "Prestavi"}
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       {isDeleteModalOpen ? (
         <div

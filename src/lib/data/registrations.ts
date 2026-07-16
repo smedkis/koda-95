@@ -169,6 +169,48 @@ export async function updateRegistration(
   return { id: registrationId };
 }
 
+export async function moveRegistration(
+  currentTerminSlug: string,
+  registrationId: string,
+  targetTerminSlug: string,
+): Promise<MutationResult> {
+  const currentTermin = await getTerminRowBySlug(currentTerminSlug);
+  if (!currentTermin) return { error: "Termin ne obstaja." };
+  if (targetTerminSlug === currentTerminSlug) {
+    return { error: "Voznik je že prijavljen na ta termin." };
+  }
+
+  const targetTermin = await getTerminRowBySlug(targetTerminSlug);
+  if (!targetTermin) return { error: "Ciljni termin ne obstaja." };
+
+  const client = getSupabaseServerClient();
+
+  if (targetTermin.capacity !== null) {
+    const { count, error: countError } = await client
+      .from("prijave")
+      .select("id", { count: "exact", head: true })
+      .eq("termin_id", targetTermin.id);
+    if (countError) return { error: countError.message };
+    if ((count ?? 0) >= targetTermin.capacity) {
+      return { error: "Ciljni termin je poln." };
+    }
+  }
+
+  const { error } = await client
+    .from("prijave")
+    .update({ termin_id: targetTermin.id })
+    .eq("id", registrationId)
+    .eq("termin_id", currentTermin.id);
+  if (error) {
+    if (error.code === "23505") {
+      return { error: "Voznik je za ciljni termin že prijavljen." };
+    }
+    return { error: error.message };
+  }
+
+  return { id: registrationId };
+}
+
 export async function deleteRegistration(
   terminSlug: string,
   registrationId: string,

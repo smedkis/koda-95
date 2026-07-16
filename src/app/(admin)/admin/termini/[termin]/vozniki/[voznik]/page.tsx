@@ -1,7 +1,7 @@
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { AdminVoznikEditContent } from "@/components/admin/AdminVoznikEditContent";
 import { Heading2, Text } from "@/components/ui/Typography";
-import { getTerminBySlug } from "@/lib/data/termini";
+import { getTerminBySlug, listTermini } from "@/lib/data/termini";
 import { getRegistration } from "@/lib/data/registrations";
 
 export default async function UrediVoznikPage({
@@ -13,6 +13,13 @@ export default async function UrediVoznikPage({
   const termin = await getTerminBySlug(terminId);
   const driver = termin ? await getRegistration(terminId, voznikId) : null;
   const cleanTerminTitle = termin?.title.replace(/\s*\([^)]*\)\s*$/, "") ?? "Termin";
+  const { upcoming } = await listTermini();
+  const otherTermini = upcoming
+    .filter((t) => t.id !== terminId)
+    .map((t) => ({
+      slug: t.id,
+      label: `${t.title.replace(/\s*\([^)]*\)\s*$/, "")} — ${t.date}`,
+    }));
 
   if (!driver) {
     return (
@@ -39,7 +46,11 @@ export default async function UrediVoznikPage({
         ]}
       />
       <Heading2>{driver.driverName}</Heading2>
-      <AdminVoznikEditContent terminId={terminId} initialDriver={driver} />
+      <AdminVoznikEditContent
+        terminId={terminId}
+        initialDriver={driver}
+        otherTermini={otherTermini}
+      />
     </div>
   );
 }
