@@ -45,9 +45,7 @@ function HeroChip({ icon, label, value }: { icon: string; label: string; value: 
 function SecondaryItem({ icon, children }: { icon: string; children: string }) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary-bg">
-        <Image src={icon} alt="" width={16} height={16} className="size-4" />
-      </span>
+      <Image src={icon} alt="" width={16} height={16} className="size-4 shrink-0" />
       <Text className="text-[14px] text-paragraph">{children}</Text>
     </div>
   );
@@ -85,7 +83,7 @@ export function TerminCard({
   // visually read as "nobody wants this", so the bar itself has a floor
   // around 33% (jittered per termin so cards don't all match exactly).
   // The real count is still what's written out below it.
-  const floorPercentage = hashToRange(href, 28, 38);
+  const floorPercentage = hashToRange(href, 18, 48);
   const percentage = hasCapacity
     ? Math.max(
         floorPercentage,
@@ -106,8 +104,8 @@ export function TerminCard({
 
   const secondaryItems: { icon: string; label: string }[] = [];
   if (price) secondaryItems.push({ icon: "/icon-ticket.svg", label: price });
-  secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? "Po dogovoru" });
-  secondaryItems.push({ icon: "/icon-location.svg", label: address ?? "Po dogovoru" });
+  secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? "Ura po dogovoru" });
+  secondaryItems.push({ icon: "/icon-location.svg", label: address ?? "Lokacija po dogovoru" });
 
   return (
     <Box
@@ -149,6 +147,13 @@ export function TerminCard({
         ))}
       </div>
 
+      <div className="mt-6 flex flex-col items-center gap-2">
+        <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
+          {t("reserve")}
+        </span>
+        <Text className="text-[13px] font-medium text-[#006e5e]">Prijavi se zdaj, plačaj kasneje</Text>
+      </div>
+
       {hasCapacity ? (
         <div className="mt-5">
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-divider">
@@ -163,13 +168,6 @@ export function TerminCard({
           </Text>
         </div>
       ) : null}
-
-      <div className="mt-6 flex flex-col items-center gap-2">
-        <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
-          {t("reserve")}
-        </span>
-        <Text className="text-[13px] font-medium text-[#006e5e]">Prijavi se zdaj, plačaj kasneje</Text>
-      </div>
     </Box>
   );
 }
