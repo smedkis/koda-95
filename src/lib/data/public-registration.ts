@@ -107,12 +107,12 @@ export type CompleteRegistrationResult = { ok: true } | { error: string };
 
 // Fills in the rest of an already-registered prijava (found by its
 // registration code) with the personal/category/payment details from the
-// 3-step /obrazec form. Doesn't attempt to merge into a pre-existing
-// vozniki profile even if the entered EMŠO matches one — this registration
-// already has its own voznik row from submitQuickRegistration, so a
-// returning driver ends up with two profiles rather than a unified history.
-// A real merge (repointing prijava.voznik_id, deleting the duplicate) is
-// more than this fix needs.
+// 3-step /obrazec form. A returning driver's quick-form submission always
+// creates a fresh voznik row (their EMŠO isn't known yet at that point), so
+// if the EMŠO entered here collides with an existing profile, that fresh
+// row is a duplicate of a real returning driver — merge into the existing
+// profile instead of failing: repoint this prijava to it, carry over the
+// freshest contact details, and drop the duplicate.
 export async function completeRegistration(
   code: string,
   input: CompleteRegistrationInput,
@@ -126,25 +126,59 @@ export async function completeRegistration(
   if (findError) return { error: findError.message };
   if (!prijava) return { error: "Prijava ne obstaja." };
 
+  const personalFields = {
+    date_of_birth: input.dateOfBirth || null,
+    place_of_birth: input.placeOfBirth || null,
+    country_of_birth: input.countryOfBirth || null,
+    citizenship: input.citizenship || null,
+    emso: input.emso.trim() || null,
+    residence_type: input.residenceType,
+    postal_code: input.postalCode || null,
+    city: input.city || null,
+    street_address: input.address || null,
+  };
+
   const { error: voznikError } = await client
     .from("vozniki")
-    .update({
-      date_of_birth: input.dateOfBirth || null,
-      place_of_birth: input.placeOfBirth || null,
-      country_of_birth: input.countryOfBirth || null,
-      citizenship: input.citizenship || null,
-      emso: input.emso.trim() || null,
-      residence_type: input.residenceType,
-      postal_code: input.postalCode || null,
-      city: input.city || null,
-      street_address: input.address || null,
-    })
+    .update(personalFields)
     .eq("id", prijava.voznik_id);
   if (voznikError) {
-    if (voznikError.code === "23505") {
-      return { error: "S tem EMŠO je že registriran drug voznik." };
-    }
-    return { error: voznikError.message };
+    if (voznikError.code !== "23505") return { error: voznikError.message };
+
+    const { data: existing, error: findExistingError } = await client
+      .from("vozniki")
+      .select("id")
+      .eq("emso", personalFields.emso as string)
+      .neq("id", prijava.voznik_id)
+      .maybeSingle();
+    if (findExistingError) return { error: findExistingError.message };
+    if (!existing) return { error: "S tem EMŠO je že registriran drug voznik." };
+
+    const { data: duplicate, error: duplicateError } = await client
+      .from("vozniki")
+      .select("full_name, email, phone")
+      .eq("id", prijava.voznik_id)
+      .single();
+    if (duplicateError) return { error: duplicateError.message };
+
+    const { error: mergeError } = await client
+      .from("vozniki")
+      .update({ ...personalFields, ...duplicate })
+      .eq("id", existing.id);
+    if (mergeError) return { error: mergeError.message };
+
+    const { error: repointError } = await client
+      .from("prijave")
+      .update({ voznik_id: existing.id })
+      .eq("id", prijava.id);
+    if (repointError) return { error: repointError.message };
+
+    await client
+      .from("narocniki")
+      .update({ voznik_id: existing.id })
+      .eq("voznik_id", prijava.voznik_id);
+
+    await client.from("vozniki").delete().eq("id", prijava.voznik_id);
   }
 
   const { error: prijavaError } = await client
