@@ -47,7 +47,7 @@ export function TerminiSection({ termini }: { termini: TerminEntry[] }) {
               "animate-card-in",
               isSingle ? "w-full lg:max-w-[calc(50%-1rem)]" : undefined,
             )}
-            style={{ animationDelay: `${index * 80}ms` }}
+            style={{ animationDelay: `${index * 150}ms` }}
           >
             <TerminCard
               {...cardProps}

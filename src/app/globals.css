@@ -14,7 +14,7 @@
   --color-placeholder: #999999;
   --color-container-border: #f0f0f0;
 
-  --animate-card-in: card-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-card-in: card-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes card-in {
