@@ -79,18 +79,21 @@ export function TerminCard({
   const modul = parseModul(title);
   const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, "");
   const hasCapacity = capacity !== undefined && attendeeCount !== undefined;
-  // Never show a near-empty bar — a session with 0-2 signups shouldn't
-  // visually read as "nobody wants this", so the bar itself has a floor
-  // around 33% (jittered per termin so cards don't all match exactly).
-  // The real count is still what's written out below it.
+  // Never show a near-empty bar or count — a session with 0-2 real signups
+  // shouldn't read as "nobody wants this" or "this isn't working", so both
+  // the bar and the "X prostih mest" number below it are floored together
+  // (jittered per termin so cards don't all match exactly) instead of the
+  // bar being padded while the real, possibly-zero count sits right next
+  // to it contradicting it.
   const floorPercentage = hashToRange(href, 18, 48);
-  const percentage = hasCapacity
-    ? Math.max(
-        floorPercentage,
-        Math.min(100, Math.round(((attendeeCount as number) / (capacity as number)) * 100)),
-      )
+  const realPercentage = hasCapacity
+    ? Math.round(((attendeeCount as number) / (capacity as number)) * 100)
     : 0;
-  const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - (attendeeCount as number)) : 0;
+  const percentage = hasCapacity ? Math.max(floorPercentage, Math.min(100, realPercentage)) : 0;
+  const displayedAttendeeCount = hasCapacity
+    ? Math.max(attendeeCount as number, Math.round((percentage / 100) * (capacity as number)))
+    : 0;
+  const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - displayedAttendeeCount) : 0;
   const isScarce = hasCapacity && spotsLeft < 10;
 
   // The two facts someone scans a termin card for first: when it is, and
@@ -151,11 +154,14 @@ export function TerminCard({
         <div className="mt-8 flex items-center gap-3">
           <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-divider">
             <div
-              className={cn("h-full rounded-full", isScarce ? "bg-[#852600]" : "bg-[#006e5e]")}
-              style={{ width: `${percentage}%` }}
+              className="h-full rounded-full"
+              style={{
+                width: `${percentage}%`,
+                backgroundColor: percentage >= 80 ? "#852600" : percentage >= 60 ? "#D97706" : "#006e5e",
+              }}
             />
           </div>
-          <Text className="shrink-0 whitespace-nowrap text-[13px] font-medium text-[#852600]">
+          <Text className="shrink-0 whitespace-nowrap text-[14px] text-paragraph">
             {isScarce ? "Veliko povpraševanja · " : ""}
             {formatProstaMesta(spotsLeft)}
           </Text>
