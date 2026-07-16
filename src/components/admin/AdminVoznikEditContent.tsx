@@ -381,13 +381,14 @@ export function AdminVoznikEditContent({
               <Button
                 type="button"
                 variant="secondary"
+                className="bg-white text-red-600 outline outline-1 outline-red-200 hover:bg-red-50"
                 onClick={() => {
                   setMoveError(null);
                   setTargetTerminSlug(otherTermini[0]?.slug ?? "");
                   setIsMoveModalOpen(true);
                 }}
               >
-                Prestavi na drug termin
+                Prestavi
               </Button>
             ) : null}
             <Button
