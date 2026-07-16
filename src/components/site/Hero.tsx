@@ -25,8 +25,15 @@ export function Hero({
       {breadcrumbs ? <Breadcrumbs items={breadcrumbs} className="justify-center" /> : null}
       <Heading1>
         {titlePrefix ? `${titlePrefix} ` : null}
-        <span className="underline decoration-primary decoration-4 underline-offset-4">
+        <span className="relative inline-block">
           {titleHighlight}
+          {/* Same orange gradient used on the "next termin" badge/border
+              elsewhere, so this highlight ties into an existing motif
+              instead of introducing a third accent treatment. */}
+          <span
+            className="absolute inset-x-0 -bottom-1 h-[3px] rounded-full sm:h-1.5"
+            style={{ backgroundImage: "linear-gradient(90deg, #f58220, #ffab5c)" }}
+          />
         </span>
         {titleSuffix ? ` ${titleSuffix}` : null}
       </Heading1>
