@@ -13,6 +13,7 @@ import { cn } from "@/lib/cn";
 import { dmyToIso, isoToDmy } from "@/lib/date-format";
 import {
   deleteRegistrationAction,
+  markRegistrationPaidAction,
   moveRegistrationAction,
   updateRegistrationAction,
 } from "@/app/(admin)/admin/termini/[termin]/actions";
@@ -144,6 +145,7 @@ export function AdminVoznikEditContent({
   const router = useRouter();
   const [driver, setDriver] = useState(initialDriver);
   const [isSaving, setIsSaving] = useState(false);
+  const [isMarkingPaid, setIsMarkingPaid] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [activityLog, setActivityLog] = useState<LogEntry[]>(initialDriver.events ?? []);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -170,6 +172,19 @@ export function AdminVoznikEditContent({
       return;
     }
     router.push(`/admin/termini/${terminId}`);
+  };
+
+  const handleMarkPaid = async () => {
+    setIsMarkingPaid(true);
+    setSaveError(null);
+    const result = await markRegistrationPaidAction(terminId, driver.id);
+    setIsMarkingPaid(false);
+    if ("error" in result) {
+      setSaveError(result.error);
+      return;
+    }
+    update("paymentStatus", "poravnano");
+    logEvent("Zabeleženo plačilo");
   };
 
   const canConfirmDelete = deleteConfirmText.trim() === driver.driverName;
@@ -401,10 +416,10 @@ export function AdminVoznikEditContent({
                 type="button"
                 variant="action"
                 className="w-full justify-center"
-                disabled={step3Done}
-                onClick={() => update("paymentStatus", "poravnano")}
+                disabled={step3Done || isMarkingPaid}
+                onClick={handleMarkPaid}
               >
-                Označi kot plačano
+                {isMarkingPaid ? "Označujem …" : "Označi kot plačano"}
               </Button>
             ) : (
               <Button

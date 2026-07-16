@@ -199,6 +199,35 @@ export async function updateRegistration(
   return { id: registrationId };
 }
 
+export async function markRegistrationPaid(
+  terminSlug: string,
+  registrationId: string,
+): Promise<MutationResult> {
+  const termin = await getTerminRowBySlug(terminSlug);
+  if (!termin) return { error: "Termin ne obstaja." };
+
+  const client = getSupabaseServerClient();
+  const { data: prijava, error: findError } = await client
+    .from("prijave")
+    .select("payment_status")
+    .eq("id", registrationId)
+    .eq("termin_id", termin.id)
+    .maybeSingle();
+  if (findError) return { error: findError.message };
+  if (!prijava) return { error: "Prijava ne obstaja." };
+  if (prijava.payment_status === "paid") return { id: registrationId };
+
+  const { error } = await client
+    .from("prijave")
+    .update({ payment_status: "paid" })
+    .eq("id", registrationId);
+  if (error) return { error: error.message };
+
+  await logRegistrationEvent(registrationId, "Zabeleženo plačilo");
+
+  return { id: registrationId };
+}
+
 export async function moveRegistration(
   currentTerminSlug: string,
   registrationId: string,

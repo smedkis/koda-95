@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import {
   createRegistration,
   deleteRegistration,
+  markRegistrationPaid,
   moveRegistration,
   updateRegistration,
   type MutationResult,
@@ -28,6 +29,19 @@ export async function updateRegistrationAction(
   driver: TerminDriver,
 ): Promise<MutationResult> {
   const result = await updateRegistration(terminSlug, registrationId, driver);
+  if (!("error" in result)) {
+    revalidatePath(`/admin/termini/${terminSlug}`);
+    revalidatePath(`/admin/termini/${terminSlug}/vozniki/${registrationId}`);
+    revalidatePath("/admin/termini");
+  }
+  return result;
+}
+
+export async function markRegistrationPaidAction(
+  terminSlug: string,
+  registrationId: string,
+): Promise<MutationResult> {
+  const result = await markRegistrationPaid(terminSlug, registrationId);
   if (!("error" in result)) {
     revalidatePath(`/admin/termini/${terminSlug}`);
     revalidatePath(`/admin/termini/${terminSlug}/vozniki/${registrationId}`);
