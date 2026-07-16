@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Eyebrow } from "@/components/ui/Typography";
+import { cn } from "@/lib/cn";
 import { TerminCard, type TerminCardProps } from "./TerminCard";
 
 export type TerminEntry = Omit<TerminCardProps, "daysUntil"> & { dateISO: string };
@@ -39,8 +40,15 @@ export function TerminiSection({ termini }: { termini: TerminEntry[] }) {
             : "grid w-full grid-cols-1 gap-8 lg:grid-cols-2"
         }
       >
-        {sortedTermini.map(({ dateISO, ...cardProps }) => (
-          <div key={cardProps.href} className={isSingle ? "w-full lg:max-w-[calc(50%-1rem)]" : undefined}>
+        {sortedTermini.map(({ dateISO, ...cardProps }, index) => (
+          <div
+            key={cardProps.href}
+            className={cn(
+              "animate-card-in",
+              isSingle ? "w-full lg:max-w-[calc(50%-1rem)]" : undefined,
+            )}
+            style={{ animationDelay: `${index * 80}ms` }}
+          >
             <TerminCard
               {...cardProps}
               daysUntil={cardProps.href === nextHref ? getDaysUntil(dateISO) : undefined}
