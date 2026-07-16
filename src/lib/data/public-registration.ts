@@ -2,6 +2,7 @@ import "server-only";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getPublicTermin, programKeyToShort } from "./termini";
 import { syncNarocnikFromRegistration } from "./narocniki";
+import { logRegistrationEvent } from "./registrations";
 import { buildTerminTitle, formatTimeRange } from "@/lib/termini-format";
 import type {
   LicenceCategory,
@@ -65,7 +66,7 @@ export async function submitQuickRegistration(
       consent_marketing: input.consentMarketing,
       consent_terms: input.consentTerms,
     })
-    .select("registration_code")
+    .select("id, registration_code")
     .single();
 
   if (prijavaError) {
@@ -82,6 +83,8 @@ export async function submitQuickRegistration(
     voznikId: voznik.id,
     source: "Obrazec",
   });
+
+  await logRegistrationEvent(prijava.id, "Izpolnjena prijava");
 
   return { code: prijava.registration_code };
 }
@@ -192,6 +195,8 @@ export async function completeRegistration(
     })
     .eq("id", prijava.id);
   if (prijavaError) return { error: prijavaError.message };
+
+  await logRegistrationEvent(prijava.id, "Izpolnil obrazec");
 
   return { ok: true };
 }

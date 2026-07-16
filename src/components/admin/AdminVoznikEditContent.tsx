@@ -101,25 +101,6 @@ function formatNow(): string {
   });
 }
 
-// Placeholder history — once a real backend logs these events as they
-// happen, this should be replaced with the actual stored log for the driver.
-function buildInitialLog(driver: TerminDriver): LogEntry[] {
-  const entries: LogEntry[] = [
-    { message: "Izpolnjena prijava", timestamp: "20.04.2026 14:32" },
-    { message: "Poslano prvo obvestilo za izpolnitev obrazca", timestamp: "22.04.2026 09:00" },
-  ];
-  if (driver.formStatus === "izpolnjen") {
-    entries.push({
-      message: `Voznik ${driver.driverName} izpolnil obrazec`,
-      timestamp: "24.04.2026 18:47",
-    });
-  }
-  if (driver.paymentStatus === "poravnano") {
-    entries.push({ message: "Zabeleženo plačilo", timestamp: "25.04.2026 10:15" });
-  }
-  return entries;
-}
-
 function StatusStep({
   label,
   completed,
@@ -164,10 +145,7 @@ export function AdminVoznikEditContent({
   const [driver, setDriver] = useState(initialDriver);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [activityLog, setActivityLog] = useState<LogEntry[]>(() => [
-    ...buildInitialLog(initialDriver),
-    ...(initialDriver.events ?? []),
-  ]);
+  const [activityLog, setActivityLog] = useState<LogEntry[]>(initialDriver.events ?? []);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -424,10 +402,7 @@ export function AdminVoznikEditContent({
                 variant="action"
                 className="w-full justify-center"
                 disabled={step3Done}
-                onClick={() => {
-                  update("paymentStatus", "poravnano");
-                  logEvent("Zabeleženo plačilo");
-                }}
+                onClick={() => update("paymentStatus", "poravnano")}
               >
                 Označi kot plačano
               </Button>

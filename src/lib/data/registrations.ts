@@ -94,7 +94,7 @@ async function getRegistrationEvents(
   }));
 }
 
-async function logRegistrationEvent(prijavaId: string, message: string): Promise<void> {
+export async function logRegistrationEvent(prijavaId: string, message: string): Promise<void> {
   const client = getSupabaseServerClient();
   await client.from("prijava_dogodki").insert({ prijava_id: prijavaId, message });
 }
@@ -136,6 +136,8 @@ export async function createRegistration(
     source: "Ročno dodano",
   });
 
+  await logRegistrationEvent(prijava.id, "Izpolnjena prijava");
+
   return { id: prijava.id };
 }
 
@@ -150,7 +152,7 @@ export async function updateRegistration(
   const client = getSupabaseServerClient();
   const { data: prijava, error: findError } = await client
     .from("prijave")
-    .select("voznik_id")
+    .select("voznik_id, payment_status")
     .eq("id", registrationId)
     .eq("termin_id", termin.id)
     .maybeSingle();
@@ -189,6 +191,10 @@ export async function updateRegistration(
     })
     .eq("id", registrationId);
   if (prijavaError) return { error: prijavaError.message };
+
+  if (prijava.payment_status !== "paid" && driver.paymentStatus === "poravnano") {
+    await logRegistrationEvent(registrationId, "Zabeleženo plačilo");
+  }
 
   return { id: registrationId };
 }
