@@ -29,6 +29,7 @@ export type TerminDriver = {
   formStatus: "izpolnjen" | "manjka";
   paymentStatus: "caka" | "poslano" | "poravnano";
   payer: "sam" | string;
+  events?: { message: string; timestamp: string }[];
 };
 
 export function formatDriverCategory(driver: TerminDriver): string {

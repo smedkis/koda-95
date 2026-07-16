@@ -2,9 +2,9 @@
 // 20260701085511_termini_price_optional.sql,
 // 20260713100000_termini_capacity_modul.sql,
 // 20260713110000_termini_location_time_partial_prijave.sql,
-// 20260713120000_narocniki.sql, and
-// 20260713140000_zacetna_location_time_optional.sql. Keep in sync with any
-// new migration.
+// 20260713120000_narocniki.sql,
+// 20260713140000_zacetna_location_time_optional.sql, and
+// 20260716090000_prijava_dogodki.sql. Keep in sync with any new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -76,6 +76,13 @@ export type ObvescanjeRow = {
   created_at: string;
 };
 
+export type PrijavaDogodkiRow = {
+  id: string;
+  prijava_id: string;
+  message: string;
+  created_at: string;
+};
+
 export type NarocnikiRow = {
   id: string;
   full_name: string | null;
@@ -119,6 +126,13 @@ export interface Database {
         Row: NarocnikiRow;
         Insert: Partial<Omit<NarocnikiRow, "id" | "created_at">> & Pick<NarocnikiRow, "email">;
         Update: Partial<Omit<NarocnikiRow, "id" | "created_at">>;
+        Relationships: [];
+      };
+      prijava_dogodki: {
+        Row: PrijavaDogodkiRow;
+        Insert: Partial<Omit<PrijavaDogodkiRow, "id" | "created_at">> &
+          Pick<PrijavaDogodkiRow, "prijava_id" | "message">;
+        Update: Partial<Omit<PrijavaDogodkiRow, "id" | "created_at">>;
         Relationships: [];
       };
     };

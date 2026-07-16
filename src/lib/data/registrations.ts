@@ -4,8 +4,8 @@ import { getTerminRowBySlug, programKeyToShort, terminSlug } from "./termini";
 import { syncNarocnikFromRegistration } from "./narocniki";
 import type { PrijaveRow, TerminiRow, VozniciRow } from "@/lib/supabase/database.types";
 import type { TerminDriver } from "@/components/admin/AdminTerminDriversTable";
-import { dmyToIso, isoToDmy } from "@/lib/date-format";
-import { buildTerminTitle } from "@/lib/termini-format";
+import { dmyToIso, formatDateTimeSl, isoToDmy } from "@/lib/date-format";
+import { buildTerminTitle, formatSlovenianDate } from "@/lib/termini-format";
 
 type JoinedPrijava = PrijaveRow & { vozniki: VozniciRow };
 
@@ -72,7 +72,31 @@ export async function getRegistration(
   if (error) throw new Error(error.message);
   if (!data) return null;
 
-  return toTerminDriver(data as unknown as JoinedPrijava, termin.price_eur);
+  const driver = toTerminDriver(data as unknown as JoinedPrijava, termin.price_eur);
+  driver.events = await getRegistrationEvents(registrationId);
+  return driver;
+}
+
+async function getRegistrationEvents(
+  prijavaId: string,
+): Promise<{ message: string; timestamp: string }[]> {
+  const client = getSupabaseServerClient();
+  const { data, error } = await client
+    .from("prijava_dogodki")
+    .select("message, created_at")
+    .eq("prijava_id", prijavaId)
+    .order("created_at", { ascending: true });
+  if (error) throw new Error(error.message);
+
+  return (data ?? []).map((row) => ({
+    message: row.message,
+    timestamp: formatDateTimeSl(row.created_at),
+  }));
+}
+
+async function logRegistrationEvent(prijavaId: string, message: string): Promise<void> {
+  const client = getSupabaseServerClient();
+  await client.from("prijava_dogodki").insert({ prijava_id: prijavaId, message });
 }
 
 export type MutationResult = { id: string } | { error: string };
@@ -207,6 +231,15 @@ export async function moveRegistration(
     }
     return { error: error.message };
   }
+
+  const targetTitle = buildTerminTitle(
+    programKeyToShort(targetTermin.program),
+    targetTermin.modul,
+  ).replace(/\s*\([^)]*\)\s*$/, "");
+  await logRegistrationEvent(
+    registrationId,
+    `Prestavljen na termin: ${targetTitle} (${formatSlovenianDate(targetTermin.date)})`,
+  );
 
   return { id: registrationId };
 }

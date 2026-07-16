@@ -164,7 +164,10 @@ export function AdminVoznikEditContent({
   const [driver, setDriver] = useState(initialDriver);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [activityLog, setActivityLog] = useState<LogEntry[]>(() => buildInitialLog(initialDriver));
+  const [activityLog, setActivityLog] = useState<LogEntry[]>(() => [
+    ...buildInitialLog(initialDriver),
+    ...(initialDriver.events ?? []),
+  ]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
