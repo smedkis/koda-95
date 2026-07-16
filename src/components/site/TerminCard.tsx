@@ -89,9 +89,6 @@ export function TerminCard({
   if (modul) secondaryItems.push({ icon: "/Category.svg", label: `Modul ${modul}` });
   secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? "Po dogovoru" });
   secondaryItems.push({ icon: "/icon-location.svg", label: address ?? "Po dogovoru" });
-  if (price && hasCapacity) {
-    secondaryItems.push({ icon: "/icon-profile.svg", label: `${attendeeCount}/${capacity} mest` });
-  }
 
   return (
     <Box
