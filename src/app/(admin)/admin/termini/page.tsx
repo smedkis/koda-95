@@ -12,10 +12,10 @@ function toCalendarTermin(termin: TerminCardData): CalendarTermin {
   return {
     id: termin.id,
     program: termin.program,
+    title: termin.title,
     dateISO: parseTerminSlug(termin.id)?.date ?? "",
     registeredCount: termin.registeredCount,
     capacity: termin.capacity,
-    modul: termin.program === "redna" ? termin.title.match(/\d{4}/)?.[0] : undefined,
   };
 }
 

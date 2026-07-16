@@ -11,10 +11,10 @@ type Program = "vsi" | "redna" | "zacetna";
 export type CalendarTermin = {
   id: string;
   program: "redna" | "zacetna";
+  title: string;
   dateISO: string;
   registeredCount: number;
   capacity?: number;
-  modul?: string;
 };
 
 const PROGRAM_OPTIONS: { value: Program; label: string }[] = [
@@ -107,20 +107,22 @@ function ChevronIcon({ direction }: { direction: "left" | "right" }) {
 }
 
 function DayChip({ termin }: { termin: CalendarTermin }) {
-  const label = termin.program === "redna" ? `Redna${termin.modul ? ` ${termin.modul}` : ""}` : "Začetna";
-  const spots = termin.capacity !== undefined ? `${termin.registeredCount}/${termin.capacity}` : undefined;
+  const spots =
+    termin.capacity !== undefined
+      ? `${termin.registeredCount}/${termin.capacity} prijavljenih`
+      : `${termin.registeredCount} prijavljenih`;
   return (
     <Link
       href={`/admin/termini/${termin.id}`}
       className={cn(
-        "flex items-center justify-between gap-1 truncate rounded px-1.5 py-1 font-body text-[11px] font-medium sm:text-[12px]",
+        "flex flex-col gap-0.5 rounded px-1.5 py-1 font-body text-[11px] font-medium transition-colors sm:text-[12px]",
         termin.program === "redna"
-          ? "bg-[#FFE9D6] text-[#8A4B12] hover:bg-[#FFDCB8]"
-          : "bg-secondary-bg text-secondary-dark hover:bg-[#CBF3E8]",
+          ? "bg-primary text-white hover:bg-[#d06e1b]"
+          : "bg-secondary text-paragraph hover:bg-[#5de0c0]",
       )}
     >
-      <span className="truncate">{label}</span>
-      {spots ? <span className="shrink-0 opacity-80">{spots}</span> : null}
+      <span className="line-clamp-2">{termin.title}</span>
+      <span className="truncate opacity-80">{spots}</span>
     </Link>
   );
 }
@@ -168,7 +170,7 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
             type="button"
             onClick={() => goToMonth(-1)}
             aria-label="Prejšnji mesec"
-            className="flex size-9 cursor-pointer items-center justify-center rounded border border-divider hover:bg-secondary-bg"
+            className="flex size-9 cursor-pointer items-center justify-center rounded bg-paragraph text-white transition-colors hover:bg-[#36272b]"
           >
             <ChevronIcon direction="left" />
           </button>
@@ -179,7 +181,7 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
             type="button"
             onClick={() => goToMonth(1)}
             aria-label="Naslednji mesec"
-            className="flex size-9 cursor-pointer items-center justify-center rounded border border-divider hover:bg-secondary-bg"
+            className="flex size-9 cursor-pointer items-center justify-center rounded bg-paragraph text-white transition-colors hover:bg-[#36272b]"
           >
             <ChevronIcon direction="right" />
           </button>
@@ -206,7 +208,7 @@ export function AdminTerminiCalendar({ termini }: { termini: CalendarTermin[] })
               <div
                 key={dateIso}
                 className={cn(
-                  "group flex min-h-[88px] flex-col gap-1 border-r border-b border-divider p-1.5 last:border-r-0 sm:min-h-[112px] sm:p-2",
+                  "group flex min-h-[104px] flex-col gap-1 border-r border-b border-divider p-1.5 last:border-r-0 sm:min-h-[140px] sm:p-2",
                   !isCurrentMonth && "bg-[#FAFAFA]",
                 )}
               >
