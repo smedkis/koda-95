@@ -117,7 +117,7 @@ export function TerminCard({
       )}
     >
       {isNext ? (
-        <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-1/2 items-center rounded-full bg-primary px-3 py-1.5 font-body text-[12px] font-semibold text-white">
+        <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-[calc(50%+1px)] items-center rounded-full bg-primary px-3 py-1.5 font-body text-[12px] font-semibold text-white">
           Naslednji termin · Čez {daysUntil} {daysUntil === 1 ? "dan" : "dni"}
         </span>
       ) : null}
