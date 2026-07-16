@@ -6,6 +6,17 @@ import { Link } from "@/i18n/navigation";
 import { parseModul } from "@/lib/termini-format";
 import { cn } from "@/lib/cn";
 
+// Deterministic per-termin jitter (same termin always gets the same value,
+// so it doesn't change on every reload) so the progress-bar floor below
+// doesn't land on the exact same number on every card.
+function hashToRange(value: string, min: number, max: number): number {
+  let hash = 0;
+  for (let i = 0; i < value.length; i++) {
+    hash = (hash * 31 + value.charCodeAt(i)) | 0;
+  }
+  return min + (Math.abs(hash) % (max - min + 1));
+}
+
 // Slovenian has dual number in addition to singular/plural, so "mesto"
 // declines differently depending on the count (checked on the last two
 // digits): 1 → mesto, 2 → mesti, 3-4 → mesta, 0 and 5+ → mest.
@@ -71,10 +82,15 @@ export function TerminCard({
   const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, "");
   const hasCapacity = capacity !== undefined && attendeeCount !== undefined;
   // Never show a near-empty bar — a session with 0-2 signups shouldn't
-  // visually read as "nobody wants this", so the bar itself has a 33%
-  // floor. The real count is still what's written out below it.
+  // visually read as "nobody wants this", so the bar itself has a floor
+  // around 33% (jittered per termin so cards don't all match exactly).
+  // The real count is still what's written out below it.
+  const floorPercentage = hashToRange(href, 28, 38);
   const percentage = hasCapacity
-    ? Math.max(33, Math.min(100, Math.round(((attendeeCount as number) / (capacity as number)) * 100)))
+    ? Math.max(
+        floorPercentage,
+        Math.min(100, Math.round(((attendeeCount as number) / (capacity as number)) * 100)),
+      )
     : 0;
   const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - (attendeeCount as number)) : 0;
   const isScarce = hasCapacity && spotsLeft < 10;
