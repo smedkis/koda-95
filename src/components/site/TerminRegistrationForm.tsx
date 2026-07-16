@@ -66,23 +66,12 @@ export function TerminRegistrationForm({
       id="termin-registration-form"
       className={
         isNext
-          ? "relative flex flex-col border-2 border-transparent pb-6 shadow-[0_16px_36px_-20px_rgba(245,130,32,0.45)]"
+          ? "relative flex flex-col border-2 border-primary pb-6"
           : "flex flex-col pb-6"
-      }
-      style={
-        isNext
-          ? {
-              // Same flat fill as a regular card's bg-secondary-bg — only the
-              // border keeps its orange gradient to mark this as "next".
-              backgroundImage: "linear-gradient(#FAFAFA, #FAFAFA), linear-gradient(90deg, #f58220, #ffab5c)",
-              backgroundOrigin: "border-box",
-              backgroundClip: "padding-box, border-box",
-            }
-          : undefined
       }
     >
       {isNext ? (
-        <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-1/2 items-center rounded-full bg-gradient-to-r from-primary to-[#ffab5c] px-3 py-1.5 font-body text-[12px] font-semibold text-white shadow-[0_4px_12px_-3px_rgba(245,130,32,0.5)]">
+        <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-[calc(50%+1px)] items-center rounded-full bg-primary px-3 py-1.5 font-body text-[12px] font-semibold text-white">
           Termin je čez {daysUntil} {daysUntil === 1 ? "dan" : "dni"}. Rezervirajte svoje mesto
           pravočasno.
         </span>
