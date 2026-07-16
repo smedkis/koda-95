@@ -147,13 +147,6 @@ export function TerminCard({
         ))}
       </div>
 
-      <div className="mt-6 flex flex-col items-center gap-2">
-        <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
-          {t("reserve")}
-        </span>
-        <Text className="text-[13px] font-medium text-[#006e5e]">Prijavi se zdaj, plačaj kasneje</Text>
-      </div>
-
       {hasCapacity ? (
         <div className="mt-5">
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-divider">
@@ -168,6 +161,13 @@ export function TerminCard({
           </Text>
         </div>
       ) : null}
+
+      <div className="mt-6 flex flex-col items-center gap-2">
+        <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
+          {t("reserve")}
+        </span>
+        <Text className="text-[13px] font-medium text-[#006e5e]">Prijavi se zdaj, plačaj kasneje</Text>
+      </div>
     </Box>
   );
 }
