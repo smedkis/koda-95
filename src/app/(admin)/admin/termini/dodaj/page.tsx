@@ -8,14 +8,19 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function DodajTerminPage() {
+export default async function DodajTerminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ date?: string }>;
+}) {
+  const { date } = await searchParams;
   return (
     <div className="mt-12 mb-24 lg:mt-20 lg:mb-32">
       <AdminBreadcrumbs
         items={[{ label: "Termini", href: "/admin/termini" }, { label: "Dodaj termin" }]}
       />
       <Heading2>Dodaj termin</Heading2>
-      <AdminTerminForm />
+      <AdminTerminForm initialDate={date} />
     </div>
   );
 }

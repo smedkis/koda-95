@@ -57,13 +57,19 @@ function ProgramToggle({
   );
 }
 
-export function AdminTerminForm({ initialTermin }: { initialTermin?: TerminFormData }) {
+export function AdminTerminForm({
+  initialTermin,
+  initialDate,
+}: {
+  initialTermin?: TerminFormData;
+  initialDate?: string;
+}) {
   const router = useRouter();
   const isEdit = !!initialTermin;
 
   const [program, setProgram] = useState<Program>(initialTermin?.program ?? "redna");
   const [modul, setModul] = useState(initialTermin?.modul ?? MODUL_OPTIONS[0]);
-  const [date, setDate] = useState(initialTermin?.dateISO ?? "");
+  const [date, setDate] = useState(initialTermin?.dateISO ?? initialDate ?? "");
   const [startTime, setStartTime] = useState(initialTermin?.startTime || "15:00");
   const [endTime, setEndTime] = useState(initialTermin?.endTime || "21:00");
   const [locationChoice, setLocationChoice] = useState(() => {
