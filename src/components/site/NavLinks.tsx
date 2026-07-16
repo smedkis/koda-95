@@ -23,7 +23,13 @@ export function NavLinks() {
     <div className="hidden items-center gap-8 sm:flex">
       {LINKS.map((link) => (
         <Link key={link.href} href={link.href}>
-          <TextMedium as="span" className={cn(pathname === link.href && "text-primary")}>
+          <TextMedium
+            as="span"
+            className={cn(
+              pathname === link.href &&
+                "underline decoration-primary decoration-2 underline-offset-4",
+            )}
+          >
             {link.label}
           </TextMedium>
         </Link>
