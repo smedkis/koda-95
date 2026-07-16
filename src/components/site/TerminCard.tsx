@@ -162,12 +162,7 @@ export function TerminCard({
               style={{ width: `${percentage}%` }}
             />
           </div>
-          <Text
-            className={cn(
-              "mt-2 text-center",
-              isScarce ? "text-[13px] text-[#852600]" : "text-[#006e5e]",
-            )}
-          >
+          <Text className="mt-2 text-center text-[13px] text-paragraph">
             {isScarce ? "Veliko povpraševanja · " : ""}
             {formatProstaMesta(spotsLeft)}
           </Text>
