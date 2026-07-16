@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Eyebrow, Heading3, Text, TextMedium } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
+import { fireConfetti } from "@/lib/confetti";
 import { dmyToIso, isoToDmy } from "@/lib/date-format";
 import {
   deleteRegistrationAction,
@@ -174,7 +175,8 @@ export function AdminVoznikEditContent({
     router.push(`/admin/termini/${terminId}`);
   };
 
-  const handleMarkPaid = async () => {
+  const handleMarkPaid = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const origin = { x: event.clientX, y: event.clientY };
     setIsMarkingPaid(true);
     setSaveError(null);
     const result = await markRegistrationPaidAction(terminId, driver.id);
@@ -185,6 +187,7 @@ export function AdminVoznikEditContent({
     }
     update("paymentStatus", "poravnano");
     logEvent("Zabeleženo plačilo");
+    fireConfetti(origin);
   };
 
   const canConfirmDelete = deleteConfirmText.trim() === driver.driverName;
