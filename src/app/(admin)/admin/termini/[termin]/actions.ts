@@ -30,6 +30,7 @@ export async function updateRegistrationAction(
   const result = await updateRegistration(terminSlug, registrationId, driver);
   if (!("error" in result)) {
     revalidatePath(`/admin/termini/${terminSlug}`);
+    revalidatePath(`/admin/termini/${terminSlug}/vozniki/${registrationId}`);
     revalidatePath("/admin/termini");
   }
   return result;
@@ -55,7 +56,9 @@ export async function moveRegistrationAction(
   const result = await moveRegistration(terminSlug, registrationId, targetTerminSlug);
   if (!("error" in result)) {
     revalidatePath(`/admin/termini/${terminSlug}`);
+    revalidatePath(`/admin/termini/${terminSlug}/vozniki/${registrationId}`);
     revalidatePath(`/admin/termini/${targetTerminSlug}`);
+    revalidatePath(`/admin/termini/${targetTerminSlug}/vozniki/${registrationId}`);
     revalidatePath("/admin/termini");
   }
   return result;
