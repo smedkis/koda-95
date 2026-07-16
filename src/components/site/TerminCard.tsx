@@ -148,21 +148,21 @@ export function TerminCard({
       </div>
 
       {hasCapacity ? (
-        <div className="mt-5">
+        <div className="mt-8">
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-divider">
             <div
               className={cn("h-full rounded-full", isScarce ? "bg-[#852600]" : "bg-[#006e5e]")}
               style={{ width: `${percentage}%` }}
             />
           </div>
-          <Text className="mt-2 text-center text-[13px] text-paragraph">
+          <Text className="mt-2 text-[13px] font-medium text-[#852600]">
             {isScarce ? "Veliko povpraševanja · " : ""}
             {formatProstaMesta(spotsLeft)}
           </Text>
         </div>
       ) : null}
 
-      <div className="mt-6 flex flex-col items-center gap-2">
+      <div className="mt-8 flex flex-col items-center gap-2">
         <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
           {t("reserve")}
         </span>
