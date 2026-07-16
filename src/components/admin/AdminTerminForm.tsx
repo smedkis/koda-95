@@ -18,13 +18,8 @@ import { cn } from "@/lib/cn";
 
 type Program = "redna" | "zacetna";
 
-// Placeholder presets — first is the real location, the other two are
-// stand-ins until the actual additional locations are confirmed.
-const LOCATION_PRESETS = [
-  "Pot za krajem 35, 4000 Kranj",
-  "Cesta na Loko 12, 4000 Kranj",
-  "Savska cesta 8, 4000 Kranj",
-];
+// Confirmed Redna Koda 95 locations.
+const LOCATION_PRESETS = ["Pot za krajem 35, 4000 Kranj", "Ljubljanska cesta 30, 4000 Kranj"];
 const CUSTOM_LOCATION = "drugo";
 
 // Redna Koda 95 is split into yearly modules (35h spread over 5 years) — the
