@@ -79,19 +79,16 @@ export function TerminCard({
   const modul = parseModul(title);
   const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, "");
   const hasCapacity = capacity !== undefined && attendeeCount !== undefined;
-  // Never show a near-empty bar or count — a session with 0-2 real signups
-  // shouldn't read as "nobody wants this" or "this isn't working", so both
-  // the bar and the "X prostih mest" number below it are floored together
-  // (jittered per termin so cards don't all match exactly) instead of the
-  // bar being padded while the real, possibly-zero count sits right next
-  // to it contradicting it.
-  const floorPercentage = hashToRange(href, 18, 48);
-  const realPercentage = hasCapacity
-    ? Math.round(((attendeeCount as number) / (capacity as number)) * 100)
-    : 0;
-  const percentage = hasCapacity ? Math.max(floorPercentage, Math.min(100, realPercentage)) : 0;
+  // Nudge the displayed count up slightly (by at most 2, deterministic per
+  // termin so it's stable across reloads) so a session with real 0-1
+  // signups doesn't read as "nobody wants this" — kept small so it stays
+  // close to the real number instead of every card looking the same.
+  const jitter = hasCapacity ? hashToRange(href, 0, 2) : 0;
   const displayedAttendeeCount = hasCapacity
-    ? Math.max(attendeeCount as number, Math.round((percentage / 100) * (capacity as number)))
+    ? Math.min(capacity as number, (attendeeCount as number) + jitter)
+    : 0;
+  const percentage = hasCapacity
+    ? Math.round((displayedAttendeeCount / (capacity as number)) * 100)
     : 0;
   const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - displayedAttendeeCount) : 0;
   const isScarce = hasCapacity && spotsLeft < 10;
@@ -131,7 +128,7 @@ export function TerminCard({
       }
     >
       {isNext ? (
-        <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-1/2 items-center rounded-full bg-gradient-to-r from-primary to-[#ffab5c] px-3 py-1.5 font-body text-[12px] font-semibold text-white shadow-[0_4px_12px_-3px_rgba(245,130,32,0.5)]">
+        <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-1/2 items-center rounded-full bg-gradient-to-r from-primary to-[#ffab5c] px-3 py-1.5 font-body text-[12px] font-semibold text-white">
           Naslednji termin · Čez {daysUntil} {daysUntil === 1 ? "dan" : "dni"}
         </span>
       ) : null}
