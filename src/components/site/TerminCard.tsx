@@ -28,25 +28,10 @@ function formatProstaMesta(count: number): string {
   return `${count} prostih mest`;
 }
 
-function HeroChip({
-  icon,
-  label,
-  value,
-  isNext,
-}: {
-  icon: string;
-  label: string;
-  value: string;
-  isNext: boolean;
-}) {
+function HeroChip({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <span
-        className={cn(
-          "flex size-10 shrink-0 items-center justify-center rounded-full",
-          isNext ? "bg-white" : "bg-[#FFEEDD]",
-        )}
-      >
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#FFEEDD]">
         <Image src={icon} alt="" width={18} height={18} className="size-[18px]" />
       </span>
       <div className="min-w-0">
@@ -57,24 +42,11 @@ function HeroChip({
   );
 }
 
-function SecondaryItem({
-  icon,
-  isNext,
-  children,
-}: {
-  icon: string;
-  isNext: boolean;
-  children: string;
-}) {
+function SecondaryItem({ icon, children }: { icon: string; children: string }) {
   return (
     <div className="flex items-center gap-1.5">
-      <span
-        className={cn(
-          "flex size-6 shrink-0 items-center justify-center rounded-full",
-          isNext ? "bg-white" : "bg-secondary-bg",
-        )}
-      >
-        <Image src={icon} alt="" width={12} height={12} className="size-3" />
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary-bg">
+        <Image src={icon} alt="" width={16} height={16} className="size-4" />
       </span>
       <Text className="text-[14px] text-paragraph">{children}</Text>
     </div>
@@ -141,18 +113,16 @@ export function TerminCard({
     <Box
       as={Link}
       href={href}
-      className={
-        isNext
-          ? "relative flex flex-col border-2 border-transparent shadow-[0_16px_36px_-20px_rgba(245,130,32,0.45)] transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_40px_-16px_rgba(245,130,32,0.55)]"
-          : "relative flex flex-col transition-shadow hover:shadow-md"
-      }
+      className={cn(
+        "relative flex flex-col transition-shadow hover:shadow-md",
+        isNext && "border-2 border-transparent",
+      )}
       style={
         isNext
           ? {
-              // Warm-tinted fill (instead of the flat #FAFAFA regular cards
-              // use) so the "next" card stands out on its own, not just via
-              // the border.
-              backgroundImage: "linear-gradient(#FFF4E8, #FFF4E8), linear-gradient(90deg, #f58220, #ffab5c)",
+              // Same flat fill as a regular card's bg-secondary-bg — only
+              // the border keeps its orange gradient to mark this as "next".
+              backgroundImage: "linear-gradient(#FAFAFA, #FAFAFA), linear-gradient(90deg, #f58220, #ffab5c)",
               backgroundOrigin: "border-box",
               backgroundClip: "padding-box, border-box",
             }
@@ -167,13 +137,13 @@ export function TerminCard({
       <Heading3>{cleanTitle}</Heading3>
 
       <div className="mt-6 grid grid-cols-2 gap-4">
-        <HeroChip icon="/icon-calendar.svg" label="Datum" value={date} isNext={isNext} />
-        <HeroChip icon={heroRight.icon} label={heroRight.label} value={heroRight.value} isNext={isNext} />
+        <HeroChip icon="/icon-calendar.svg" label="Datum" value={date} />
+        <HeroChip icon={heroRight.icon} label={heroRight.label} value={heroRight.value} />
       </div>
 
       <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-divider pt-4">
         {secondaryItems.map((item) => (
-          <SecondaryItem key={item.label} icon={item.icon} isNext={isNext}>
+          <SecondaryItem key={item.label} icon={item.icon}>
             {item.label}
           </SecondaryItem>
         ))}
