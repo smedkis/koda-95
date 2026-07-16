@@ -1,20 +1,10 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import type { ReactNode } from "react";
 import { Box } from "@/components/ui/Box";
-import { Heading3, Text } from "@/components/ui/Typography";
+import { Heading3, Text, TextMedium, TextSmall } from "@/components/ui/Typography";
 import { Link } from "@/i18n/navigation";
 import { parseModul } from "@/lib/termini-format";
 import { cn } from "@/lib/cn";
-
-function InfoRow({ icon, children }: { icon: string; children: ReactNode }) {
-  return (
-    <div className="flex items-center gap-2">
-      <Image src={icon} alt="" width={24} height={24} className="size-6 shrink-0" />
-      <Text className="whitespace-nowrap">{children}</Text>
-    </div>
-  );
-}
 
 // Slovenian has dual number in addition to singular/plural, so "mesto"
 // declines differently depending on the count (checked on the last two
@@ -25,6 +15,31 @@ function formatProstaMesta(count: number): string {
   if (lastTwoDigits === 2) return `${count} prosti mesti`;
   if (lastTwoDigits === 3 || lastTwoDigits === 4) return `${count} prosta mesta`;
   return `${count} prostih mest`;
+}
+
+function HeroChip({ icon, label, value }: { icon: string; label: string; value: string }) {
+  return (
+    <div className="flex min-w-0 items-center gap-3">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#FFEEDD]">
+        <Image src={icon} alt="" width={18} height={18} className="size-[18px]" />
+      </span>
+      <div className="min-w-0">
+        <TextSmall className="text-[12px] text-placeholder">{label}</TextSmall>
+        <TextMedium className="truncate text-[16px] font-semibold text-heading">{value}</TextMedium>
+      </div>
+    </div>
+  );
+}
+
+function SecondaryItem({ icon, children }: { icon: string; children: string }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary-bg">
+        <Image src={icon} alt="" width={12} height={12} className="size-3" />
+      </span>
+      <Text className="text-[14px] text-paragraph">{children}</Text>
+    </div>
+  );
 }
 
 export type TerminCardProps = {
@@ -61,6 +76,23 @@ export function TerminCard({
   const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - (attendeeCount as number)) : 0;
   const isScarce = hasCapacity && spotsLeft < 10;
 
+  // The two facts someone scans a termin card for first: when it is, and
+  // either what it costs or whether there's still room. Everything else
+  // (time, location, modul, exact headcount) is secondary detail below.
+  const heroRight = price
+    ? { icon: "/icon-ticket.svg", label: "Cena", value: price }
+    : hasCapacity
+      ? { icon: "/icon-profile.svg", label: "Prosta mesta", value: `${attendeeCount}/${capacity}` }
+      : { icon: "/icon-profile.svg", label: "Prosta mesta", value: "Neomejeno" };
+
+  const secondaryItems: { icon: string; label: string }[] = [];
+  if (modul) secondaryItems.push({ icon: "/Category.svg", label: `Modul ${modul}` });
+  secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? "Po dogovoru" });
+  secondaryItems.push({ icon: "/icon-location.svg", label: address ?? "Po dogovoru" });
+  if (price && hasCapacity) {
+    secondaryItems.push({ icon: "/icon-profile.svg", label: `${attendeeCount}/${capacity} mest` });
+  }
+
   return (
     <Box
       as={Link}
@@ -88,22 +120,22 @@ export function TerminCard({
         </span>
       ) : null}
       <Heading3>{cleanTitle}</Heading3>
-      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-        {modul ? <InfoRow icon="/Category.svg">Modul {modul}</InfoRow> : null}
-        {price ? <InfoRow icon="/icon-ticket.svg">{price}</InfoRow> : null}
-        <InfoRow icon="/icon-calendar.svg">{date}</InfoRow>
-        <InfoRow icon="/icon-clock.svg">{timeRange ?? "Po dogovoru"}</InfoRow>
-        <InfoRow icon="/icon-location.svg">{address ?? "Po dogovoru"}</InfoRow>
-        {hasCapacity ? (
-          <InfoRow icon="/icon-profile.svg">
-            {attendeeCount}/{capacity}
-          </InfoRow>
-        ) : (
-          <InfoRow icon="/icon-profile.svg">Neomejeno prostih mest</InfoRow>
-        )}
+
+      <div className="mt-6 grid grid-cols-2 gap-4">
+        <HeroChip icon="/icon-calendar.svg" label="Datum" value={date} />
+        <HeroChip icon={heroRight.icon} label={heroRight.label} value={heroRight.value} />
       </div>
+
+      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-divider pt-4">
+        {secondaryItems.map((item) => (
+          <SecondaryItem key={item.label} icon={item.icon}>
+            {item.label}
+          </SecondaryItem>
+        ))}
+      </div>
+
       {hasCapacity ? (
-        <div className="mt-6">
+        <div className="mt-5">
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-divider">
             <div
               className={cn("h-full rounded-full", isScarce ? "bg-[#852600]" : "bg-[#006e5e]")}
@@ -116,13 +148,12 @@ export function TerminCard({
           </Text>
         </div>
       ) : null}
-      <div className="mt-6 flex items-center justify-between gap-3">
-        <span className="inline-flex w-fit items-center justify-center gap-2 self-start rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
+
+      <div className="mt-6 flex flex-col items-center gap-2">
+        <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
           {t("reserve")}
         </span>
-        <Text className="text-right text-[14px] font-medium text-[#006e5e] sm:whitespace-nowrap">
-          Prijavi se zdaj,<br className="sm:hidden" /> plačaj kasneje
-        </Text>
+        <Text className="text-[13px] font-medium text-[#006e5e]">Prijavi se zdaj, plačaj kasneje</Text>
       </div>
     </Box>
   );
