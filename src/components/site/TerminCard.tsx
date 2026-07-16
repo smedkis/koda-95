@@ -128,7 +128,13 @@ export function TerminCard({
       }
     >
       {isNext ? (
-        <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-1/2 items-center rounded-full bg-gradient-to-r from-primary to-[#ffab5c] px-3 py-1.5 font-body text-[12px] font-semibold text-white">
+        <span
+          className="absolute left-6 top-0 inline-flex w-fit -translate-y-1/2 items-center rounded-full px-3 py-1.5 font-body text-[12px] font-semibold text-white"
+          // Plain sRGB linear-gradient, same as the card border below —
+          // Tailwind's bg-gradient-to-r interpolates in OKLab by default,
+          // which visibly differs from this even with identical stops.
+          style={{ backgroundImage: "linear-gradient(90deg, #f58220, #ffab5c)" }}
+        >
           Naslednji termin · Čez {daysUntil} {daysUntil === 1 ? "dan" : "dni"}
         </span>
       ) : null}
