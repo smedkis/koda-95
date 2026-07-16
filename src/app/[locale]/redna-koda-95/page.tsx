@@ -47,7 +47,12 @@ export default async function RednaKoda95Page() {
   const termini = await listPublicTermini("redna-koda-95");
   return (
     <Container>
-      <Hero title={t("heroTitle")} description={t("heroDescription")} />
+      <Hero
+        titlePrefix={t("heroTitlePrefix")}
+        titleHighlight={t("heroTitleHighlight")}
+        titleSuffix={t("heroTitleSuffix")}
+        description={t("heroDescription")}
+      />
       <TerminiSection termini={termini} />
       <LogosSection />
       <SectionDivider />
