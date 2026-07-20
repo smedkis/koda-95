@@ -30,6 +30,7 @@ export type TerminDriver = {
   paymentStatus: "caka" | "poslano" | "poravnano";
   payer: "sam" | string;
   events?: { message: string; timestamp: string }[];
+  registrationSource?: string;
 };
 
 export function formatDriverCategory(driver: TerminDriver): string {

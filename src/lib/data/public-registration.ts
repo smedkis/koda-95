@@ -84,6 +84,7 @@ export async function submitQuickRegistration(
       voznik_id: voznik.id,
       consent_marketing: input.consentMarketing,
       consent_terms: input.consentTerms,
+      source: input.source === "obvescanje" ? "Obveščanje" : "Obrazec",
     })
     .select("id, registration_code")
     .single();

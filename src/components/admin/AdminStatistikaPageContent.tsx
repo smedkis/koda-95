@@ -247,7 +247,7 @@ export function AdminStatistikaPageContent({
           <table className="w-full min-w-[560px] border-collapse">
             <thead>
               <tr className="border-b border-divider">
-                {["Št.", "Voznik", "Datum prijave", "Termin"].map((label) => (
+                {["Št.", "Voznik", "Datum prijave", "Termin", "Vir"].map((label) => (
                   <th key={label} className="px-4 py-4 text-left">
                     <Eyebrow className="text-[14px]">{label}</Eyebrow>
                   </th>
@@ -279,6 +279,9 @@ export function AdminStatistikaPageContent({
                     <Link href={`/admin/termini/${terminId}`} className="hover:underline">
                       <Text className="text-[14px]">{terminTitle}</Text>
                     </Link>
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <Text className="text-[14px]">{driver.registrationSource ?? "—"}</Text>
                   </td>
                 </tr>
               ))}

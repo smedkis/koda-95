@@ -58,6 +58,7 @@ function toTerminDriver(row: JoinedPrijava, priceEur: number | null): TerminDriv
     formStatus: hasForm ? "izpolnjen" : "manjka",
     paymentStatus: row.payment_status === "paid" ? "poravnano" : "caka",
     payer: row.payer_type === "self" ? "sam" : (row.company_name ?? "Podjetje"),
+    registrationSource: row.source ?? undefined,
   };
 }
 
@@ -139,7 +140,7 @@ export async function createRegistration(
 
   const { data: prijava, error: prijavaError } = await client
     .from("prijave")
-    .insert({ termin_id: termin.id, voznik_id: voznik.id })
+    .insert({ termin_id: termin.id, voznik_id: voznik.id, source: "Ročno dodano" })
     .select("id, registration_code")
     .single();
   if (prijavaError) {

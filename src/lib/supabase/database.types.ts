@@ -4,8 +4,9 @@
 // 20260713110000_termini_location_time_partial_prijave.sql,
 // 20260713120000_narocniki.sql,
 // 20260713140000_zacetna_location_time_optional.sql,
-// 20260716090000_prijava_dogodki.sql, and
-// 20260720120000_admin_sessions.sql. Keep in sync with any new migration.
+// 20260716090000_prijava_dogodki.sql,
+// 20260720120000_admin_sessions.sql, and
+// 20260720140000_prijave_source.sql. Keep in sync with any new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -58,6 +59,7 @@ export type PrijaveRow = {
   consent_marketing: boolean;
   consent_terms: boolean | null;
   payment_status: PaymentStatus;
+  source: string | null;
   created_at: string;
   updated_at: string;
 };
