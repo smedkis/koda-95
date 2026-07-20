@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
@@ -23,6 +23,7 @@ export function TerminRegistrationForm({
   terminPath: string;
 }) {
   const t = useTranslations("TerminRegistrationForm");
+  const locale = useLocale();
   const router = useRouter();
   const isNext = daysUntil !== undefined;
 
@@ -52,6 +53,7 @@ export function TerminRegistrationForm({
       phone,
       consentMarketing,
       consentTerms,
+      locale,
     });
     setIsSubmitting(false);
     if ("error" in result) {

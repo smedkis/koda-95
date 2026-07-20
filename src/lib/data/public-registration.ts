@@ -5,7 +5,11 @@ import { syncNarocnikFromRegistration } from "./narocniki";
 import { logRegistrationEvent } from "./registrations";
 import { buildTerminTitle, formatSlovenianDate, formatTimeRange } from "@/lib/termini-format";
 import { sendEmail } from "@/lib/email/resend";
-import { buildCompletionEmail, buildQuickRegistrationEmail } from "@/lib/email/templates";
+import {
+  buildCompletionEmail,
+  buildQuickRegistrationEmail,
+  getLogoAttachment,
+} from "@/lib/email/templates";
 import { generateUpnQrDataUrl } from "@/lib/upn-qr";
 import { RECIPIENT_IBAN, RECIPIENT_NAME } from "@/lib/payment-info";
 import type {
@@ -29,6 +33,7 @@ export type QuickRegistrationInput = {
   phone: string;
   consentMarketing: boolean;
   consentTerms: boolean;
+  locale: string;
 };
 
 export type QuickRegistrationResult = { code: string } | { error: string };
@@ -95,20 +100,22 @@ export async function submitQuickRegistration(
   await logRegistrationEvent(prijava.id, "Izpolnjena prijava");
 
   if (input.email) {
-    const { subject, html } = buildQuickRegistrationEmail({
+    const { subject, html } = await buildQuickRegistrationEmail({
+      locale: input.locale,
       driverName: input.fullName,
       registrationCode: prijava.registration_code,
       terminTitle: buildTerminTitle(programKeyToShort(termin.program), termin.modul),
       terminDate: formatSlovenianDate(termin.date),
       completeFormUrl: `${getSiteUrl()}${publicTerminHref(termin.program, termin.date)}/obrazec?prijava=${prijava.registration_code}`,
     });
-    await sendEmail({ to: input.email, subject, html });
+    await sendEmail({ to: input.email, subject, html, attachments: [getLogoAttachment()] });
   }
 
   return { code: prijava.registration_code };
 }
 
 export type CompleteRegistrationInput = {
+  locale: string;
   licenceCategories: LicenceCategory[];
   placeOfBirth: string;
   countryOfBirth: string;
@@ -249,7 +256,8 @@ export async function completeRegistration(
       qrContent = qrDataUrl.split(",")[1];
     }
 
-    const { subject, html } = buildCompletionEmail({
+    const { subject, html } = await buildCompletionEmail({
+      locale: input.locale,
       driverName: voznik.full_name,
       registrationCode: code,
       terminTitle,
@@ -266,9 +274,10 @@ export async function completeRegistration(
       to: voznik.email,
       subject,
       html,
-      attachments: qrContent
-        ? [{ filename: "placilo-qr.png", content: qrContent, contentId: qrCid }]
-        : undefined,
+      attachments: [
+        getLogoAttachment(),
+        ...(qrContent ? [{ filename: "placilo-qr.png", content: qrContent, contentId: qrCid }] : []),
+      ],
     });
   }
 

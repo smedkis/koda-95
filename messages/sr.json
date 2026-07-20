@@ -155,5 +155,31 @@
   "RootMeta": {
     "title": "Koda 95 — Tahografi Cuderman",
     "description": "Prijave za obuke Koda 95"
+  },
+  "Email": {
+    "quickRegistration": {
+      "subject": "Prijava potvrđena — {code}",
+      "heading": "Prijava potvrđena",
+      "greeting": "Poštovani {name},",
+      "body": "Vaša prijava za {terminTitle} ({date}) je uspešno primljena.",
+      "codeLabel": "Kod prijave:",
+      "completeCta": "Za dovršetak prijave (lični podaci i način plaćanja) kliknite na link ispod:",
+      "completeButton": "Dovrši prijavu",
+      "footer": "Ako niste vi poslali ovu prijavu, možete zanemariti ovaj mejl."
+    },
+    "completion": {
+      "subject": "Podaci za plaćanje — {code}",
+      "heading": "Prijava završena",
+      "greeting": "Poštovani {name},",
+      "body": "Uspešno ste dovršili prijavu za {terminTitle} ({date}).",
+      "codeLabel": "Kod prijave:",
+      "noPriceText": "Cena za ovaj termin još nije određena. Obavestićemo vas mejlom o načinu plaćanja.",
+      "companyPaymentText": "Plaćanje u iznosu {amount} biće izvršeno preko preduzeća{companyLabel} na osnovu izdatog računa.",
+      "amountLabel": "Iznos",
+      "ibanLabel": "IBAN",
+      "recipientLabel": "Primalac",
+      "referenceLabel": "Referenca",
+      "footer": "Ako imate pitanja, odgovorite na ovaj mejl."
+    }
   }
 }

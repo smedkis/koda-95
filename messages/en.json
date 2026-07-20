@@ -155,5 +155,31 @@
   "RootMeta": {
     "title": "Koda 95 — Tahografi Cuderman",
     "description": "Registration for Koda 95 training"
+  },
+  "Email": {
+    "quickRegistration": {
+      "subject": "Registration confirmed — {code}",
+      "heading": "Registration confirmed",
+      "greeting": "Hello {name},",
+      "body": "Your registration for {terminTitle} ({date}) has been successfully received.",
+      "codeLabel": "Registration code:",
+      "completeCta": "To complete your registration (personal details and payment method), click the link below:",
+      "completeButton": "Complete registration",
+      "footer": "If you didn't submit this registration, you can ignore this email."
+    },
+    "completion": {
+      "subject": "Payment details — {code}",
+      "heading": "Registration completed",
+      "greeting": "Hello {name},",
+      "body": "You have successfully completed your registration for {terminTitle} ({date}).",
+      "codeLabel": "Registration code:",
+      "noPriceText": "The price for this session hasn't been set yet. We'll notify you by email about the payment method.",
+      "companyPaymentText": "Payment of {amount} will be made by the company{companyLabel} via invoice.",
+      "amountLabel": "Amount",
+      "ibanLabel": "IBAN",
+      "recipientLabel": "Recipient",
+      "referenceLabel": "Reference",
+      "footer": "If you have any questions, reply to this email."
+    }
   }
 }

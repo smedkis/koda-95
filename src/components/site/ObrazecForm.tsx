@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
@@ -22,6 +22,7 @@ import type { LicenceCategory } from "@/lib/supabase/database.types";
 
 export function ObrazecForm() {
   const t = useTranslations("Obrazec");
+  const locale = useLocale();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [formData, setFormData] = useState<ObrazecFormData>(INITIAL_OBRAZEC_FORM_DATA);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,6 +73,7 @@ export function ObrazecForm() {
     setIsSubmitting(true);
     setSubmitError(null);
     const result = await completeRegistrationAction(code, {
+      locale,
       licenceCategories,
       placeOfBirth: formData.placeOfBirth,
       countryOfBirth: formData.countryOfBirth,

@@ -1,19 +1,39 @@
 import "server-only";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { getTranslations } from "next-intl/server";
 import type { PayerType } from "@/lib/supabase/database.types";
+import type { EmailAttachment } from "./resend";
+
+const LOGO_CONTENT_ID = "logo";
+
+let logoAttachment: EmailAttachment | null = null;
+
+// Embedded as an inline attachment (not a hosted-URL <img>) so the header
+// renders correctly even before the site is deployed, and doesn't depend on
+// the site being reachable from wherever the recipient opens the email.
+export function getLogoAttachment(): EmailAttachment {
+  logoAttachment ??= {
+    filename: "logo.png",
+    content: readFileSync(path.join(process.cwd(), "public/logo.png")).toString("base64"),
+    contentId: LOGO_CONTENT_ID,
+  };
+  return logoAttachment;
+}
 
 // Table-based layout with inlined styles throughout — email clients don't
 // reliably support flexbox/grid or external stylesheets.
-function wrapEmail(bodyHtml: string): string {
+function wrapEmail(locale: string, bodyHtml: string): string {
   return `<!doctype html>
-<html lang="sl">
+<html lang="${locale}">
   <body style="margin:0;padding:0;background:#fafafa;font-family:Arial,Helvetica,sans-serif;color:#402e32;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fafafa;padding:32px 0;">
       <tr>
         <td align="center">
           <table role="presentation" width="100%" style="max-width:560px;background:#ffffff;border-radius:8px;overflow:hidden;border:1px solid #f0f0f0;">
             <tr>
-              <td style="background:#000000;padding:20px 32px;">
-                <span style="color:#ffffff;font-size:18px;font-weight:700;">Tahografi Cuderman</span>
+              <td style="background:#fafafa;padding:20px 32px;border-bottom:1px solid #f0f0f0;">
+                <img src="cid:${LOGO_CONTENT_ID}" alt="Tahografi Cuderman" width="140" height="53" style="display:block;" />
               </td>
             </tr>
             <tr>
@@ -29,40 +49,41 @@ function wrapEmail(bodyHtml: string): string {
 </html>`;
 }
 
-export function buildQuickRegistrationEmail({
+export async function buildQuickRegistrationEmail({
+  locale,
   driverName,
   registrationCode,
   terminTitle,
   terminDate,
   completeFormUrl,
 }: {
+  locale: string;
   driverName: string;
   registrationCode: string;
   terminTitle: string;
   terminDate: string;
   completeFormUrl: string;
-}): { subject: string; html: string } {
+}): Promise<{ subject: string; html: string }> {
+  const t = await getTranslations({ locale, namespace: "Email.quickRegistration" });
+
   const body = `
-    <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">Prijava potrjena</h1>
-    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">Pozdravljeni ${driverName},</p>
-    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
-      Vaša prijava na <strong>${terminTitle}</strong> (${terminDate}) je bila uspešno sprejeta.
-    </p>
+    <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">${t("heading")}</h1>
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("greeting", { name: driverName })}</p>
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("body", { terminTitle, date: terminDate })}</p>
     <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">
-      Koda prijave: <strong style="color:#f58220;">${registrationCode}</strong>
+      ${t("codeLabel")} <strong style="color:#f58220;">${registrationCode}</strong>
     </p>
-    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
-      Za dokončanje prijave (osebni podatki in način plačila) kliknite spodnjo povezavo:
-    </p>
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("completeCta")}</p>
     <p style="margin:0 0 8px;">
-      <a href="${completeFormUrl}" style="display:inline-block;background:#f58220;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-size:15px;font-weight:600;">Dokončaj prijavo</a>
+      <a href="${completeFormUrl}" style="display:inline-block;background:#f58220;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-size:15px;font-weight:600;">${t("completeButton")}</a>
     </p>
-    <p style="margin:24px 0 0;font-size:13px;color:#999999;">Če prijave niste oddali vi, lahko to sporočilo prezrete.</p>
+    <p style="margin:24px 0 0;font-size:13px;color:#999999;">${t("footer")}</p>
   `;
-  return { subject: `Prijava potrjena — ${registrationCode}`, html: wrapEmail(body) };
+  return { subject: t("subject", { code: registrationCode }), html: wrapEmail(locale, body) };
 }
 
-export function buildCompletionEmail({
+export async function buildCompletionEmail({
+  locale,
   driverName,
   registrationCode,
   terminTitle,
@@ -75,6 +96,7 @@ export function buildCompletionEmail({
   reference,
   qrCid,
 }: {
+  locale: string;
   driverName: string;
   registrationCode: string;
   terminTitle: string;
@@ -86,32 +108,32 @@ export function buildCompletionEmail({
   recipientName: string;
   reference: string;
   qrCid?: string;
-}): { subject: string; html: string } {
+}): Promise<{ subject: string; html: string }> {
+  const t = await getTranslations({ locale, namespace: "Email.completion" });
+
   const paymentSection = !amount
-    ? `<p style="margin:0 0 16px;font-size:15px;line-height:1.6;">Cena za ta termin še ni določena. O načinu plačila vas obvestimo naknadno po e-pošti.</p>`
+    ? `<p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("noPriceText")}</p>`
     : payerType === "company"
-      ? `<p style="margin:0 0 16px;font-size:15px;line-height:1.6;">Plačilo v znesku <strong>${amount}</strong> bo izvedeno prek podjetja${companyName ? ` <strong>${companyName}</strong>` : ""} na podlagi izdanega računa.</p>`
+      ? `<p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("companyPaymentText", { amount, companyLabel: companyName ? ` ${companyName}` : "" })}</p>`
       : `
         <table role="presentation" width="100%" style="border-collapse:collapse;margin:0 0 24px;">
-          <tr><td style="padding:6px 0;color:#999999;font-size:13px;">Znesek</td><td style="padding:6px 0;text-align:right;font-size:14px;font-weight:600;">${amount}</td></tr>
-          <tr><td style="padding:6px 0;color:#999999;font-size:13px;">IBAN</td><td style="padding:6px 0;text-align:right;font-size:14px;">${iban}</td></tr>
-          <tr><td style="padding:6px 0;color:#999999;font-size:13px;">Prejemnik</td><td style="padding:6px 0;text-align:right;font-size:14px;">${recipientName}</td></tr>
-          <tr><td style="padding:6px 0;color:#999999;font-size:13px;">Referenca</td><td style="padding:6px 0;text-align:right;font-size:14px;">${reference}</td></tr>
+          <tr><td style="padding:6px 0;color:#999999;font-size:13px;">${t("amountLabel")}</td><td style="padding:6px 0;text-align:right;font-size:14px;font-weight:600;">${amount}</td></tr>
+          <tr><td style="padding:6px 0;color:#999999;font-size:13px;">${t("ibanLabel")}</td><td style="padding:6px 0;text-align:right;font-size:14px;">${iban}</td></tr>
+          <tr><td style="padding:6px 0;color:#999999;font-size:13px;">${t("recipientLabel")}</td><td style="padding:6px 0;text-align:right;font-size:14px;">${recipientName}</td></tr>
+          <tr><td style="padding:6px 0;color:#999999;font-size:13px;">${t("referenceLabel")}</td><td style="padding:6px 0;text-align:right;font-size:14px;">${reference}</td></tr>
         </table>
         ${qrCid ? `<p style="text-align:center;margin:0 0 8px;"><img src="cid:${qrCid}" alt="UPN QR" width="180" height="180" /></p>` : ""}
       `;
 
   const body = `
-    <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">Prijava zaključena</h1>
-    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">Pozdravljeni ${driverName},</p>
-    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
-      Uspešno ste dokončali prijavo na <strong>${terminTitle}</strong> (${terminDate}).
-    </p>
+    <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">${t("heading")}</h1>
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("greeting", { name: driverName })}</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">${t("body", { terminTitle, date: terminDate })}</p>
     <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">
-      Koda prijave: <strong style="color:#f58220;">${registrationCode}</strong>
+      ${t("codeLabel")} <strong style="color:#f58220;">${registrationCode}</strong>
     </p>
     ${paymentSection}
-    <p style="margin:24px 0 0;font-size:13px;color:#999999;">Če imate vprašanja, odgovorite na to e-pošto.</p>
+    <p style="margin:24px 0 0;font-size:13px;color:#999999;">${t("footer")}</p>
   `;
-  return { subject: `Podatki za plačilo — ${registrationCode}`, html: wrapEmail(body) };
+  return { subject: t("subject", { code: registrationCode }), html: wrapEmail(locale, body) };
 }
