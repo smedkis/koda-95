@@ -116,7 +116,7 @@ export function ObrazecPaymentBox({
         <div className="flex w-full flex-1 flex-col text-left">
           <DetailRow label={t("recipient")} value={recipientName} />
           <DetailRow label={t("iban")} value={iban} />
-          <DetailRow label={t("reference")} value={`SI00 ${reference}`} />
+          <DetailRow label={t("reference")} value={reference} />
           <DetailRow label={t("amount")} value={amount} showDivider={false} />
         </div>
       </div>

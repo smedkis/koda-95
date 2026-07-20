@@ -15,7 +15,7 @@ import {
   buildQuickRegistrationEmail,
   getLogoAttachment,
 } from "@/lib/email/templates";
-import { generateUpnQrDataUrl } from "@/lib/upn-qr";
+import { buildRfReference, generateUpnQrDataUrl } from "@/lib/upn-qr";
 import { RECIPIENT_IBAN, RECIPIENT_NAME } from "@/lib/payment-info";
 import { getSiteUrl } from "@/lib/site-url";
 import type {
@@ -261,7 +261,7 @@ export async function completeRegistration(
       terminRow.modul,
       input.locale,
     );
-    const reference = `SI00${code}`;
+    const reference = buildRfReference(code);
 
     let qrCid: string | undefined;
     let qrContent: string | undefined;

@@ -8,7 +8,7 @@ import { Footer } from "@/components/site/Footer";
 import { ObrazecConfirmedHeader } from "@/components/site/ObrazecConfirmedHeader";
 import { ObrazecPaymentBox } from "@/components/site/ObrazecPaymentBox";
 import { SectionDivider } from "@/components/site/SectionDivider";
-import { generateUpnQrDataUrl } from "@/lib/upn-qr";
+import { buildRfReference, generateUpnQrDataUrl } from "@/lib/upn-qr";
 import { getRegistrationByCode } from "@/lib/data/public-registration";
 import { RECIPIENT_IBAN, RECIPIENT_NAME } from "@/lib/payment-info";
 
@@ -43,12 +43,14 @@ export default async function ObrazecPotrjenoPage({
       )
     : null;
 
+  const reference = buildRfReference(registration.registrationCode);
+
   const qrDataUrl =
     !isCompany && hasPrice
       ? await generateUpnQrDataUrl({
           amount: registration.priceEur as number,
           iban: RECIPIENT_IBAN,
-          reference: `SI00${registration.registrationCode}`,
+          reference,
           recipientName: RECIPIENT_NAME,
           purpose: registration.terminTitle,
         })
@@ -64,7 +66,7 @@ export default async function ObrazecPotrjenoPage({
             companyName={registration.companyName ?? undefined}
             companyEmail={registration.companyEmail ?? undefined}
             amount={amount as string}
-            reference={registration.registrationCode}
+            reference={reference}
             iban={RECIPIENT_IBAN}
             recipientName={RECIPIENT_NAME}
             qrDataUrl={qrDataUrl}
