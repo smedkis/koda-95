@@ -170,8 +170,8 @@
       "timeLabel": "Time",
       "priceLabel": "Price",
       "locationLabel": "Location",
-      "completeCta": "You're successfully registered and we'll be expecting you at the training. You can already fill out the remaining details (personal information, payment method) via the link below, which speeds things up on the training day — or you can fill them out on-site instead.",
-      "completeButton": "Fill out the form in advance",
+      "completeCta": "You're successfully registered and we'll be expecting you at the training. Fill out the remaining details (personal information, payment method) today so everything's ready and check-in is quick on the day.",
+      "completeButton": "Fill out the form",
       "footer": "If you didn't submit this registration, you can ignore this email."
     },
     "completion": {
