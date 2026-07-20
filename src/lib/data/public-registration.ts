@@ -17,6 +17,7 @@ import {
 } from "@/lib/email/templates";
 import { generateUpnQrDataUrl } from "@/lib/upn-qr";
 import { RECIPIENT_IBAN, RECIPIENT_NAME } from "@/lib/payment-info";
+import { getSiteUrl } from "@/lib/site-url";
 import type {
   LicenceCategory,
   PayerType,
@@ -25,10 +26,6 @@ import type {
   TerminiRow,
   VozniciRow,
 } from "@/lib/supabase/database.types";
-
-function getSiteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://koda95.tahograficuderman.si";
-}
 
 export type QuickRegistrationInput = {
   program: ProgramKey;

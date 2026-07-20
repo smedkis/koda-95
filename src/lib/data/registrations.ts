@@ -1,11 +1,24 @@
 import "server-only";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { getTerminRowBySlug, programKeyToShort, terminSlug } from "./termini";
+import { getTerminRowBySlug, programKeyToShort, publicTerminHref, terminSlug } from "./termini";
 import { syncNarocnikFromRegistration } from "./narocniki";
 import type { PrijaveRow, TerminiRow, VozniciRow } from "@/lib/supabase/database.types";
 import type { TerminDriver } from "@/components/admin/AdminTerminDriversTable";
 import { dmyToIso, formatDateTimeSl, isoToDmy } from "@/lib/date-format";
-import { buildTerminTitle, formatSlovenianDate } from "@/lib/termini-format";
+import {
+  buildTerminTitle,
+  formatPriceEur,
+  formatSlovenianDate,
+  formatTimeRange,
+} from "@/lib/termini-format";
+import { sendEmail } from "@/lib/email/resend";
+import { buildQuickRegistrationEmail, getLogoAttachment } from "@/lib/email/templates";
+import { getSiteUrl } from "@/lib/site-url";
+
+// Admin has no i18n (single language, no locale switcher) — registrations
+// added here always email in Slovenian, unlike the public quick-form path
+// which sends in whatever locale the visitor was using.
+const ADMIN_LOCALE = "sl";
 
 type JoinedPrijava = PrijaveRow & { vozniki: VozniciRow };
 
@@ -119,7 +132,7 @@ export async function createRegistration(
   const { data: prijava, error: prijavaError } = await client
     .from("prijave")
     .insert({ termin_id: termin.id, voznik_id: voznik.id })
-    .select("id")
+    .select("id, registration_code")
     .single();
   if (prijavaError) {
     if (prijavaError.code === "23505") {
@@ -137,6 +150,21 @@ export async function createRegistration(
   });
 
   await logRegistrationEvent(prijava.id, "Izpolnjena prijava");
+
+  if (input.email) {
+    const { subject, html } = await buildQuickRegistrationEmail({
+      locale: ADMIN_LOCALE,
+      driverName: input.fullName,
+      registrationCode: prijava.registration_code,
+      terminTitle: buildTerminTitle(programKeyToShort(termin.program), termin.modul),
+      terminDate: formatSlovenianDate(termin.date),
+      timeRange: formatTimeRange(termin.start_time, termin.end_time),
+      address: termin.address ?? undefined,
+      price: formatPriceEur(termin.price_eur),
+      completeFormUrl: `${getSiteUrl()}${publicTerminHref(termin.program, termin.date)}/obrazec?prijava=${prijava.registration_code}`,
+    });
+    await sendEmail({ to: input.email, subject, html, attachments: [getLogoAttachment()] });
+  }
 
   return { id: prijava.id };
 }
