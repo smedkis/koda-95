@@ -170,8 +170,8 @@
       "timeLabel": "Vreme",
       "priceLabel": "Cena",
       "locationLabel": "Lokacija",
-      "completeCta": "Prijavu dovršavate tako što popunite obrazac klikom na link ispod (lični podaci i način plaćanja):",
-      "completeButton": "Popuni obrazac",
+      "completeCta": "Uspešno ste prijavljeni i očekujemo vas na obuci. Preostale podatke (lične podatke, način plaćanja) možete popuniti već sada putem linka ispod, što ubrzava postupak na dan obuke – a možete ih popuniti i na samoj lokaciji.",
+      "completeButton": "Popuni obrazac unapred",
       "footer": "Ako niste vi poslali ovu prijavu, možete zanemariti ovaj mejl."
     },
     "completion": {

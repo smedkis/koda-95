@@ -170,8 +170,8 @@
       "timeLabel": "Ura",
       "priceLabel": "Cena",
       "locationLabel": "Lokacija",
-      "completeCta": "Prijavo dokončate tako, da izpolnite obrazec s klikom na spodnjo povezavo (osebni podatki in način plačila):",
-      "completeButton": "Izpolni obrazec",
+      "completeCta": "Ste uspešno prijavljeni in vas pričakujemo na usposabljanju. Preostale podatke (osebni podatki, način plačila) lahko izpolnite že zdaj prek spodnje povezave, kar pohitri postopek na dan usposabljanja – lahko pa jih izpolnite tudi na sami lokaciji.",
+      "completeButton": "Izpolni obrazec vnaprej",
       "footer": "Če prijave niste oddali vi, lahko to sporočilo prezrete."
     },
     "completion": {
