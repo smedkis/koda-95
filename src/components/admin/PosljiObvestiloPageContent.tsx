@@ -6,7 +6,8 @@ import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
-import { Heading2, Heading3 } from "@/components/ui/Typography";
+import { Heading2, Heading3, Text } from "@/components/ui/Typography";
+import { sendBulkNotificationAction } from "@/app/(admin)/admin/obvescanje/actions";
 
 export type TerminOption = {
   id: string;
@@ -22,7 +23,7 @@ const PROGRAM_LABELS: Record<TerminOption["program"], string> = {
 const PROGRAM_ORDER: TerminOption["program"][] = ["redna", "zacetna"];
 
 type Audience = { never: boolean; wasEnrolled: boolean; enrolled: boolean };
-type Channels = { email: boolean; viber: boolean };
+type Channels = { email: boolean };
 
 export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[] }) {
   const router = useRouter();
@@ -35,7 +36,9 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
   const [selectedTerminIds, setSelectedTerminIds] = useState<Set<string>>(
     () => new Set(termini.map((termin) => termin.id)),
   );
-  const [channels, setChannels] = useState<Channels>({ email: true, viber: true });
+  const [channels, setChannels] = useState<Channels>({ email: true });
+  const [isSending, setIsSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   const terminiByProgram = useMemo(() => {
     return PROGRAM_ORDER.map((program) => ({
@@ -68,11 +71,19 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
 
   const hasAudience = audience.never || audience.wasEnrolled || audience.enrolled;
   const hasTermini = selectedTerminIds.size > 0;
-  const hasChannel = channels.email || channels.viber;
-  const canSend = hasAudience && hasTermini && hasChannel;
+  const hasChannel = channels.email;
+  const canSend = hasAudience && hasTermini && hasChannel && !isSending;
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!canSend) return;
+    setIsSending(true);
+    setSendError(null);
+    const result = await sendBulkNotificationAction(audience, Array.from(selectedTerminIds));
+    setIsSending(false);
+    if ("error" in result) {
+      setSendError(result.error);
+      return;
+    }
     router.push("/admin/obvescanje");
   };
 
@@ -160,15 +171,16 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
           />
           <Checkbox
             labelSize="md"
-            label="Viber"
-            checked={channels.viber}
-            onChange={(event) =>
-              setChannels((current) => ({ ...current, viber: event.target.checked }))
-            }
+            label="Viber (kmalu)"
+            className="cursor-not-allowed opacity-50"
+            checked={false}
+            disabled
+            onChange={() => {}}
           />
         </div>
       </Box>
 
+      {sendError ? <Text className="mt-4 text-red-600">{sendError}</Text> : null}
       <Button
         type="button"
         variant="primary"
@@ -176,7 +188,7 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
         disabled={!canSend}
         onClick={handleSend}
       >
-        Pošlji obvestilo
+        {isSending ? "Pošiljam …" : "Pošlji obvestilo"}
       </Button>
     </div>
   );

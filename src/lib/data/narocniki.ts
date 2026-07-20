@@ -3,6 +3,10 @@ import { getSupabaseServerClient } from "@/lib/supabase/server";
 import type { NarocnikiRow, PrijaveRow, TerminiRow, VozniciRow } from "@/lib/supabase/database.types";
 import type { ObvescanjeEntry, ObvescanjeEnrollment } from "@/components/admin/ObvescanjeTable";
 import { todayIso } from "@/lib/termini-format";
+import { getTerminBySlug, shortToProgramKey, publicTerminHref } from "./termini";
+import { sendEmail } from "@/lib/email/resend";
+import { buildBulkNotificationEmail, getLogoAttachment } from "@/lib/email/templates";
+import { getSiteUrl } from "@/lib/site-url";
 
 type JoinedPrijava = PrijaveRow & { termini: TerminiRow };
 type JoinedNarocnik = NarocnikiRow & {
@@ -89,6 +93,52 @@ export async function deleteNarocnik(id: string): Promise<{ error?: string }> {
   const { error } = await client.from("narocniki").delete().eq("id", id);
   if (error) return { error: error.message };
   return {};
+}
+
+export type NotificationAudience = { never: boolean; wasEnrolled: boolean; enrolled: boolean };
+
+// The bulk "Pošlji obvestilo" send — resolves termin slugs to their real,
+// current title/public URL server-side (never trusts client-supplied
+// content for what goes in the email), filters narocniki by enrollment
+// status, and emails everyone matching. Only email is wired up for now —
+// Viber is a future channel, per the admin UI's disabled checkbox.
+export async function sendBulkNotification(input: {
+  audience: NotificationAudience;
+  terminSlugs: string[];
+}): Promise<{ sent: number } | { error: string }> {
+  const terminiData = await Promise.all(input.terminSlugs.map((slug) => getTerminBySlug(slug)));
+  const termini = terminiData
+    .filter((termin) => termin !== null)
+    .map((termin) => ({
+      title: termin.title,
+      href: `${getSiteUrl()}${publicTerminHref(shortToProgramKey(termin.program), termin.dateISO)}`,
+    }));
+  if (termini.length === 0) return { error: "Izbran termin ne obstaja več." };
+
+  const entries = await getNarocniki();
+  const recipients = entries.filter((entry) => {
+    if (entry.enrollment.status === "never") return input.audience.never;
+    if (entry.enrollment.status === "was_enrolled") return input.audience.wasEnrolled;
+    return input.audience.enrolled;
+  });
+  if (recipients.length === 0) return { sent: 0 };
+
+  const { subject, html } = buildBulkNotificationEmail(termini);
+  const attachments = [getLogoAttachment()];
+  await Promise.all(
+    recipients.map((recipient) => sendEmail({ to: recipient.email, subject, html, attachments })),
+  );
+
+  const client = getSupabaseServerClient();
+  await client
+    .from("narocniki")
+    .update({ last_notified_at: new Date().toISOString() })
+    .in(
+      "id",
+      recipients.map((recipient) => recipient.id),
+    );
+
+  return { sent: recipients.length };
 }
 
 // Keeps the contacts list in sync whenever a registration is created —

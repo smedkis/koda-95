@@ -30,6 +30,10 @@ export function programKeyToShort(program: ProgramKey): Program {
   return KEY_TO_PROGRAM[program];
 }
 
+export function shortToProgramKey(program: Program): ProgramKey {
+  return PROGRAM_TO_KEY[program];
+}
+
 const SLUG_PATTERN = /^(redna|zacetna)-(\d{4}-\d{2}-\d{2})$/;
 
 export function parseTerminSlug(slug: string): { program: ProgramKey; date: string } | null {

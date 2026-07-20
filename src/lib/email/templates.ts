@@ -189,3 +189,26 @@ export async function buildFormReminderEmail({
   `;
   return { subject: t("subject"), html: wrapEmail(locale, body) };
 }
+
+// Admin's bulk "Pošlji obvestilo" announcement — always Slovenian, same as
+// the rest of admin. Narocniki aren't tied to a locale (they may never have
+// registered at all), so there's no real per-recipient language to send in.
+export function buildBulkNotificationEmail(termini: { title: string; href: string }[]): {
+  subject: string;
+  html: string;
+} {
+  const items = termini
+    .map(
+      (termin) =>
+        `<li style="margin-bottom:8px;"><a href="${termin.href}" style="color:#f58220;font-weight:600;text-decoration:none;">${termin.title}</a></li>`,
+    )
+    .join("");
+
+  const body = `
+    <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">Novi termini usposabljanja Koda 95</h1>
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">Preverite razpoložljive termine in se prijavite:</p>
+    <ul style="margin:0 0 24px;padding-left:20px;font-size:15px;line-height:1.6;">${items}</ul>
+    <p style="margin:0;font-size:15px;line-height:1.6;">Za prijavo kliknite na termin zgoraj.</p>
+  `;
+  return { subject: "Novi termini usposabljanja Koda 95", html: wrapEmail("sl", body) };
+}
