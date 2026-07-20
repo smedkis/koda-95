@@ -12,6 +12,7 @@ import { Eyebrow, Heading3, Text, TextMedium } from "@/components/ui/Typography"
 import { cn } from "@/lib/cn";
 import { fireConfetti } from "@/lib/confetti";
 import { dmyToIso, isoToDmy } from "@/lib/date-format";
+import { generatePaymentPdf } from "@/lib/generate-payment-pdf";
 import {
   deleteRegistrationAction,
   markRegistrationPaidAction,
@@ -139,15 +140,18 @@ export function AdminVoznikEditContent({
   terminId,
   initialDriver,
   otherTermini,
+  terminTitle,
 }: {
   terminId: string;
   initialDriver: TerminDriver;
   otherTermini: { slug: string; label: string }[];
+  terminTitle: string;
 }) {
   const router = useRouter();
   const [driver, setDriver] = useState(initialDriver);
   const [isSaving, setIsSaving] = useState(false);
   const [isMarkingPaid, setIsMarkingPaid] = useState(false);
+  const [isDownloadingPayment, setIsDownloadingPayment] = useState(false);
   const [isSendingReminder, setIsSendingReminder] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [activityLog, setActivityLog] = useState<LogEntry[]>(initialDriver.events ?? []);
@@ -190,6 +194,22 @@ export function AdminVoznikEditContent({
     update("paymentStatus", "poravnano");
     logEvent("Zabeleženo plačilo");
     fireConfetti(origin);
+  };
+
+  const handleDownloadPayment = async () => {
+    if (!driver.paymentAmount || !driver.paymentReference) return;
+    const amountEur = parseFloat(driver.paymentAmount);
+    if (Number.isNaN(amountEur)) return;
+    setIsDownloadingPayment(true);
+    try {
+      await generatePaymentPdf({
+        registrationCode: driver.paymentReference,
+        terminTitle,
+        amountEur,
+      });
+    } finally {
+      setIsDownloadingPayment(false);
+    }
   };
 
   const handleSendReminder = async () => {
@@ -450,6 +470,17 @@ export function AdminVoznikEditContent({
                 {isSendingReminder ? "Pošiljam …" : "Pošlji obvestilo"}
               </Button>
             )}
+            {!step3Done && driver.paymentAmount && driver.paymentReference ? (
+              <Button
+                type="button"
+                variant="secondary"
+                className="mt-3 w-full justify-center py-[6px]"
+                disabled={isDownloadingPayment}
+                onClick={handleDownloadPayment}
+              >
+                {isDownloadingPayment ? "Pripravljam …" : "Prenesi podatke za plačilo"}
+              </Button>
+            ) : null}
             <div className="mt-6 mb-6 border-t border-divider" />
             <div className="flex flex-col gap-4">
               <InfoRow label="Način plačila" value={driver.paymentMethod ?? "—"} />

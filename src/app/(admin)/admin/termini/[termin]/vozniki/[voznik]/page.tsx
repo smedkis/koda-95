@@ -52,6 +52,7 @@ export default async function UrediVoznikPage({
         terminId={terminId}
         initialDriver={driver}
         otherTermini={otherTermini}
+        terminTitle={cleanTerminTitle}
       />
     </div>
   );
