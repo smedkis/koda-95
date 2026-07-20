@@ -8,6 +8,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Admin data changes from paths this page never gets a revalidatePath call
+// for (e.g. public registrations) — force-dynamic means every request reads
+// live from Supabase instead of relying on Next's Data/Full Route Cache to
+// have been told to invalidate.
+export const dynamic = "force-dynamic";
+
 export default async function ObvescanjeListPage() {
   const entries = await getNarocniki();
 

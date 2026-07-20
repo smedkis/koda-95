@@ -4,6 +4,8 @@ import { Heading2, Text } from "@/components/ui/Typography";
 import { getTerminBySlug, listTermini } from "@/lib/data/termini";
 import { getRegistration } from "@/lib/data/registrations";
 
+export const dynamic = "force-dynamic";
+
 export default async function UrediVoznikPage({
   params,
 }: {

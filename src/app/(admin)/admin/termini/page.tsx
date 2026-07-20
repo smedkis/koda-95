@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+export const dynamic = "force-dynamic";
+
 function toCalendarTermin(termin: TerminCardData): CalendarTermin {
   return {
     id: termin.id,

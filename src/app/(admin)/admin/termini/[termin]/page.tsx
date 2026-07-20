@@ -3,6 +3,8 @@ import { AdminTerminDetailContent } from "@/components/admin/AdminTerminDetailCo
 import { getTerminBySlug } from "@/lib/data/termini";
 import { getRegistrationsForTermin } from "@/lib/data/registrations";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {

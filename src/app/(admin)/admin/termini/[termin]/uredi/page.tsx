@@ -3,6 +3,8 @@ import { AdminTerminForm } from "@/components/admin/AdminTerminForm";
 import { Heading2, Text } from "@/components/ui/Typography";
 import { getTerminBySlug } from "@/lib/data/termini";
 
+export const dynamic = "force-dynamic";
+
 export default async function UrediTerminPage({
   params,
 }: {

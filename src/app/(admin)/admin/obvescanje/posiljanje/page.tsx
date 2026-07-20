@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function PosljiObvestiloPage() {
   const { upcoming, past } = await listTermini();
   const narocniki = await getNarocniki();
