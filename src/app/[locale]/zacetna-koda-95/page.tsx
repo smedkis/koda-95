@@ -54,6 +54,7 @@ export default async function ZacetnaKoda95Page() {
         titleHighlight={t("heroTitleHighlight")}
         titleSuffix={t("heroTitleSuffix")}
         description={t("heroDescription")}
+        accent="secondary"
       />
       <TerminiSection termini={termini} />
       <LogosSection />

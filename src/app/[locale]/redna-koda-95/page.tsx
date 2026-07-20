@@ -52,6 +52,7 @@ export default async function RednaKoda95Page() {
         titleHighlight={t("heroTitleHighlight")}
         titleSuffix={t("heroTitleSuffix")}
         description={t("heroDescription")}
+        accent="primary"
       />
       <TerminiSection termini={termini} />
       <LogosSection />

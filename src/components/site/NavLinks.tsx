@@ -9,8 +9,8 @@ export function NavLinks() {
   const pathname = usePathname();
   const t = useTranslations("Nav");
   const LINKS = [
-    { href: "/redna-koda-95", label: t("redna") },
-    { href: "/zacetna-koda-95", label: t("zacetna") },
+    { href: "/redna-koda-95", label: t("redna"), accent: "decoration-primary" },
+    { href: "/zacetna-koda-95", label: t("zacetna"), accent: "decoration-secondary" },
   ] as const;
 
   // Hide on the registration form and confirmation page — don't invite
@@ -26,8 +26,7 @@ export function NavLinks() {
           <TextMedium
             as="span"
             className={cn(
-              pathname === link.href &&
-                "underline decoration-primary decoration-2 underline-offset-4",
+              pathname === link.href && `underline ${link.accent} decoration-2 underline-offset-4`,
             )}
           >
             {link.label}
