@@ -40,13 +40,16 @@ async function getTermin(slug: string, locale: string) {
   const counts = await countsByTermin([row.id]);
   const registered = counts.get(row.id)?.registered ?? 0;
   const hasCapacity = row.capacity !== null;
+  const td = await getTranslations({ locale, namespace: "TerminDetails" });
 
   return {
     title: buildTerminTitle("redna", row.modul, locale),
     description: DESCRIPTION,
     price: formatPriceEur(row.price_eur),
-    spotsLabel: hasCapacity ? `${registered}/${row.capacity} prostih mest` : "Neomejeno prostih mest",
-    date: formatSlovenianDate(row.date),
+    spotsLabel: hasCapacity
+      ? td("spotsRatio", { registered, capacity: row.capacity as number })
+      : td("unlimitedSpots"),
+    date: formatSlovenianDate(row.date, locale),
     dateISO: row.date,
     timeRange: formatTimeRange(row.start_time, row.end_time),
     address: row.address ?? undefined,

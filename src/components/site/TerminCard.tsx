@@ -17,17 +17,6 @@ function hashToRange(value: string, min: number, max: number): number {
   return min + (Math.abs(hash) % (max - min + 1));
 }
 
-// Slovenian has dual number in addition to singular/plural, so "mesto"
-// declines differently depending on the count (checked on the last two
-// digits): 1 → mesto, 2 → mesti, 3-4 → mesta, 0 and 5+ → mest.
-function formatProstaMesta(count: number): string {
-  const lastTwoDigits = count % 100;
-  if (lastTwoDigits === 1) return `${count} prosto mesto`;
-  if (lastTwoDigits === 2) return `${count} prosti mesti`;
-  if (lastTwoDigits === 3 || lastTwoDigits === 4) return `${count} prosta mesta`;
-  return `${count} prostih mest`;
-}
-
 function HeroChip({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
@@ -97,15 +86,15 @@ export function TerminCard({
   // either which module it is or whether there's still room. Price moves
   // down to the secondary row instead (client wanted these two swapped).
   const heroRight = modul
-    ? { icon: "/Category.svg", label: "Modul", value: modul }
+    ? { icon: "/Category.svg", label: t("modulLabel"), value: modul }
     : hasCapacity
-      ? { icon: "/icon-profile.svg", label: "Prosta mesta", value: `${attendeeCount}/${capacity}` }
-      : { icon: "/icon-profile.svg", label: "Prosta mesta", value: "Neomejeno" };
+      ? { icon: "/icon-profile.svg", label: t("spotsLabel"), value: `${attendeeCount}/${capacity}` }
+      : { icon: "/icon-profile.svg", label: t("spotsLabel"), value: t("unlimited") };
 
   const secondaryItems: { icon: string; label: string }[] = [];
   if (price) secondaryItems.push({ icon: "/icon-ticket.svg", label: price });
-  secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? "Ura po dogovoru" });
-  secondaryItems.push({ icon: "/icon-location.svg", label: address ?? "Lokacija po dogovoru" });
+  secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? t("timeAgreed") });
+  secondaryItems.push({ icon: "/icon-location.svg", label: address ?? t("locationAgreed") });
 
   return (
     <Box
@@ -118,13 +107,13 @@ export function TerminCard({
     >
       {isNext ? (
         <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-[calc(50%+1px)] items-center rounded-full bg-primary px-3 py-1.5 font-body text-[12px] font-semibold text-white">
-          Naslednji termin čez {daysUntil} {daysUntil === 1 ? "dan" : "dni"}
+          {t("nextBadge", { days: daysUntil })}
         </span>
       ) : null}
       <Heading3>{cleanTitle}</Heading3>
 
       <div className="mt-6 grid grid-cols-2 gap-4">
-        <HeroChip icon="/icon-calendar.svg" label="Datum" value={date} />
+        <HeroChip icon="/icon-calendar.svg" label={t("dateLabel")} value={date} />
         <HeroChip icon={heroRight.icon} label={heroRight.label} value={heroRight.value} />
       </div>
 
@@ -148,8 +137,8 @@ export function TerminCard({
             />
           </div>
           <Text className="shrink-0 whitespace-nowrap text-[14px] text-paragraph">
-            {isScarce ? "Veliko povpraševanja · " : ""}
-            {formatProstaMesta(spotsLeft)}
+            {isScarce ? `${t("highDemand")} · ` : ""}
+            {t("spotsLeft", { count: spotsLeft })}
           </Text>
         </div>
       ) : null}
@@ -158,7 +147,7 @@ export function TerminCard({
         <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
           {t("reserve")}
         </span>
-        <Text className="text-[13px] font-medium text-[#006e5e]">Prijavi se zdaj, plačaj kasneje</Text>
+        <Text className="text-[13px] font-medium text-[#006e5e]">{t("payLater")}</Text>
       </div>
     </Box>
   );

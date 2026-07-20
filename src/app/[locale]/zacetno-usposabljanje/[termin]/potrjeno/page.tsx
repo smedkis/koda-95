@@ -33,9 +33,9 @@ export default async function PotrjenoPage({
   if (!registration) notFound();
 
   const t = await getTranslations("Confirmation");
-  const displayDate = formatSlovenianDate(registration.dateISO);
-  const price = formatPriceEur(registration.priceEur) ?? "Cena bo znana naknadno";
-  const timeRange = registration.timeRange ?? "Po dogovoru";
+  const displayDate = formatSlovenianDate(registration.dateISO, locale);
+  const price = formatPriceEur(registration.priceEur) ?? t("priceTbd");
+  const timeRange = registration.timeRange ?? t("byArrangement");
 
   return (
     <Container>
@@ -44,7 +44,7 @@ export default async function PotrjenoPage({
         title={registration.terminTitle}
         date={registration.dateISO}
         timeRange={timeRange}
-        location={registration.address ?? "Po dogovoru"}
+        location={registration.address ?? t("byArrangement")}
       />
       <ConfirmationDetails
         driver={registration.driverName}

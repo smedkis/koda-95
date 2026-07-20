@@ -1,4 +1,5 @@
 {
+  "Weekdays": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
   "TerminTitle": {
     "redna": "Periodic Training Koda 95 (Module {modul})",
     "zacetna": "Initial Qualification Koda 95"
@@ -15,7 +16,17 @@
     "credit": "Built by: Grega Cuderman"
   },
   "TerminCard": {
-    "reserve": "Book this session"
+    "reserve": "Book this session",
+    "dateLabel": "Date",
+    "modulLabel": "Module",
+    "spotsLabel": "Spots available",
+    "unlimited": "Unlimited",
+    "timeAgreed": "Time by arrangement",
+    "locationAgreed": "Location by arrangement",
+    "highDemand": "High demand",
+    "spotsLeft": "{count, plural, one {# spot left} other {# spots left}}",
+    "nextBadge": "Next session in {days, plural, one {# day} other {# days}}",
+    "payLater": "Register now, pay later"
   },
   "TerminiSection": {
     "heading": "Choose a training session"
@@ -60,7 +71,10 @@
     "backToTermini": "All sessions",
     "detailsHeading": "Session details",
     "location": "Location",
-    "mapTitle": "Session location"
+    "mapTitle": "Session location",
+    "byArrangement": "By arrangement",
+    "spotsRatio": "{registered}/{capacity} spots taken",
+    "unlimitedSpots": "Unlimited spots"
   },
   "TerminRegistrationForm": {
     "fullName": "Full name",
@@ -68,7 +82,9 @@
     "phone": "Phone number",
     "consentMarketing": "I'd like to receive Koda 95 updates by phone and email.",
     "consentTerms": "I agree to the general terms of business and privacy policy.",
-    "submit": "Register for this session"
+    "submit": "Register for this session",
+    "nextBadge": "This session is in {days, plural, one {# day} other {# days}}. Reserve your spot in time.",
+    "payLater": "Register now, pay later"
   },
   "Confirmation": {
     "title": "Your registration is confirmed!",
@@ -84,7 +100,9 @@
     "location": "Location",
     "mapTitle": "Session location",
     "pageTitle": "Registration confirmed",
-    "completeRegistration": "Fill out the form"
+    "completeRegistration": "Fill out the form",
+    "byArrangement": "By arrangement",
+    "priceTbd": "Price to be determined"
   },
   "ConfirmationHelp": {
     "heading": "Need help?"

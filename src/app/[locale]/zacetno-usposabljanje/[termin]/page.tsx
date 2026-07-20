@@ -32,11 +32,13 @@ async function getTermin(slug: string, locale: string) {
   const row = await getPublicTermin(PROGRAM, dateISO);
   if (!row) return null;
 
+  const td = await getTranslations({ locale, namespace: "TerminDetails" });
+
   return {
     title: buildTerminTitle("zacetna", row.modul, locale),
     description: DESCRIPTION,
-    spotsLabel: "Neomejeno prostih mest",
-    date: formatSlovenianDate(row.date),
+    spotsLabel: td("unlimitedSpots"),
+    date: formatSlovenianDate(row.date, locale),
     dateISO: row.date,
     timeRange: formatTimeRange(row.start_time, row.end_time),
     address: row.address ?? undefined,

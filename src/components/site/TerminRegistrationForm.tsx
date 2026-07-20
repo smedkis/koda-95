@@ -74,8 +74,7 @@ export function TerminRegistrationForm({
     >
       {isNext ? (
         <span className="absolute left-6 top-0 inline-flex w-fit -translate-y-[calc(50%+1px)] items-center rounded-full bg-primary px-3 py-1.5 font-body text-[12px] font-semibold text-white">
-          Termin je čez {daysUntil} {daysUntil === 1 ? "dan" : "dni"}. Rezervirajte svoje mesto
-          pravočasno.
+          {t("nextBadge", { days: daysUntil })}
         </span>
       ) : null}
       <Input
@@ -131,7 +130,7 @@ export function TerminRegistrationForm({
         {isSubmitting ? "…" : t("submit")}
       </Button>
       <Text className="mt-2 text-center text-[14px] font-medium text-[#006e5e]">
-        Prijavi se zdaj, plačaj kasneje
+        {t("payLater")}
       </Text>
     </Box>
   );

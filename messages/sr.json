@@ -1,4 +1,5 @@
 {
+  "Weekdays": ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota"],
   "TerminTitle": {
     "redna": "Periodična obuka Koda 95 (Modul {modul})",
     "zacetna": "Osnovna kvalifikacija Koda 95"
@@ -15,7 +16,17 @@
     "credit": "Izradio: Grega Cuderman"
   },
   "TerminCard": {
-    "reserve": "Rezerviši termin"
+    "reserve": "Rezerviši termin",
+    "dateLabel": "Datum",
+    "modulLabel": "Modul",
+    "spotsLabel": "Slobodna mesta",
+    "unlimited": "Neograničeno",
+    "timeAgreed": "Vreme po dogovoru",
+    "locationAgreed": "Lokacija po dogovoru",
+    "highDemand": "Velika potražnja",
+    "spotsLeft": "{count, plural, one {# slobodno mesto} few {# slobodna mesta} other {# slobodnih mesta}}",
+    "nextBadge": "Sledeći termin za {days, plural, one {# dan} few {# dana} other {# dana}}",
+    "payLater": "Prijavi se sada, plati kasnije"
   },
   "TerminiSection": {
     "heading": "Izaberite termin obuke"
@@ -60,7 +71,10 @@
     "backToTermini": "Svi termini",
     "detailsHeading": "Detalji termina",
     "location": "Lokacija",
-    "mapTitle": "Lokacija termina"
+    "mapTitle": "Lokacija termina",
+    "byArrangement": "Po dogovoru",
+    "spotsRatio": "{registered}/{capacity} zauzetih mesta",
+    "unlimitedSpots": "Neograničeno mesta"
   },
   "TerminRegistrationForm": {
     "fullName": "Ime i prezime",
@@ -68,7 +82,9 @@
     "phone": "Broj telefona",
     "consentMarketing": "Želim da primam obaveštenja o Koda 95 putem telefona i e-maila.",
     "consentTerms": "Slažem se sa opštim uslovima poslovanja i politikom privatnosti.",
-    "submit": "Prijavi se na termin"
+    "submit": "Prijavi se na termin",
+    "nextBadge": "Termin je za {days, plural, one {# dan} few {# dana} other {# dana}}. Rezervišite svoje mesto na vreme.",
+    "payLater": "Prijavi se sada, plati kasnije"
   },
   "Confirmation": {
     "title": "Vaša prijava je potvrđena!",
@@ -84,7 +100,9 @@
     "location": "Lokacija",
     "mapTitle": "Lokacija termina",
     "pageTitle": "Prijava potvrđena",
-    "completeRegistration": "Popuni obrazac"
+    "completeRegistration": "Popuni obrazac",
+    "byArrangement": "Po dogovoru",
+    "priceTbd": "Cena će biti naknadno određena"
   },
   "ConfirmationHelp": {
     "heading": "Potrebna vam je pomoć?"

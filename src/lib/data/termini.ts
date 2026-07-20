@@ -295,7 +295,7 @@ function toPublicEntry(row: TerminiRow, registeredCount: number, locale: string)
   const hasCapacity = row.capacity !== null;
   return {
     title: buildTerminTitle(KEY_TO_PROGRAM[row.program], row.modul, locale),
-    date: formatSlovenianDate(row.date),
+    date: formatSlovenianDate(row.date, locale),
     dateISO: row.date,
     address: row.address ?? undefined,
     timeRange: formatTimeRange(row.start_time, row.end_time),

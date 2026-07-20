@@ -6,11 +6,26 @@ import sl from "../../messages/sl.json";
 import en from "../../messages/en.json";
 import sr from "../../messages/sr.json";
 
-const WEEKDAYS = ["Nedelja", "Ponedeljek", "Torek", "Sreda", "Četrtek", "Petek", "Sobota"];
+// Admin has no i18n (single language, always Slovenian), and is by far the
+// most common caller of the locale-aware helpers below — defaulting to "sl"
+// means those call sites don't need to pass anything. Public-facing callers
+// (termin pages, registration emails) pass the visitor's real locale
+// explicitly. Plain static imports rather than next-intl's getTranslations
+// because these are synchronous, non-React helpers used from both server
+// data modules and client components (e.g. AdminTerminForm's live preview).
+type Messages = {
+  Weekdays: string[];
+  TerminTitle: { redna: string; zacetna: string };
+};
+const MESSAGES: Record<string, Messages> = { sl, en, sr };
 
-export function formatSlovenianDate(isoDate: string): string {
+function getMessages(locale: string): Messages {
+  return MESSAGES[locale] ?? MESSAGES.sl;
+}
+
+export function formatSlovenianDate(isoDate: string, locale = "sl"): string {
   const date = new Date(`${isoDate}T00:00:00`);
-  const weekday = WEEKDAYS[date.getDay()];
+  const weekday = getMessages(locale).Weekdays[date.getDay()];
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   return `${weekday}, ${day}.${month}. ${date.getFullYear()}`;
@@ -30,19 +45,12 @@ export function formatTimeRange(
   return `${toHoursMinutes(start).replace(":", ".")} - ${toHoursMinutes(end).replace(":", ".")}`;
 }
 
-// Admin has no i18n (single language, always Slovenian), and is by far the
-// most common caller — defaulting to "sl" means those call sites don't need
-// to pass anything. Public-facing/locale-aware callers (termin pages,
-// registration emails) pass the visitor's real locale explicitly.
-const TERMIN_TITLE_MESSAGES: Record<string, { TerminTitle: { redna: string; zacetna: string } }> =
-  { sl, en, sr };
-
 export function buildTerminTitle(
   program: "redna" | "zacetna",
   modul?: number | null,
   locale = "sl",
 ): string {
-  const messages = (TERMIN_TITLE_MESSAGES[locale] ?? TERMIN_TITLE_MESSAGES.sl).TerminTitle;
+  const messages = getMessages(locale).TerminTitle;
   return program === "redna"
     ? messages.redna.replace("{modul}", String(modul))
     : messages.zacetna;

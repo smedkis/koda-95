@@ -70,13 +70,13 @@ export function TerminDetails({
             </div>
             <div className="flex flex-col gap-2">
               <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
-              <DetailRow icon="/icon-clock.svg">{timeRange ?? "Po dogovoru"}</DetailRow>
+              <DetailRow icon="/icon-clock.svg">{timeRange ?? t("byArrangement")}</DetailRow>
             </div>
           </>
         ) : (
           <>
             <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
-            <DetailRow icon="/icon-clock.svg">{timeRange ?? "Po dogovoru"}</DetailRow>
+            <DetailRow icon="/icon-clock.svg">{timeRange ?? t("byArrangement")}</DetailRow>
             <div className="col-span-2">
               <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
             </div>
@@ -85,7 +85,7 @@ export function TerminDetails({
       </div>
       <Eyebrow className="mt-6">{t("location")}</Eyebrow>
       <div className="mt-4">
-        <DetailRow icon="/icon-location.svg">{address ?? "Po dogovoru"}</DetailRow>
+        <DetailRow icon="/icon-location.svg">{address ?? t("byArrangement")}</DetailRow>
       </div>
       {address ? (
         <div className="mt-4 aspect-video w-full overflow-hidden rounded-lg border border-divider">

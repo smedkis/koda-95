@@ -66,7 +66,7 @@ export function ConfirmationDetails({
     {
       icon: <DetailIcon src="/icon-location.svg" />,
       label: t("location"),
-      value: location ?? "Po dogovoru",
+      value: location ?? t("byArrangement"),
     },
   ];
 
