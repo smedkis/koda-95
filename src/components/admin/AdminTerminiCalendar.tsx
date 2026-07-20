@@ -116,7 +116,7 @@ function DayChip({ termin }: { termin: CalendarTermin }) {
     <Link
       href={`/admin/termini/${termin.id}`}
       className={cn(
-        "relative flex flex-col gap-0.5 rounded border border-transparent px-1.5 py-1 font-body text-[11px] transition-colors hover:border-heading sm:text-[12px]",
+        "relative flex flex-col gap-0.5 rounded border border-transparent px-1.5 py-1 font-body text-[11px] transition-colors hover:border-[#9eb0a2] sm:text-[12px]",
         termin.program === "redna"
           ? "bg-primary text-white hover:bg-[#d06e1b]"
           : "bg-secondary text-paragraph hover:bg-[#5de0c0]",
