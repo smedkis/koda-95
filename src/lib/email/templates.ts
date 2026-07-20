@@ -193,14 +193,17 @@ export async function buildFormReminderEmail({
 // Admin's bulk "Pošlji obvestilo" announcement — always Slovenian, same as
 // the rest of admin. Narocniki aren't tied to a locale (they may never have
 // registered at all), so there's no real per-recipient language to send in.
-export function buildBulkNotificationEmail(termini: { title: string; href: string }[]): {
+export function buildBulkNotificationEmail(
+  termini: { title: string; href: string; date: string }[],
+  unsubscribeHref: string,
+): {
   subject: string;
   html: string;
 } {
   const items = termini
     .map(
       (termin) =>
-        `<li style="margin-bottom:8px;"><a href="${termin.href}" style="color:#f58220;font-weight:600;text-decoration:none;">${termin.title}</a></li>`,
+        `<li style="margin-bottom:12px;"><a href="${termin.href}" style="color:#f58220;font-weight:600;text-decoration:none;">${termin.title}</a><br/><span style="color:#999999;font-size:13px;">${termin.date}</span></li>`,
     )
     .join("");
 
@@ -208,7 +211,9 @@ export function buildBulkNotificationEmail(termini: { title: string; href: strin
     <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">Novi termini usposabljanja Koda 95</h1>
     <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">Preverite razpoložljive termine in se prijavite:</p>
     <ul style="margin:0 0 24px;padding-left:20px;font-size:15px;line-height:1.6;">${items}</ul>
-    <p style="margin:0;font-size:15px;line-height:1.6;">Za prijavo kliknite na termin zgoraj.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">Za prijavo kliknite na termin zgoraj.</p>
+    <p style="margin:0 0 4px;font-size:13px;color:#999999;">Tahografi Cuderman d.o.o., Pot za krajem 35</p>
+    <p style="margin:0;font-size:13px;"><a href="${unsubscribeHref}" style="color:#999999;">Odjava od prejemanja obvestil</a></p>
   `;
   return { subject: "Novi termini usposabljanja Koda 95", html: wrapEmail("sl", body) };
 }

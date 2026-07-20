@@ -112,6 +112,7 @@ export async function sendBulkNotification(input: {
     .map((termin) => ({
       title: termin.title,
       href: `${getSiteUrl()}${publicTerminHref(shortToProgramKey(termin.program), termin.dateISO)}`,
+      date: termin.date,
     }));
   if (termini.length === 0) return { error: "Izbran termin ne obstaja več." };
 
@@ -123,10 +124,13 @@ export async function sendBulkNotification(input: {
   });
   if (recipients.length === 0) return { sent: 0 };
 
-  const { subject, html } = buildBulkNotificationEmail(termini);
   const attachments = [getLogoAttachment()];
   await Promise.all(
-    recipients.map((recipient) => sendEmail({ to: recipient.email, subject, html, attachments })),
+    recipients.map((recipient) => {
+      const unsubscribeHref = `${getSiteUrl()}/odjava?id=${recipient.id}`;
+      const { subject, html } = buildBulkNotificationEmail(termini, unsubscribeHref);
+      return sendEmail({ to: recipient.email, subject, html, attachments });
+    }),
   );
 
   const client = getSupabaseServerClient();

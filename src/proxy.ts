@@ -29,6 +29,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (pathname === "/odjava") {
+    return NextResponse.next();
+  }
+
   const userAgent = request.headers.get("user-agent") ?? "";
 
   if (BOT_USER_AGENT.test(userAgent)) {
