@@ -37,20 +37,29 @@ function parseRegistrationDate(value: string | undefined): Date | null {
   return new Date(Number(year), Number(month) - 1, Number(day));
 }
 
-type MonthlyCount = { key: string; label: string; count: number };
+type MonthlyCount = { key: string; label: string; count: number; completed: number; missing: number };
 
 function buildMonthlyCounts(registrations: DriverSearchResult[]): MonthlyCount[] {
-  const counts = new Map<string, number>();
+  const counts = new Map<string, { completed: number; missing: number }>();
   for (const { driver } of registrations) {
     const date = parseRegistrationDate(driver.registrationDate);
     if (!date) continue;
     const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-    counts.set(key, (counts.get(key) ?? 0) + 1);
+    const current = counts.get(key) ?? { completed: 0, missing: 0 };
+    if (driver.formStatus === "izpolnjen") current.completed += 1;
+    else current.missing += 1;
+    counts.set(key, current);
   }
   return Array.from(counts.entries())
-    .map(([key, count]) => {
+    .map(([key, { completed, missing }]) => {
       const [year, month] = key.split("-").map(Number);
-      return { key, label: `${MONTH_NAMES[month - 1]} ${year}`, count };
+      return {
+        key,
+        label: `${MONTH_NAMES[month - 1]} ${year}`,
+        count: completed + missing,
+        completed,
+        missing,
+      };
     })
     .sort((a, b) => b.key.localeCompare(a.key));
 }
@@ -65,17 +74,21 @@ export function AdminStatistikaPageContent({
   const [currentPage, setCurrentPage] = useState(1);
   const [exportMonth, setExportMonth] = useState(ALL_MONTHS);
 
-  const formCompletedCount = useMemo(
-    () => registrations.filter(({ driver }) => driver.formStatus === "izpolnjen").length,
-    [registrations],
-  );
-  const formMissingCount = registrations.length - formCompletedCount;
-
   const monthlyCounts = useMemo(() => buildMonthlyCounts(registrations), [registrations]);
-  const maxCount = Math.max(1, ...monthlyCounts.map((entry) => entry.count));
-  // The dropdown lists most-recent-first, but a chart reads left-to-right as
-  // time moving forward, so the bars themselves go oldest → newest.
-  const chartMonths = useMemo(() => [...monthlyCounts].reverse(), [monthlyCounts]);
+  // Not very useful yet with only a few months of data, but once
+  // registrations span years this keeps the chart from becoming an
+  // unreadable wall of bars — defaults to showing everything available.
+  const [visibleMonths, setVisibleMonths] = useState(() => monthlyCounts.length || 1);
+  const maxVisibleMonths = Math.max(1, monthlyCounts.length);
+  const clampedVisibleMonths = Math.min(visibleMonths, maxVisibleMonths);
+  // monthlyCounts is newest-first; take the most recent N, then the dropdown
+  // lists most-recent-first but a chart reads left-to-right as time moving
+  // forward, so the bars themselves go oldest → newest.
+  const chartMonths = useMemo(
+    () => [...monthlyCounts.slice(0, clampedVisibleMonths)].reverse(),
+    [monthlyCounts, clampedVisibleMonths],
+  );
+  const maxCount = Math.max(1, ...chartMonths.map((entry) => entry.count));
 
   const sortedRegistrations = useMemo(
     () =>
@@ -151,39 +164,77 @@ export function AdminStatistikaPageContent({
       </div>
 
       <div className="mt-16">
-        <Heading3>Izpolnjeni obrazci</Heading3>
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <Box className="bg-white">
-            <Eyebrow>Izpolnjen obrazec</Eyebrow>
-            <Heading2 className="mt-2">{formCompletedCount}</Heading2>
-          </Box>
-          <Box className="bg-white">
-            <Eyebrow>Manjka obrazec</Eyebrow>
-            <Heading2 className="mt-2">{formMissingCount}</Heading2>
-          </Box>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <Heading3>Prijave po mesecih</Heading3>
+          {maxVisibleMonths > 1 ? (
+            <div className="flex items-center gap-3">
+              <Text className="text-[13px] whitespace-nowrap text-placeholder">
+                Zadnjih {clampedVisibleMonths} {clampedVisibleMonths === 1 ? "mesec" : "mesecev"}
+              </Text>
+              <input
+                type="range"
+                min={1}
+                max={maxVisibleMonths}
+                value={clampedVisibleMonths}
+                onChange={(event) => setVisibleMonths(Number(event.target.value))}
+                className="w-32 accent-primary"
+              />
+            </div>
+          ) : null}
         </div>
-      </div>
-
-      <div className="mt-16">
-        <Heading3>Prijave po mesecih</Heading3>
         <Box className="mt-6 bg-white">
           {chartMonths.length > 0 ? (
-            <div className="flex items-end gap-6 overflow-x-auto pb-1">
-              {chartMonths.map((entry) => (
-                <div key={entry.key} className="flex min-w-[64px] flex-1 flex-col items-center gap-3">
-                  <Text className="text-[16px] font-medium">{entry.count}</Text>
-                  <div className="flex h-36 w-full items-end">
+            <>
+              <div className="flex items-end gap-6 overflow-x-auto pb-1">
+                {chartMonths.map((entry) => {
+                  const totalHeight = Math.max(6, (entry.count / maxCount) * 100);
+                  const completedHeight =
+                    entry.count > 0 ? (totalHeight * entry.completed) / entry.count : 0;
+                  const missingHeight = totalHeight - completedHeight;
+                  return (
                     <div
-                      className="w-full rounded-t bg-primary"
-                      style={{ height: `${Math.max(6, (entry.count / maxCount) * 100)}%` }}
-                    />
-                  </div>
-                  <Text className="text-center text-[12px] whitespace-nowrap text-placeholder">
-                    {entry.label}
-                  </Text>
+                      key={entry.key}
+                      className="flex min-w-[64px] flex-1 flex-col items-center gap-3"
+                    >
+                      <Text className="text-[16px] font-medium">{entry.count}</Text>
+                      <div className="flex h-36 w-full flex-col justify-end">
+                        {missingHeight > 0 ? (
+                          <div
+                            className={cn(
+                              "w-full bg-primary opacity-40",
+                              entry.completed === 0 && "rounded-t",
+                            )}
+                            style={{ height: `${missingHeight}%` }}
+                          />
+                        ) : null}
+                        {completedHeight > 0 ? (
+                          <div
+                            className={cn(
+                              "w-full bg-primary",
+                              missingHeight === 0 && "rounded-t",
+                            )}
+                            style={{ height: `${completedHeight}%` }}
+                          />
+                        ) : null}
+                      </div>
+                      <Text className="text-center text-[12px] whitespace-nowrap text-placeholder">
+                        {entry.label}
+                      </Text>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-6 flex items-center justify-center gap-6 border-t border-divider pt-4">
+                <div className="flex items-center gap-2">
+                  <span className="size-3 rounded-sm bg-primary" />
+                  <Text className="text-[13px] text-placeholder">Izpolnjen obrazec</Text>
                 </div>
-              ))}
-            </div>
+                <div className="flex items-center gap-2">
+                  <span className="size-3 rounded-sm bg-primary opacity-40" />
+                  <Text className="text-[13px] text-placeholder">Brez obrazca</Text>
+                </div>
+              </div>
+            </>
           ) : (
             <Text className="text-[14px] text-placeholder">Ni podatkov o prijavah.</Text>
           )}
