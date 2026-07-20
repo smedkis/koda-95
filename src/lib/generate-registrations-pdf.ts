@@ -54,12 +54,13 @@ export async function generateRegistrationsPdf(
   autoTable(doc, {
     startY: 28,
     margin: { left: marginX, right: marginX },
-    head: [["Št.", "Ime in priimek", "Datum prijave", "Termin"]],
+    head: [["Št.", "Ime in priimek", "Datum prijave", "Termin", "Vir"]],
     body: registrations.map(({ driver, terminTitle }, index) => [
       String(index + 1),
       driver.driverName,
       driver.registrationDate ?? "—",
       terminTitle,
+      driver.registrationSource ?? "—",
     ]),
     styles: {
       font: FONT_FAMILY,
@@ -77,8 +78,9 @@ export async function generateRegistrationsPdf(
     },
     columnStyles: {
       0: { cellWidth: 12, halign: "center" },
-      1: { cellWidth: 55 },
-      2: { cellWidth: 35 },
+      1: { cellWidth: 50 },
+      2: { cellWidth: 30 },
+      4: { cellWidth: 28 },
     },
     theme: "grid",
   });

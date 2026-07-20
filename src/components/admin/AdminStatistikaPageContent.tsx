@@ -194,6 +194,7 @@ export function AdminStatistikaPageContent({
                   return (
                     <div
                       key={entry.key}
+                      title={`${entry.label}: ${entry.count} prijav, ${entry.completed} izpolnjenih obrazcev`}
                       className="flex min-w-[64px] flex-1 flex-col items-center gap-3"
                     >
                       <Text className="text-[16px] font-medium">{entry.count}</Text>
