@@ -69,10 +69,13 @@ export async function generateMetadata({
 
 export default async function TerminPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ termin: string; locale: string }>;
+  searchParams: Promise<{ vir?: string }>;
 }) {
   const { termin: slug, locale } = await params;
+  const { vir } = await searchParams;
   const termin = await getTermin(slug, locale);
   if (!termin) notFound();
 
@@ -107,6 +110,7 @@ export default async function TerminPage({
                 program={PROGRAM}
                 dateISO={termin.dateISO}
                 terminPath={`/redno-usposabljanje/${slug}`}
+                source={vir}
               />
             </div>
           </div>

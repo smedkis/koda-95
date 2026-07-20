@@ -36,6 +36,10 @@ export type QuickRegistrationInput = {
   consentMarketing: boolean;
   consentTerms: boolean;
   locale: string;
+  // Set when the visitor arrived via a bulk "Pošlji obvestilo" email link
+  // (?vir=obvescanje) — surfaced in the driver's own history so it's clear
+  // where the registration actually came from.
+  source?: string;
 };
 
 export type QuickRegistrationResult = { code: string } | { error: string };
@@ -99,7 +103,10 @@ export async function submitQuickRegistration(
     source: "Obrazec",
   });
 
-  await logRegistrationEvent(prijava.id, "Izpolnjena prijava");
+  await logRegistrationEvent(
+    prijava.id,
+    input.source === "obvescanje" ? "Izpolnjena prijava (Vir: Obveščanje)" : "Izpolnjena prijava",
+  );
 
   if (input.email) {
     const { subject, html } = await buildQuickRegistrationEmail({

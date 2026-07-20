@@ -111,7 +111,7 @@ export async function sendBulkNotification(input: {
     .filter((termin) => termin !== null)
     .map((termin) => ({
       title: termin.title,
-      href: `${getSiteUrl()}${publicTerminHref(shortToProgramKey(termin.program), termin.dateISO)}`,
+      href: `${getSiteUrl()}${publicTerminHref(shortToProgramKey(termin.program), termin.dateISO)}?vir=obvescanje`,
       date: termin.date,
     }));
   if (termini.length === 0) return { error: "Izbran termin ne obstaja več." };

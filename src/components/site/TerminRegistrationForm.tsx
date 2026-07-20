@@ -16,11 +16,13 @@ export function TerminRegistrationForm({
   program,
   dateISO,
   terminPath,
+  source,
 }: {
   daysUntil?: number;
   program: ProgramKey;
   dateISO: string;
   terminPath: string;
+  source?: string;
 }) {
   const t = useTranslations("TerminRegistrationForm");
   const locale = useLocale();
@@ -54,6 +56,7 @@ export function TerminRegistrationForm({
       consentMarketing,
       consentTerms,
       locale,
+      source,
     });
     setIsSubmitting(false);
     if ("error" in result) {
