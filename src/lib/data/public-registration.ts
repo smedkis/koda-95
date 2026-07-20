@@ -106,7 +106,7 @@ export async function submitQuickRegistration(
       locale: input.locale,
       driverName: input.fullName,
       registrationCode: prijava.registration_code,
-      terminTitle: buildTerminTitle(programKeyToShort(termin.program), termin.modul),
+      terminTitle: buildTerminTitle(programKeyToShort(termin.program), termin.modul, input.locale),
       terminDate: formatSlovenianDate(termin.date),
       timeRange: formatTimeRange(termin.start_time, termin.end_time),
       address: termin.address ?? undefined,
@@ -244,7 +244,11 @@ export async function completeRegistration(
           terminRow.price_eur as number,
         )
       : null;
-    const terminTitle = buildTerminTitle(programKeyToShort(terminRow.program), terminRow.modul);
+    const terminTitle = buildTerminTitle(
+      programKeyToShort(terminRow.program),
+      terminRow.modul,
+      input.locale,
+    );
     const reference = `SI00${code}`;
 
     let qrCid: string | undefined;
@@ -304,7 +308,10 @@ export type RegistrationDetails = {
 
 type JoinedPrijava = PrijaveRow & { vozniki: VozniciRow; termini: TerminiRow };
 
-export async function getRegistrationByCode(code: string): Promise<RegistrationDetails | null> {
+export async function getRegistrationByCode(
+  code: string,
+  locale = "sl",
+): Promise<RegistrationDetails | null> {
   const client = getSupabaseServerClient();
   const { data, error } = await client
     .from("prijave")
@@ -318,7 +325,7 @@ export async function getRegistrationByCode(code: string): Promise<RegistrationD
   return {
     registrationCode: row.registration_code,
     driverName: row.vozniki.full_name,
-    terminTitle: buildTerminTitle(programKeyToShort(row.termini.program), row.termini.modul),
+    terminTitle: buildTerminTitle(programKeyToShort(row.termini.program), row.termini.modul, locale),
     dateISO: row.termini.date,
     timeRange: formatTimeRange(row.termini.start_time, row.termini.end_time),
     address: row.termini.address ?? undefined,

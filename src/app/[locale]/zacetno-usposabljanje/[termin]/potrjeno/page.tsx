@@ -24,12 +24,12 @@ export default async function PotrjenoPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ termin: string }>;
+  params: Promise<{ termin: string; locale: string }>;
   searchParams: Promise<{ prijava?: string }>;
 }) {
-  const { termin } = await params;
+  const { termin, locale } = await params;
   const { prijava } = await searchParams;
-  const registration = prijava ? await getRegistrationByCode(prijava) : null;
+  const registration = prijava ? await getRegistrationByCode(prijava, locale) : null;
   if (!registration) notFound();
 
   const t = await getTranslations("Confirmation");

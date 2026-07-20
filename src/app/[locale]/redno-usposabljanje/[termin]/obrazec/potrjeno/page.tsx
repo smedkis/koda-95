@@ -29,7 +29,7 @@ export default async function ObrazecPotrjenoPage({
 }) {
   const { locale } = await params;
   const { prijava } = await searchParams;
-  const registration = prijava ? await getRegistrationByCode(prijava) : null;
+  const registration = prijava ? await getRegistrationByCode(prijava, locale) : null;
   if (!registration) notFound();
 
   const t = await getTranslations("Obrazec");

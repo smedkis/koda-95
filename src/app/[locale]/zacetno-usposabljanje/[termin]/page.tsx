@@ -26,14 +26,14 @@ const PROGRAM = "zacetna-koda-95" as const;
 const DESCRIPTION =
   "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) po predpisanem programu. Namenjeno je novim poklicnim voznikom kategorij C in D, ki še nimajo veljavne kode 95.";
 
-async function getTermin(slug: string) {
+async function getTermin(slug: string, locale: string) {
   const dateISO = parsePublicTerminSlug(slug);
   if (!dateISO) return null;
   const row = await getPublicTermin(PROGRAM, dateISO);
   if (!row) return null;
 
   return {
-    title: buildTerminTitle("zacetna", row.modul),
+    title: buildTerminTitle("zacetna", row.modul, locale),
     description: DESCRIPTION,
     spotsLabel: "Neomejeno prostih mest",
     date: formatSlovenianDate(row.date),
@@ -46,10 +46,10 @@ async function getTermin(slug: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ termin: string }>;
+  params: Promise<{ termin: string; locale: string }>;
 }): Promise<Metadata> {
-  const { termin: slug } = await params;
-  const termin = await getTermin(slug);
+  const { termin: slug, locale } = await params;
+  const termin = await getTermin(slug, locale);
   if (!termin) return {};
   return {
     title: `${termin.title} | Tahografi Cuderman`,
@@ -60,13 +60,13 @@ export async function generateMetadata({
 export default async function TerminPage({
   params,
 }: {
-  params: Promise<{ termin: string }>;
+  params: Promise<{ termin: string; locale: string }>;
 }) {
-  const { termin: slug } = await params;
-  const termin = await getTermin(slug);
+  const { termin: slug, locale } = await params;
+  const termin = await getTermin(slug, locale);
   if (!termin) notFound();
 
-  const allUpcoming = await listPublicTermini(PROGRAM);
+  const allUpcoming = await listPublicTermini(PROGRAM, locale);
   const isNext = isNextTermin(
     termin.dateISO,
     allUpcoming.map((entry) => entry.dateISO),

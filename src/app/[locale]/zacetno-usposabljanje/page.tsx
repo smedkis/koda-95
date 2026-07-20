@@ -44,9 +44,14 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function ZacetnaKoda95Page() {
+export default async function ZacetnaKoda95Page({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const t = await getTranslations("Programs.zacetna");
-  const termini = await listPublicTermini("zacetna-koda-95");
+  const termini = await listPublicTermini("zacetna-koda-95", locale);
   return (
     <Container>
       <Hero

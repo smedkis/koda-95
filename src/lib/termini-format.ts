@@ -2,6 +2,10 @@
 // components (e.g. AdminTerminForm's live preview), so no "server-only"
 // guard here.
 
+import sl from "../../messages/sl.json";
+import en from "../../messages/en.json";
+import sr from "../../messages/sr.json";
+
 const WEEKDAYS = ["Nedelja", "Ponedeljek", "Torek", "Sreda", "Četrtek", "Petek", "Sobota"];
 
 export function formatSlovenianDate(isoDate: string): string {
@@ -26,14 +30,28 @@ export function formatTimeRange(
   return `${toHoursMinutes(start).replace(":", ".")} - ${toHoursMinutes(end).replace(":", ".")}`;
 }
 
-export function buildTerminTitle(program: "redna" | "zacetna", modul?: number | null): string {
+// Admin has no i18n (single language, always Slovenian), and is by far the
+// most common caller — defaulting to "sl" means those call sites don't need
+// to pass anything. Public-facing/locale-aware callers (termin pages,
+// registration emails) pass the visitor's real locale explicitly.
+const TERMIN_TITLE_MESSAGES: Record<string, { TerminTitle: { redna: string; zacetna: string } }> =
+  { sl, en, sr };
+
+export function buildTerminTitle(
+  program: "redna" | "zacetna",
+  modul?: number | null,
+  locale = "sl",
+): string {
+  const messages = (TERMIN_TITLE_MESSAGES[locale] ?? TERMIN_TITLE_MESSAGES.sl).TerminTitle;
   return program === "redna"
-    ? `Redno usposabljanje Koda 95 (Modul ${modul})`
-    : "Začetno usposabljanje Koda 95";
+    ? messages.redna.replace("{modul}", String(modul))
+    : messages.zacetna;
 }
 
+// The modul number is always the trailing "(... 1234)" in the title,
+// regardless of which language's word for "Module" precedes it.
 export function parseModul(title: string): string | undefined {
-  const match = title.match(/\((?:Modul\s*)?(\d{4})\)/);
+  const match = title.match(/\(\D*(\d{4})\)\s*$/);
   return match ? match[1] : undefined;
 }
 

@@ -291,10 +291,10 @@ export type PublicTerminEntry = {
   href: string;
 };
 
-function toPublicEntry(row: TerminiRow, registeredCount: number): PublicTerminEntry {
+function toPublicEntry(row: TerminiRow, registeredCount: number, locale: string): PublicTerminEntry {
   const hasCapacity = row.capacity !== null;
   return {
-    title: buildTerminTitle(KEY_TO_PROGRAM[row.program], row.modul),
+    title: buildTerminTitle(KEY_TO_PROGRAM[row.program], row.modul, locale),
     date: formatSlovenianDate(row.date),
     dateISO: row.date,
     address: row.address ?? undefined,
@@ -306,7 +306,10 @@ function toPublicEntry(row: TerminiRow, registeredCount: number): PublicTerminEn
   };
 }
 
-export async function listPublicTermini(program: ProgramKey): Promise<PublicTerminEntry[]> {
+export async function listPublicTermini(
+  program: ProgramKey,
+  locale = "sl",
+): Promise<PublicTerminEntry[]> {
   const client = getSupabaseServerClient();
   const { data, error } = await client
     .from("termini")
@@ -318,7 +321,7 @@ export async function listPublicTermini(program: ProgramKey): Promise<PublicTerm
 
   const rows = data ?? [];
   const counts = await countsByTermin(rows.map((row) => row.id));
-  return rows.map((row) => toPublicEntry(row, counts.get(row.id)?.registered ?? 0));
+  return rows.map((row) => toPublicEntry(row, counts.get(row.id)?.registered ?? 0, locale));
 }
 
 export async function getPublicTermin(

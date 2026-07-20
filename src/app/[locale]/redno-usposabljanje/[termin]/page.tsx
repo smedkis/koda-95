@@ -31,7 +31,7 @@ const PROGRAM = "redna-koda-95" as const;
 const DESCRIPTION =
   "Redno usposabljanje za podaljšanje kode 95 po predpisanem programu za leto 2026. Usposabljanje traja 7 ur in je namenjeno vsem poklicnim voznikom kategorij C in D, ki morajo podaljšati veljavnost temeljne kvalifikacije.";
 
-async function getTermin(slug: string) {
+async function getTermin(slug: string, locale: string) {
   const dateISO = parsePublicTerminSlug(slug);
   if (!dateISO) return null;
   const row = await getPublicTermin(PROGRAM, dateISO);
@@ -42,7 +42,7 @@ async function getTermin(slug: string) {
   const hasCapacity = row.capacity !== null;
 
   return {
-    title: buildTerminTitle("redna", row.modul),
+    title: buildTerminTitle("redna", row.modul, locale),
     description: DESCRIPTION,
     price: formatPriceEur(row.price_eur),
     spotsLabel: hasCapacity ? `${registered}/${row.capacity} prostih mest` : "Neomejeno prostih mest",
@@ -56,10 +56,10 @@ async function getTermin(slug: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ termin: string }>;
+  params: Promise<{ termin: string; locale: string }>;
 }): Promise<Metadata> {
-  const { termin: slug } = await params;
-  const termin = await getTermin(slug);
+  const { termin: slug, locale } = await params;
+  const termin = await getTermin(slug, locale);
   if (!termin) return {};
   return {
     title: `${termin.title} | Tahografi Cuderman`,
@@ -70,13 +70,13 @@ export async function generateMetadata({
 export default async function TerminPage({
   params,
 }: {
-  params: Promise<{ termin: string }>;
+  params: Promise<{ termin: string; locale: string }>;
 }) {
-  const { termin: slug } = await params;
-  const termin = await getTermin(slug);
+  const { termin: slug, locale } = await params;
+  const termin = await getTermin(slug, locale);
   if (!termin) notFound();
 
-  const allUpcoming = await listPublicTermini(PROGRAM);
+  const allUpcoming = await listPublicTermini(PROGRAM, locale);
   const isNext = isNextTermin(
     termin.dateISO,
     allUpcoming.map((entry) => entry.dateISO),
