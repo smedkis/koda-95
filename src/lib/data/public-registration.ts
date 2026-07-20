@@ -3,7 +3,12 @@ import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getPublicTermin, programKeyToShort, publicTerminHref } from "./termini";
 import { syncNarocnikFromRegistration } from "./narocniki";
 import { logRegistrationEvent } from "./registrations";
-import { buildTerminTitle, formatSlovenianDate, formatTimeRange } from "@/lib/termini-format";
+import {
+  buildTerminTitle,
+  formatPriceEur,
+  formatSlovenianDate,
+  formatTimeRange,
+} from "@/lib/termini-format";
 import { sendEmail } from "@/lib/email/resend";
 import {
   buildCompletionEmail,
@@ -106,6 +111,9 @@ export async function submitQuickRegistration(
       registrationCode: prijava.registration_code,
       terminTitle: buildTerminTitle(programKeyToShort(termin.program), termin.modul),
       terminDate: formatSlovenianDate(termin.date),
+      timeRange: formatTimeRange(termin.start_time, termin.end_time),
+      address: termin.address ?? undefined,
+      price: formatPriceEur(termin.price_eur),
       completeFormUrl: `${getSiteUrl()}${publicTerminHref(termin.program, termin.date)}/obrazec?prijava=${prijava.registration_code}`,
     });
     await sendEmail({ to: input.email, subject, html, attachments: [getLogoAttachment()] });

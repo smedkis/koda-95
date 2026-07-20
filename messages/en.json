@@ -163,8 +163,15 @@
       "greeting": "Hello {name},",
       "body": "Your registration for {terminTitle} ({date}) has been successfully received.",
       "codeLabel": "Registration code:",
-      "completeCta": "To complete your registration (personal details and payment method), click the link below:",
-      "completeButton": "Complete registration",
+      "summaryHeading": "Registration summary",
+      "driverLabel": "Driver",
+      "terminLabel": "Session",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "priceLabel": "Price",
+      "locationLabel": "Location",
+      "completeCta": "You complete your registration by filling out the form via the link below (personal details and payment method):",
+      "completeButton": "Fill out the form",
       "footer": "If you didn't submit this registration, you can ignore this email."
     },
     "completion": {

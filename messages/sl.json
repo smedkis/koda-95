@@ -163,8 +163,15 @@
       "greeting": "Pozdravljeni {name},",
       "body": "Vaša prijava na {terminTitle} ({date}) je bila uspešno sprejeta.",
       "codeLabel": "Koda prijave:",
-      "completeCta": "Za dokončanje prijave (osebni podatki in način plačila) kliknite spodnjo povezavo:",
-      "completeButton": "Dokončaj prijavo",
+      "summaryHeading": "Povzetek prijave",
+      "driverLabel": "Voznik",
+      "terminLabel": "Termin",
+      "dateLabel": "Datum",
+      "timeLabel": "Ura",
+      "priceLabel": "Cena",
+      "locationLabel": "Lokacija",
+      "completeCta": "Prijavo dokončate tako, da izpolnite obrazec s klikom na spodnjo povezavo (osebni podatki in način plačila):",
+      "completeButton": "Izpolni obrazec",
       "footer": "Če prijave niste oddali vi, lahko to sporočilo prezrete."
     },
     "completion": {

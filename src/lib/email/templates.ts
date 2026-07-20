@@ -49,12 +49,21 @@ function wrapEmail(locale: string, bodyHtml: string): string {
 </html>`;
 }
 
+const NO_VALUE = "—";
+
+function summaryRow(label: string, value: string): string {
+  return `<tr><td style="padding:6px 0;color:#999999;font-size:13px;">${label}</td><td style="padding:6px 0;text-align:right;font-size:14px;">${value}</td></tr>`;
+}
+
 export async function buildQuickRegistrationEmail({
   locale,
   driverName,
   registrationCode,
   terminTitle,
   terminDate,
+  timeRange,
+  address,
+  price,
   completeFormUrl,
 }: {
   locale: string;
@@ -62,9 +71,24 @@ export async function buildQuickRegistrationEmail({
   registrationCode: string;
   terminTitle: string;
   terminDate: string;
+  timeRange?: string;
+  address?: string;
+  price?: string;
   completeFormUrl: string;
 }): Promise<{ subject: string; html: string }> {
   const t = await getTranslations({ locale, namespace: "Email.quickRegistration" });
+
+  const summaryTable = `
+    <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#000000;">${t("summaryHeading")}</p>
+    <table role="presentation" width="100%" style="border-collapse:collapse;margin:0 0 24px;">
+      ${summaryRow(t("driverLabel"), driverName)}
+      ${summaryRow(t("terminLabel"), terminTitle)}
+      ${summaryRow(t("dateLabel"), terminDate)}
+      ${summaryRow(t("timeLabel"), timeRange ?? NO_VALUE)}
+      ${summaryRow(t("priceLabel"), price ?? NO_VALUE)}
+      ${summaryRow(t("locationLabel"), address ?? NO_VALUE)}
+    </table>
+  `;
 
   const body = `
     <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">${t("heading")}</h1>
@@ -73,6 +97,7 @@ export async function buildQuickRegistrationEmail({
     <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">
       ${t("codeLabel")} <strong style="color:#f58220;">${registrationCode}</strong>
     </p>
+    ${summaryTable}
     <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("completeCta")}</p>
     <p style="margin:0 0 8px;">
       <a href="${completeFormUrl}" style="display:inline-block;background:#f58220;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-size:15px;font-weight:600;">${t("completeButton")}</a>

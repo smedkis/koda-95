@@ -163,8 +163,15 @@
       "greeting": "Poštovani {name},",
       "body": "Vaša prijava za {terminTitle} ({date}) je uspešno primljena.",
       "codeLabel": "Kod prijave:",
-      "completeCta": "Za dovršetak prijave (lični podaci i način plaćanja) kliknite na link ispod:",
-      "completeButton": "Dovrši prijavu",
+      "summaryHeading": "Pregled prijave",
+      "driverLabel": "Vozač",
+      "terminLabel": "Termin",
+      "dateLabel": "Datum",
+      "timeLabel": "Vreme",
+      "priceLabel": "Cena",
+      "locationLabel": "Lokacija",
+      "completeCta": "Prijavu dovršavate tako što popunite obrazac klikom na link ispod (lični podaci i način plaćanja):",
+      "completeButton": "Popuni obrazac",
       "footer": "Ako niste vi poslali ovu prijavu, možete zanemariti ovaj mejl."
     },
     "completion": {
