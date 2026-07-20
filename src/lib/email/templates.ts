@@ -162,3 +162,30 @@ export async function buildCompletionEmail({
   `;
   return { subject: t("subject", { code: registrationCode }), html: wrapEmail(locale, body) };
 }
+
+export async function buildFormReminderEmail({
+  locale,
+  driverName,
+  terminTitle,
+  terminDate,
+  completeFormUrl,
+}: {
+  locale: string;
+  driverName: string;
+  terminTitle: string;
+  terminDate: string;
+  completeFormUrl: string;
+}): Promise<{ subject: string; html: string }> {
+  const t = await getTranslations({ locale, namespace: "Email.formReminder" });
+
+  const body = `
+    <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">${t("heading")}</h1>
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("greeting", { name: driverName })}</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">${t("body", { terminTitle, date: terminDate })}</p>
+    <p style="margin:0 0 8px;">
+      <a href="${completeFormUrl}" style="display:inline-block;background:#f58220;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-size:15px;font-weight:600;">${t("button")}</a>
+    </p>
+    <p style="margin:24px 0 0;font-size:13px;color:#999999;">${t("footer")}</p>
+  `;
+  return { subject: t("subject"), html: wrapEmail(locale, body) };
+}

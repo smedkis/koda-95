@@ -16,6 +16,7 @@ import {
   deleteRegistrationAction,
   markRegistrationPaidAction,
   moveRegistrationAction,
+  sendFormReminderAction,
   updateRegistrationAction,
 } from "@/app/(admin)/admin/termini/[termin]/actions";
 
@@ -147,6 +148,7 @@ export function AdminVoznikEditContent({
   const [driver, setDriver] = useState(initialDriver);
   const [isSaving, setIsSaving] = useState(false);
   const [isMarkingPaid, setIsMarkingPaid] = useState(false);
+  const [isSendingReminder, setIsSendingReminder] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [activityLog, setActivityLog] = useState<LogEntry[]>(initialDriver.events ?? []);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -188,6 +190,18 @@ export function AdminVoznikEditContent({
     update("paymentStatus", "poravnano");
     logEvent("Zabeleženo plačilo");
     fireConfetti(origin);
+  };
+
+  const handleSendReminder = async () => {
+    setIsSendingReminder(true);
+    setSaveError(null);
+    const result = await sendFormReminderAction(terminId, driver.id);
+    setIsSendingReminder(false);
+    if (result.error) {
+      setSaveError(result.error);
+      return;
+    }
+    logEvent("Ročno poslano obvestilo za izpolnitev obrazca");
   };
 
   const canConfirmDelete = deleteConfirmText.trim() === driver.driverName;
@@ -429,10 +443,11 @@ export function AdminVoznikEditContent({
                 type="button"
                 variant="action"
                 className="w-full justify-center"
+                disabled={isSendingReminder}
                 icon={<Image src="/bell-white.svg" alt="" width={16} height={16} />}
-                onClick={() => logEvent("Ročno poslano obvestilo za izpolnitev obrazca")}
+                onClick={handleSendReminder}
               >
-                Pošlji obvestilo
+                {isSendingReminder ? "Pošiljam …" : "Pošlji obvestilo"}
               </Button>
             )}
             <div className="mt-6 mb-6 border-t border-divider" />

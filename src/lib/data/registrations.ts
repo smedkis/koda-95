@@ -12,7 +12,11 @@ import {
   formatTimeRange,
 } from "@/lib/termini-format";
 import { sendEmail } from "@/lib/email/resend";
-import { buildQuickRegistrationEmail, getLogoAttachment } from "@/lib/email/templates";
+import {
+  buildFormReminderEmail,
+  buildQuickRegistrationEmail,
+  getLogoAttachment,
+} from "@/lib/email/templates";
 import { getSiteUrl } from "@/lib/site-url";
 
 // Admin has no i18n (single language, no locale switcher) — registrations
@@ -254,6 +258,48 @@ export async function markRegistrationPaid(
   await logRegistrationEvent(registrationId, "Zabeleženo plačilo");
 
   return { id: registrationId };
+}
+
+export async function sendFormReminder(
+  terminSlug: string,
+  registrationId: string,
+): Promise<{ error?: string }> {
+  const termin = await getTerminRowBySlug(terminSlug);
+  if (!termin) return { error: "Termin ne obstaja." };
+
+  const client = getSupabaseServerClient();
+  const { data, error: findError } = await client
+    .from("prijave")
+    .select("registration_code, vozniki(full_name, email)")
+    .eq("id", registrationId)
+    .eq("termin_id", termin.id)
+    .maybeSingle();
+  if (findError) return { error: findError.message };
+  if (!data) return { error: "Prijava ne obstaja." };
+
+  const prijava = data as unknown as {
+    registration_code: string;
+    vozniki: { full_name: string; email: string | null };
+  };
+  if (!prijava.vozniki?.email) return { error: "Voznik nima e-poštnega naslova." };
+
+  const { subject, html } = await buildFormReminderEmail({
+    locale: ADMIN_LOCALE,
+    driverName: prijava.vozniki.full_name,
+    terminTitle: buildTerminTitle(programKeyToShort(termin.program), termin.modul),
+    terminDate: formatSlovenianDate(termin.date),
+    completeFormUrl: `${getSiteUrl()}${publicTerminHref(termin.program, termin.date)}/obrazec?prijava=${prijava.registration_code}`,
+  });
+  await sendEmail({
+    to: prijava.vozniki.email,
+    subject,
+    html,
+    attachments: [getLogoAttachment()],
+  });
+
+  await logRegistrationEvent(registrationId, "Ročno poslano obvestilo za izpolnitev obrazca");
+
+  return {};
 }
 
 export async function moveRegistration(

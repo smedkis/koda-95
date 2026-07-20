@@ -187,6 +187,14 @@
       "recipientLabel": "Recipient",
       "referenceLabel": "Reference",
       "footer": "If you have any questions, reply to this email."
+    },
+    "formReminder": {
+      "subject": "Complete your training registration form",
+      "heading": "Don't forget to fill out the form",
+      "greeting": "Hello {name},",
+      "body": "A quick reminder to fill out the remaining details for {terminTitle} ({date}).",
+      "button": "Fill out the form",
+      "footer": "If you've already filled out the form, please disregard this message."
     }
   }
 }

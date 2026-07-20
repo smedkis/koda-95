@@ -6,6 +6,7 @@ import {
   deleteRegistration,
   markRegistrationPaid,
   moveRegistration,
+  sendFormReminder,
   updateRegistration,
   type MutationResult,
 } from "@/lib/data/registrations";
@@ -46,6 +47,17 @@ export async function markRegistrationPaidAction(
     revalidatePath(`/admin/termini/${terminSlug}`);
     revalidatePath(`/admin/termini/${terminSlug}/vozniki/${registrationId}`);
     revalidatePath("/admin/termini");
+  }
+  return result;
+}
+
+export async function sendFormReminderAction(
+  terminSlug: string,
+  registrationId: string,
+): Promise<{ error?: string }> {
+  const result = await sendFormReminder(terminSlug, registrationId);
+  if (!result.error) {
+    revalidatePath(`/admin/termini/${terminSlug}/vozniki/${registrationId}`);
   }
   return result;
 }

@@ -187,6 +187,14 @@
       "recipientLabel": "Prejemnik",
       "referenceLabel": "Referenca",
       "footer": "Če imate vprašanja, odgovorite na to e-pošto."
+    },
+    "formReminder": {
+      "subject": "Izpolnite obrazec za usposabljanje",
+      "heading": "Ne pozabite izpolniti obrazca",
+      "greeting": "Pozdravljeni {name},",
+      "body": "Prijazno vas opominjamo, da izpolnite preostale podatke za {terminTitle} ({date}).",
+      "button": "Izpolni obrazec",
+      "footer": "Če ste obrazec že izpolnili, to sporočilo prezrite."
     }
   }
 }
