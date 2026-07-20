@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AddNarocnikiModal } from "./AddNarocnikiModal";
 import { ObvescanjeTable, type ObvescanjeEntry } from "./ObvescanjeTable";
 import { Button } from "@/components/ui/Button";
 import { Heading2, Heading3 } from "@/components/ui/Typography";
 import { addNarocnikiAction, deleteNarocnikAction } from "@/app/(admin)/admin/obvescanje/actions";
-import { markObvescanjeSeenAction } from "@/app/(admin)/actions";
 import type { AddNarocnikInput } from "@/lib/data/narocniki";
 
 export function ObvescanjePageContent({
@@ -19,10 +18,6 @@ export function ObvescanjePageContent({
   const [entries, setEntries] = useState(initialEntries);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
-
-  useEffect(() => {
-    markObvescanjeSeenAction();
-  }, []);
 
   const handleDelete = async (id: string) => {
     const previous = entries;

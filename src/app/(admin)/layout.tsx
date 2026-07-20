@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { AdminFooter } from "@/components/admin/AdminFooter";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { Container } from "@/components/ui/Container";
 import { montserrat, sourceSans } from "@/fonts";
-import { OBVESCANJE_SEEN_COOKIE } from "@/lib/obvescanje-seen";
-import { countNewRegistrationsSince } from "@/lib/data/registrations";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -13,15 +10,11 @@ export const metadata: Metadata = {
   description: "Administracija — Koda 95",
 };
 
-export default async function AdminRootLayout({
+export default function AdminRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const seenAt = cookieStore.get(OBVESCANJE_SEEN_COOKIE)?.value ?? null;
-  const newRegistrationsCount = await countNewRegistrationsSince(seenAt);
-
   return (
     <html
       lang="sl"
@@ -29,7 +22,7 @@ export default async function AdminRootLayout({
     >
       <body className="min-h-screen flex flex-col">
         <Container className="flex flex-1 flex-col bg-secondary-bg">
-          <AdminNav newRegistrationsCount={newRegistrationsCount} />
+          <AdminNav />
           <div className="flex flex-1 flex-col">{children}</div>
           <AdminFooter />
         </Container>

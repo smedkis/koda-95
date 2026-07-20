@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { AdminTerminiCalendar, type CalendarTermin } from "@/components/admin/AdminTerminiCalendar";
 import { listTermini, parseTerminSlug } from "@/lib/data/termini";
 import type { TerminCardData } from "@/lib/data/termini";
+import { parseTerminSeenMap, TERMIN_SEEN_COOKIE } from "@/lib/termin-seen";
 
 export const metadata: Metadata = {
   title: "Termini | Koda 95 Admin",
@@ -16,11 +18,14 @@ function toCalendarTermin(termin: TerminCardData): CalendarTermin {
     dateISO: parseTerminSlug(termin.id)?.date ?? "",
     registeredCount: termin.registeredCount,
     capacity: termin.capacity,
+    newCount: termin.newCount ?? 0,
   };
 }
 
 export default async function TerminiListPage() {
-  const { upcoming, past } = await listTermini();
+  const cookieStore = await cookies();
+  const seenMap = parseTerminSeenMap(cookieStore.get(TERMIN_SEEN_COOKIE)?.value);
+  const { upcoming, past } = await listTermini(seenMap);
   const termini = [...upcoming, ...past].map(toCalendarTermin);
   return <AdminTerminiCalendar termini={termini} />;
 }

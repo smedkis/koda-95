@@ -422,15 +422,3 @@ export async function searchDrivers(query: string): Promise<DriverSearchResult[]
 export async function getAllRegistrations(): Promise<DriverSearchResult[]> {
   return getAllJoinedRegistrations();
 }
-
-// Feeds the unread-style badge on the nav's Obveščanje bell — counts
-// registrations created after the admin's last visit to that page (or every
-// registration ever, if they've never visited it).
-export async function countNewRegistrationsSince(sinceIso: string | null): Promise<number> {
-  const client = getSupabaseServerClient();
-  let query = client.from("prijave").select("id", { count: "exact", head: true });
-  if (sinceIso) query = query.gt("created_at", sinceIso);
-  const { count, error } = await query;
-  if (error) throw new Error(error.message);
-  return count ?? 0;
-}

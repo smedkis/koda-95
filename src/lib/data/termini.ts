@@ -39,7 +39,7 @@ export function parseTerminSlug(slug: string): { program: ProgramKey; date: stri
   return { program: PROGRAM_TO_KEY[program as Program], date };
 }
 
-export type TerminCardData = AdminTerminCardProps & { program: Program };
+export type TerminCardData = AdminTerminCardProps & { program: Program; newCount?: number };
 
 export type TerminFormData = TerminCardData & {
   dateISO: string;
@@ -53,6 +53,7 @@ type RegistrationCounts = { registered: number; formsCompleted: number; paid: nu
 function toCardData(
   row: TerminiRow,
   counts: RegistrationCounts,
+  newCount?: number,
 ): TerminCardData {
   const program = KEY_TO_PROGRAM[row.program];
   const hasCapacity = row.capacity !== null;
@@ -70,6 +71,7 @@ function toCardData(
     formsCompletedCount: counts.formsCompleted,
     paidCount: counts.paid,
     isPast: row.date < todayIso(),
+    newCount,
   };
 }
 
@@ -112,7 +114,42 @@ export async function countsByTermin(
   return counts;
 }
 
-export async function listTermini(): Promise<{
+// Feeds the unread-style badge on each termin's calendar chip — registered
+// per termin, so it counts registrations created after the admin's last
+// visit to *that specific* termin's detail page (or every registration ever,
+// for a termin never visited). seenMap is keyed by termin slug since that's
+// what the cookie stores and what the detail page's URL exposes.
+async function newRegistrationCountsByTermin(
+  rows: TerminiRow[],
+  seenMap: Record<string, string>,
+): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  if (rows.length === 0) return counts;
+
+  const client = getSupabaseServerClient();
+  const { data, error } = await client
+    .from("prijave")
+    .select("termin_id, created_at")
+    .in(
+      "termin_id",
+      rows.map((row) => row.id),
+    );
+  if (error) throw new Error(error.message);
+
+  const slugByTerminId = new Map(rows.map((row) => [row.id, terminSlug(row.program, row.date)]));
+  for (const prijava of data ?? []) {
+    const slug = slugByTerminId.get(prijava.termin_id);
+    if (!slug) continue;
+    const seenAt = seenMap[slug];
+    if (seenAt && prijava.created_at <= seenAt) continue;
+    counts.set(prijava.termin_id, (counts.get(prijava.termin_id) ?? 0) + 1);
+  }
+  return counts;
+}
+
+export async function listTermini(
+  seenMap: Record<string, string> = {},
+): Promise<{
   upcoming: TerminCardData[];
   past: TerminCardData[];
 }> {
@@ -122,14 +159,27 @@ export async function listTermini(): Promise<{
 
   const rows = data ?? [];
   const counts = await countsByTermin(rows.map((row) => row.id));
+  const newCounts = await newRegistrationCountsByTermin(rows, seenMap);
   const today = todayIso();
 
   const upcoming = rows
     .filter((row) => row.date >= today)
-    .map((row) => toCardData(row, counts.get(row.id) ?? { registered: 0, formsCompleted: 0, paid: 0 }));
+    .map((row) =>
+      toCardData(
+        row,
+        counts.get(row.id) ?? { registered: 0, formsCompleted: 0, paid: 0 },
+        newCounts.get(row.id),
+      ),
+    );
   const past = rows
     .filter((row) => row.date < today)
-    .map((row) => toCardData(row, counts.get(row.id) ?? { registered: 0, formsCompleted: 0, paid: 0 }))
+    .map((row) =>
+      toCardData(
+        row,
+        counts.get(row.id) ?? { registered: 0, formsCompleted: 0, paid: 0 },
+        newCounts.get(row.id),
+      ),
+    )
     .reverse();
 
   return { upcoming, past };

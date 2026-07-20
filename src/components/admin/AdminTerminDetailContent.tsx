@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddVoznikModal } from "./AddVoznikModal";
 import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import {
@@ -15,7 +15,10 @@ import { parseModul } from "@/lib/termini-format";
 import { formatToday } from "@/lib/date-format";
 import { generateAttendancePdf } from "@/lib/generate-attendance-pdf";
 import type { TerminFormData } from "@/lib/data/termini";
-import { createRegistrationAction } from "@/app/(admin)/admin/termini/[termin]/actions";
+import {
+  createRegistrationAction,
+  markTerminSeenAction,
+} from "@/app/(admin)/admin/termini/[termin]/actions";
 
 export function AdminTerminDetailContent({
   id,
@@ -30,6 +33,12 @@ export function AdminTerminDetailContent({
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
+
+  useEffect(() => {
+    markTerminSeenAction(id);
+    // Only needs to run once on mount for this termin.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!termin) {
     return (

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import {
   createRegistration,
   deleteRegistration,
@@ -10,7 +11,20 @@ import {
   updateRegistration,
   type MutationResult,
 } from "@/lib/data/registrations";
+import { parseTerminSeenMap, TERMIN_SEEN_COOKIE } from "@/lib/termin-seen";
 import type { TerminDriver } from "@/components/admin/AdminTerminDriversTable";
+
+// Called on mount from the termin detail page — marks "now" as seen for that
+// termin so its calendar chip's unread badge resets.
+export async function markTerminSeenAction(terminSlug: string): Promise<void> {
+  const cookieStore = await cookies();
+  const seenMap = parseTerminSeenMap(cookieStore.get(TERMIN_SEEN_COOKIE)?.value);
+  seenMap[terminSlug] = new Date().toISOString();
+  cookieStore.set(TERMIN_SEEN_COOKIE, JSON.stringify(seenMap), {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+}
 
 export async function createRegistrationAction(
   terminSlug: string,

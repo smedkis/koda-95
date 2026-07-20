@@ -15,6 +15,7 @@ export type CalendarTermin = {
   dateISO: string;
   registeredCount: number;
   capacity?: number;
+  newCount: number;
 };
 
 const PROGRAM_OPTIONS: { value: Program; label: string }[] = [
@@ -115,12 +116,17 @@ function DayChip({ termin }: { termin: CalendarTermin }) {
     <Link
       href={`/admin/termini/${termin.id}`}
       className={cn(
-        "flex flex-col gap-0.5 rounded px-1.5 py-1 font-body text-[11px] transition-colors sm:text-[12px]",
+        "relative flex flex-col gap-0.5 rounded px-1.5 py-1 font-body text-[11px] transition-colors sm:text-[12px]",
         termin.program === "redna"
           ? "bg-primary text-white hover:bg-[#d06e1b]"
           : "bg-secondary text-paragraph hover:bg-[#5de0c0]",
       )}
     >
+      {termin.newCount > 0 ? (
+        <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#852600] px-1 font-body text-[10px] font-semibold text-white ring-2 ring-white">
+          {termin.newCount > 99 ? "99+" : termin.newCount}
+        </span>
+      ) : null}
       <span className="line-clamp-2 font-medium">{termin.title}</span>
       <span className="truncate font-normal opacity-80">{spots}</span>
     </Link>

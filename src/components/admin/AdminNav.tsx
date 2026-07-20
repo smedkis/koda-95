@@ -88,7 +88,7 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-export function AdminNav({ newRegistrationsCount = 0 }: { newRegistrationsCount?: number }) {
+export function AdminNav() {
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -190,19 +190,10 @@ export function AdminNav({ newRegistrationsCount = 0 }: { newRegistrationsCount?
               </button>
               {searchResultsDropdown}
             </label>
-            <Link
-              href="/admin/obvescanje"
-              aria-label="Obveščanje"
-              className="relative flex items-center"
-            >
+            <Link href="/admin/obvescanje" aria-label="Obveščanje" className="flex items-center">
               <BellIcon
                 className={pathname === "/admin/obvescanje" ? "text-primary" : "text-[#402E32]"}
               />
-              {newRegistrationsCount > 0 ? (
-                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 font-body text-[10px] font-semibold text-white">
-                  {newRegistrationsCount > 99 ? "99+" : newRegistrationsCount}
-                </span>
-              ) : null}
             </Link>
             <Link href="/admin/statistika" aria-label="Statistika" className="flex items-center">
               <ChartIcon
