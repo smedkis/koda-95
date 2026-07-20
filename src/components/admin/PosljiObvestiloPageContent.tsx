@@ -15,6 +15,13 @@ export type TerminOption = {
   date: string;
 };
 
+export type NarocnikStatus = "never" | "was_enrolled" | "enrolled";
+
+export type NarocnikOption = {
+  email: string;
+  status: NarocnikStatus;
+};
+
 const PROGRAM_LABELS: Record<TerminOption["program"], string> = {
   redna: "Redno usposabljanje Koda 95",
   zacetna: "Začetno usposabljanje Koda 95",
@@ -25,7 +32,63 @@ const PROGRAM_ORDER: TerminOption["program"][] = ["redna", "zacetna"];
 type Audience = { never: boolean; wasEnrolled: boolean; enrolled: boolean };
 type Channels = { email: boolean };
 
-export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[] }) {
+const AUDIENCE_GROUPS: { key: keyof Audience; status: NarocnikStatus; label: string }[] = [
+  { key: "never", status: "never", label: "Ni bil prijavljen" },
+  { key: "wasEnrolled", status: "was_enrolled", label: "Bil prijavljen v preteklosti" },
+  { key: "enrolled", status: "enrolled", label: "Trenutno prijavljen" },
+];
+
+function AudienceGroup({
+  label,
+  emails,
+  checked,
+  onChange,
+}: {
+  label: string;
+  emails: string[];
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-4">
+        <Checkbox
+          labelSize="md"
+          label={`${label} (${emails.length})`}
+          checked={checked}
+          onChange={(event) => onChange(event.target.checked)}
+        />
+        {emails.length > 0 ? (
+          <button
+            type="button"
+            className="cursor-pointer text-[13px] text-placeholder hover:text-paragraph hover:underline"
+            onClick={() => setIsExpanded((current) => !current)}
+          >
+            {isExpanded ? "Skrij e-poštne naslove" : "Prikaži e-poštne naslove"}
+          </button>
+        ) : null}
+      </div>
+      {isExpanded ? (
+        <div className="mt-2 ml-6 max-h-40 overflow-y-auto rounded border border-divider bg-secondary-bg p-3">
+          {emails.map((email) => (
+            <Text key={email} className="text-[13px]">
+              {email}
+            </Text>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export function PosljiObvestiloPageContent({
+  termini,
+  narocniki,
+}: {
+  termini: TerminOption[];
+  narocniki: NarocnikOption[];
+}) {
   const router = useRouter();
 
   const [audience, setAudience] = useState<Audience>({
@@ -39,6 +102,16 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
   const [channels, setChannels] = useState<Channels>({ email: true });
   const [isSending, setIsSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+
+  const emailsByStatus = useMemo(() => {
+    const map = new Map<NarocnikStatus, string[]>();
+    for (const entry of narocniki) {
+      const list = map.get(entry.status) ?? [];
+      list.push(entry.email);
+      map.set(entry.status, list);
+    }
+    return map;
+  }, [narocniki]);
 
   const terminiByProgram = useMemo(() => {
     return PROGRAM_ORDER.map((program) => ({
@@ -100,31 +173,18 @@ export function PosljiObvestiloPageContent({ termini }: { termini: TerminOption[
 
       <Heading3 className="mt-8">1. Komu</Heading3>
       <Box className="mt-4 flex flex-col bg-white">
-        <div className="flex flex-col gap-3">
-          <Checkbox
-            labelSize="md"
-            label="Ni bil prijavljen"
-            checked={audience.never}
-            onChange={(event) =>
-              setAudience((current) => ({ ...current, never: event.target.checked }))
-            }
-          />
-          <Checkbox
-            labelSize="md"
-            label="Bil prijavljen v preteklosti"
-            checked={audience.wasEnrolled}
-            onChange={(event) =>
-              setAudience((current) => ({ ...current, wasEnrolled: event.target.checked }))
-            }
-          />
-          <Checkbox
-            labelSize="md"
-            label="Trenutno prijavljen"
-            checked={audience.enrolled}
-            onChange={(event) =>
-              setAudience((current) => ({ ...current, enrolled: event.target.checked }))
-            }
-          />
+        <div className="flex flex-col gap-4">
+          {AUDIENCE_GROUPS.map((group) => (
+            <AudienceGroup
+              key={group.key}
+              label={group.label}
+              emails={emailsByStatus.get(group.status) ?? []}
+              checked={audience[group.key]}
+              onChange={(checked) =>
+                setAudience((current) => ({ ...current, [group.key]: checked }))
+              }
+            />
+          ))}
         </div>
       </Box>
 

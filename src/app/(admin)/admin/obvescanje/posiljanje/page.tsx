@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PosljiObvestiloPageContent } from "@/components/admin/PosljiObvestiloPageContent";
 import { listTermini } from "@/lib/data/termini";
+import { getNarocniki } from "@/lib/data/narocniki";
 
 export const metadata: Metadata = {
   title: "Pošlji obvestilo | Koda 95 Admin",
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 
 export default async function PosljiObvestiloPage() {
   const { upcoming, past } = await listTermini();
+  const narocniki = await getNarocniki();
 
   return (
     <PosljiObvestiloPageContent
@@ -16,6 +18,10 @@ export default async function PosljiObvestiloPage() {
         id: termin.id,
         program: termin.program,
         date: termin.date,
+      }))}
+      narocniki={narocniki.map((entry) => ({
+        email: entry.email,
+        status: entry.enrollment.status,
       }))}
     />
   );
