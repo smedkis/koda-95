@@ -45,7 +45,8 @@ async function login(formData: FormData) {
   clearLoginAttempts(identifier);
 
   const cookieStore = await cookies();
-  cookieStore.set(ADMIN_SESSION_COOKIE, createSession(), {
+  const token = await createSession();
+  cookieStore.set(ADMIN_SESSION_COOKIE, token, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",

@@ -12,7 +12,7 @@ export async function searchDriversAction(query: string): Promise<DriverSearchRe
 
 export async function logout() {
   const cookieStore = await cookies();
-  revokeSession(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
+  await revokeSession(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
   cookieStore.delete(ADMIN_SESSION_COOKIE);
   revalidatePath("/", "layout");
   redirect("/prijava");

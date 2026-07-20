@@ -3,8 +3,9 @@
 // 20260713100000_termini_capacity_modul.sql,
 // 20260713110000_termini_location_time_partial_prijave.sql,
 // 20260713120000_narocniki.sql,
-// 20260713140000_zacetna_location_time_optional.sql, and
-// 20260716090000_prijava_dogodki.sql. Keep in sync with any new migration.
+// 20260713140000_zacetna_location_time_optional.sql,
+// 20260716090000_prijava_dogodki.sql, and
+// 20260720120000_admin_sessions.sql. Keep in sync with any new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -83,6 +84,11 @@ export type PrijavaDogodkiRow = {
   created_at: string;
 };
 
+export type AdminSessionRow = {
+  token: string;
+  expires_at: string;
+};
+
 export type NarocnikiRow = {
   id: string;
   full_name: string | null;
@@ -133,6 +139,12 @@ export interface Database {
         Insert: Partial<Omit<PrijavaDogodkiRow, "id" | "created_at">> &
           Pick<PrijavaDogodkiRow, "prijava_id" | "message">;
         Update: Partial<Omit<PrijavaDogodkiRow, "id" | "created_at">>;
+        Relationships: [];
+      };
+      admin_sessions: {
+        Row: AdminSessionRow;
+        Insert: AdminSessionRow;
+        Update: Partial<AdminSessionRow>;
         Relationships: [];
       };
     };

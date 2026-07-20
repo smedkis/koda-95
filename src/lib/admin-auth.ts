@@ -1,44 +1,11 @@
 import crypto from "crypto";
-import fs from "fs";
-import os from "os";
-import path from "path";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 // Single hardcoded admin account (no users table) — credentials come from
 // ADMIN_USERNAME/ADMIN_PASSWORD env vars.
 export const ADMIN_SESSION_COOKIE = "koda95_admin_session";
 
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7; // 7 days, matches the cookie's maxAge
-
-// Sessions are persisted to a small file on disk rather than kept in an
-// in-memory Map. Next.js compiles proxy.ts as a module graph separate from
-// Server Actions/pages ("Proxy is meant to be invoked separately... you
-// should not attempt relying on shared modules or globals" — Next.js docs),
-// so an in-memory store created by the login action isn't reliably visible
-// to proxy.ts's own copy of this module (confirmed: it worked once right
-// after both were freshly compiled together, then broke the moment one side
-// got recompiled independently). A file on disk sidesteps that entirely,
-// since it's the same physical file no matter which bundle touches it. If
-// this ever moves to a multi-instance/edge-distributed deployment, this
-// needs to become a real shared store (e.g. Redis) instead.
-const SESSIONS_FILE = path.join(os.tmpdir(), "koda95-admin-sessions.json");
-
-type SessionsData = Record<string, number>; // token -> expiresAt
-
-function readSessions(): SessionsData {
-  try {
-    return JSON.parse(fs.readFileSync(SESSIONS_FILE, "utf-8"));
-  } catch {
-    return {};
-  }
-}
-
-function writeSessions(sessions: SessionsData) {
-  const now = Date.now();
-  const pruned = Object.fromEntries(
-    Object.entries(sessions).filter(([, expiresAt]) => expiresAt > now),
-  );
-  fs.writeFileSync(SESSIONS_FILE, JSON.stringify(pruned));
-}
 
 function timingSafeStringEqual(a: string, b: string): boolean {
   const aBuf = Buffer.from(a);
@@ -58,27 +25,37 @@ export function verifyCredentials(username: string, password: string): boolean {
   return validUsername && validPassword;
 }
 
-export function createSession(): string {
+// Sessions live in Postgres rather than a local file or in-memory Map —
+// proxy.ts checks them from the Edge Runtime (no access to Node's `fs`), and
+// Vercel's serverless instances don't share a filesystem or memory with each
+// other anyway, so anything not in a real shared store is invisible half the
+// time in production.
+export async function createSession(): Promise<string> {
   const token = crypto.randomBytes(32).toString("hex");
-  const sessions = readSessions();
-  sessions[token] = Date.now() + SESSION_TTL_MS;
-  writeSessions(sessions);
+  const client = getSupabaseServerClient();
+  await client.from("admin_sessions").insert({
+    token,
+    expires_at: new Date(Date.now() + SESSION_TTL_MS).toISOString(),
+  });
   return token;
 }
 
-export function isValidSessionToken(token: string | undefined): boolean {
+export async function isValidSessionToken(token: string | undefined): Promise<boolean> {
   if (!token) return false;
-  const expiresAt = readSessions()[token];
-  return expiresAt !== undefined && Date.now() <= expiresAt;
+  const client = getSupabaseServerClient();
+  const { data } = await client
+    .from("admin_sessions")
+    .select("expires_at")
+    .eq("token", token)
+    .maybeSingle();
+  if (!data) return false;
+  return new Date(data.expires_at).getTime() > Date.now();
 }
 
-export function revokeSession(token: string | undefined) {
+export async function revokeSession(token: string | undefined): Promise<void> {
   if (!token) return;
-  const sessions = readSessions();
-  if (token in sessions) {
-    delete sessions[token];
-    writeSessions(sessions);
-  }
+  const client = getSupabaseServerClient();
+  await client.from("admin_sessions").delete().eq("token", token);
 }
 
 // Naive in-memory brute-force guard for the login form, keyed by client IP.

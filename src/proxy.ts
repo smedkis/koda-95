@@ -16,14 +16,14 @@ export async function proxy(request: NextRequest) {
   const sessionToken = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
 
   if (pathname.startsWith("/admin")) {
-    if (!isValidSessionToken(sessionToken)) {
+    if (!(await isValidSessionToken(sessionToken))) {
       return NextResponse.redirect(new URL("/prijava", request.url));
     }
     return NextResponse.next();
   }
 
   if (pathname === "/prijava") {
-    if (isValidSessionToken(sessionToken)) {
+    if (await isValidSessionToken(sessionToken)) {
       return NextResponse.redirect(new URL("/admin/termini", request.url));
     }
     return NextResponse.next();
