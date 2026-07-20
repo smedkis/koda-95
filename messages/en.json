@@ -172,7 +172,7 @@
       "locationLabel": "Location",
       "completeCta": "You're successfully registered and we'll be expecting you at the training. Fill out the remaining details (personal information, payment method) today so everything's ready and check-in is quick on the day.",
       "completeButton": "Fill out the form",
-      "footer": "If you didn't submit this registration, you can ignore this email."
+      "footer": "You're receiving this email because a registration for the training was submitted with your email address. If you have any questions, feel free to reach out."
     },
     "completion": {
       "subject": "Payment details — {code}",

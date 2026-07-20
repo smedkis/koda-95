@@ -172,7 +172,7 @@
       "locationLabel": "Lokacija",
       "completeCta": "Uspešno ste prijavljeni i očekujemo vas na obuci. Popunite preostale podatke (lične podatke, način plaćanja) već danas, kako bi sve bilo spremno i prijava na dan obuke bila brža.",
       "completeButton": "Popuni obrazac",
-      "footer": "Ako niste vi poslali ovu prijavu, možete zanemariti ovaj mejl."
+      "footer": "Ovaj mejl ste dobili jer je vaša e-adresa korišćena za prijavu na obuku. Za sva pitanja smo vam na raspolaganju."
     },
     "completion": {
       "subject": "Podaci za plaćanje — {code}",

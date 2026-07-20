@@ -172,7 +172,7 @@
       "locationLabel": "Lokacija",
       "completeCta": "Ste uspešno prijavljeni in vas pričakujemo na usposabljanju. Preostale podatke (osebni podatki, način plačila) izpolnite še danes, da bo vse pripravljeno in bo prijava na dan usposabljanja hitrejša.",
       "completeButton": "Izpolni obrazec",
-      "footer": "Če prijave niste oddali vi, lahko to sporočilo prezrete."
+      "footer": "To sporočilo ste prejeli, ker je bila z vašim e-poštnim naslovom oddana prijava na usposabljanje. Za morebitna vprašanja smo vam na voljo."
     },
     "completion": {
       "subject": "Podatki za plačilo — {code}",
