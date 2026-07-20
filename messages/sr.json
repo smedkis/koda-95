@@ -161,7 +161,8 @@
       "metaDescription": "Periodična obuka za obnavljanje Koda 95 za profesionalne vozače kategorije C i D. Izaberite termin i prijavite se.",
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "periodičnu obuku",
-      "heroTitleSuffix": "Koda 95"
+      "heroTitleSuffix": "Koda 95",
+      "terminDescription": "Periodična obuka za obnavljanje koda 95 po propisanom programu za 2026. godinu. Obuka traje 7 sati i namenjena je svim profesionalnim vozačima kategorija C i D koji treba da obnove valjanost osnovne kvalifikacije."
     },
     "zacetna": {
       "name": "Osnovna kvalifikacija – Koda 95",
@@ -170,6 +171,7 @@
       "heroDescription": "Da li ste novi profesionalni vozač kategorije C ili D? Osnovna kvalifikacija Koda 95 zakonski je obavezna za sticanje osnovne kvalifikacije vozača. U Tahografi Cuderman organizujemo obuke tokom cele godine. Izaberite termin koji vam odgovara i prijavite se putem obrasca.",
       "metaTitle": "Osnovna kvalifikacija Koda 95 — Prijava | Tahografi Cuderman",
       "metaDescription": "Osnovna obuka za sticanje osnovne kvalifikacije vozača za profesionalne vozače kategorije C i D. Izaberite termin i prijavite se.",
+      "terminDescription": "Osnovna obuka za sticanje osnovne kvalifikacije vozača (TKV) po propisanom programu. Namenjena je novim profesionalnim vozačima kategorija C i D koji još uvek nemaju važeći kod 95.",
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "osnovnu kvalifikaciju",
       "heroTitleSuffix": "Koda 95"

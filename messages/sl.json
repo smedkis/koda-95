@@ -161,7 +161,8 @@
       "metaDescription": "Redno usposabljanje za podaljšanje kode 95 (TKV) za poklicne voznike kategorij C in D. Izberite termin in se prijavite.",
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "redno usposabljanje",
-      "heroTitleSuffix": "Koda 95"
+      "heroTitleSuffix": "Koda 95",
+      "terminDescription": "Redno usposabljanje za podaljšanje kode 95 po predpisanem programu za leto 2026. Usposabljanje traja 7 ur in je namenjeno vsem poklicnim voznikom kategorij C in D, ki morajo podaljšati veljavnost temeljne kvalifikacije."
     },
     "zacetna": {
       "name": "Začetna Koda 95",
@@ -170,6 +171,7 @@
       "heroDescription": "Ste nov poklicni voznik s kategorijo C ali D? Začetno usposabljanje Koda 95 je zakonsko obvezno za pridobitev temeljne kvalifikacije voznika (TKV). Pri Tahografi Cuderman organiziramo usposabljanja skozi vse leto. Izberite termin, ki vam ustreza, in se prijavite preko obrazca.",
       "metaTitle": "Začetna Koda 95 — Prijava na usposabljanje | Tahografi Cuderman",
       "metaDescription": "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) za poklicne voznike kategorij C in D. Izberite termin in se prijavite.",
+      "terminDescription": "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) po predpisanem programu. Namenjeno je novim poklicnim voznikom kategorij C in D, ki še nimajo veljavne kode 95.",
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "začetno usposabljanje",
       "heroTitleSuffix": "Koda 95"

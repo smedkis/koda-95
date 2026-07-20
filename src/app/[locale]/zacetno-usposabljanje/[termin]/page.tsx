@@ -21,11 +21,6 @@ import {
 
 const PROGRAM = "zacetna-koda-95" as const;
 
-// Description text isn't part of the listing card data, so it's kept here.
-// No price since Začetna Koda 95 has no fixed price, and spots are unlimited.
-const DESCRIPTION =
-  "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) po predpisanem programu. Namenjeno je novim poklicnim voznikom kategorij C in D, ki še nimajo veljavne kode 95.";
-
 async function getTermin(slug: string, locale: string) {
   const dateISO = parsePublicTerminSlug(slug);
   if (!dateISO) return null;
@@ -33,10 +28,11 @@ async function getTermin(slug: string, locale: string) {
   if (!row) return null;
 
   const td = await getTranslations({ locale, namespace: "TerminDetails" });
+  const pt = await getTranslations({ locale, namespace: "Programs.zacetna" });
 
   return {
     title: buildTerminTitle("zacetna", row.modul, locale),
-    description: DESCRIPTION,
+    description: pt("terminDescription"),
     spotsLabel: td("unlimitedSpots"),
     date: formatSlovenianDate(row.date, locale),
     dateISO: row.date,

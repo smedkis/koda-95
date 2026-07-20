@@ -27,10 +27,6 @@ import {
 
 const PROGRAM = "redna-koda-95" as const;
 
-// Description text isn't part of the listing card data, so it's kept here.
-const DESCRIPTION =
-  "Redno usposabljanje za podaljšanje kode 95 po predpisanem programu za leto 2026. Usposabljanje traja 7 ur in je namenjeno vsem poklicnim voznikom kategorij C in D, ki morajo podaljšati veljavnost temeljne kvalifikacije.";
-
 async function getTermin(slug: string, locale: string) {
   const dateISO = parsePublicTerminSlug(slug);
   if (!dateISO) return null;
@@ -41,10 +37,11 @@ async function getTermin(slug: string, locale: string) {
   const registered = counts.get(row.id)?.registered ?? 0;
   const hasCapacity = row.capacity !== null;
   const td = await getTranslations({ locale, namespace: "TerminDetails" });
+  const pt = await getTranslations({ locale, namespace: "Programs.redna" });
 
   return {
     title: buildTerminTitle("redna", row.modul, locale),
-    description: DESCRIPTION,
+    description: pt("terminDescription"),
     price: formatPriceEur(row.price_eur),
     spotsLabel: hasCapacity
       ? td("spotsRatio", { registered, capacity: row.capacity as number })

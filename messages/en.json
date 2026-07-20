@@ -161,7 +161,8 @@
       "metaDescription": "Periodic training to renew Koda 95 (CPC) for professional drivers holding category C or D. Choose a session and register.",
       "heroTitlePrefix": "Register for",
       "heroTitleHighlight": "periodic training",
-      "heroTitleSuffix": "— Koda 95"
+      "heroTitleSuffix": "— Koda 95",
+      "terminDescription": "Periodic training to renew Koda 95 according to the prescribed 2026 programme. The training lasts 7 hours and is intended for all professional drivers holding category C or D who need to renew their basic qualification."
     },
     "zacetna": {
       "name": "Initial Qualification – Koda 95",
@@ -170,6 +171,7 @@
       "heroDescription": "Are you a new professional driver holding category C or D? Initial Koda 95 qualification is legally required to obtain your driver's Certificate of Professional Competence (CPC). At Tahografi Cuderman we run training sessions all year round. Pick a session that works for you and register using the form.",
       "metaTitle": "Initial Koda 95 Qualification — Register | Tahografi Cuderman",
       "metaDescription": "Initial training to obtain the driver's Certificate of Professional Competence (CPC) for professional drivers holding category C or D. Choose a session and register.",
+      "terminDescription": "Initial training to obtain the driver's Certificate of Professional Competence (CPC) according to the prescribed programme. It's intended for new professional drivers holding category C or D who don't yet hold a valid Koda 95.",
       "heroTitlePrefix": "Register for",
       "heroTitleHighlight": "initial qualification",
       "heroTitleSuffix": "— Koda 95"
