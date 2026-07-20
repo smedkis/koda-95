@@ -225,7 +225,7 @@ export function AdminStatistikaPageContent({
                     <Text className="text-[14px]">{driver.registrationDate ?? "—"}</Text>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <Link href={`/admin/termini/${terminId}`} className="block">
+                    <Link href={`/admin/termini/${terminId}`} className="hover:underline">
                       <Text className="text-[14px]">{terminTitle}</Text>
                     </Link>
                   </td>
