@@ -93,14 +93,17 @@ export async function countsByTermin(
   const client = getSupabaseServerClient();
   const { data, error } = await client
     .from("prijave")
-    .select("termin_id, licence_categories, consent_terms, payment_status")
+    .select("termin_id, licence_categories, payment_status")
     .in("termin_id", terminIds);
   if (error) throw new Error(error.message);
 
   for (const row of data ?? []) {
     const current = counts.get(row.termin_id) ?? { registered: 0, formsCompleted: 0, paid: 0 };
     current.registered += 1;
-    if (row.licence_categories && row.licence_categories.length > 0 && row.consent_terms !== null) {
+    // licence_categories is only ever written by completeRegistration, so
+    // its presence alone is a reliable "form finished" signal — see the
+    // matching note in registrations.ts's toTerminDriver.
+    if (row.licence_categories && row.licence_categories.length > 0) {
       current.formsCompleted += 1;
     }
     if (row.payment_status === "paid") current.paid += 1;

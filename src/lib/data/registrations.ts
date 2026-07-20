@@ -28,8 +28,12 @@ type JoinedPrijava = PrijaveRow & { vozniki: VozniciRow };
 
 function toTerminDriver(row: JoinedPrijava, priceEur: number | null): TerminDriver {
   const v = row.vozniki;
-  const hasForm =
-    !!row.licence_categories && row.licence_categories.length > 0 && row.consent_terms !== null;
+  // licence_categories is only ever written by completeRegistration, so its
+  // presence alone reliably means the /obrazec form was finished — unlike
+  // consent_terms, which the admin's manual "Dodaj voznik" flow never sets
+  // at all (no consent checkbox there), so gating on it would keep every
+  // admin-added driver's form status stuck at "not completed" forever.
+  const hasForm = !!row.licence_categories && row.licence_categories.length > 0;
 
   return {
     id: row.id,
