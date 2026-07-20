@@ -5,12 +5,11 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ADMIN_SESSION_COOKIE, revokeSession } from "@/lib/admin-auth";
 import { searchDrivers, type DriverSearchResult } from "@/lib/data/registrations";
+import { OBVESCANJE_SEEN_COOKIE } from "@/lib/obvescanje-seen";
 
 export async function searchDriversAction(query: string): Promise<DriverSearchResult[]> {
   return searchDrivers(query);
 }
-
-export const OBVESCANJE_SEEN_COOKIE = "obvescanje_seen_at";
 
 // Called on mount from the Obveščanje page — marks "now" as seen so the
 // nav's unread badge resets until the next new registration comes in.

@@ -4,7 +4,7 @@ import { AdminFooter } from "@/components/admin/AdminFooter";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { Container } from "@/components/ui/Container";
 import { montserrat, sourceSans } from "@/fonts";
-import { OBVESCANJE_SEEN_COOKIE } from "./actions";
+import { OBVESCANJE_SEEN_COOKIE } from "@/lib/obvescanje-seen";
 import { countNewRegistrationsSince } from "@/lib/data/registrations";
 import "../globals.css";
 
