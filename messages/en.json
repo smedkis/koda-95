@@ -101,6 +101,7 @@
     "mapTitle": "Session location",
     "pageTitle": "Registration confirmed",
     "completeRegistration": "Fill out the form",
+    "completeRegistrationPrompt": "Fill out the form before arriving at the training",
     "byArrangement": "By arrangement",
     "priceTbd": "Price to be determined"
   },

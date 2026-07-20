@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
+import { Text } from "@/components/ui/Typography";
 import { ConfirmationDetails } from "@/components/site/ConfirmationDetails";
 import { ConfirmationHeader } from "@/components/site/ConfirmationHeader";
 import { ConfirmationHelp } from "@/components/site/ConfirmationHelp";
@@ -40,6 +41,16 @@ export default async function PotrjenoPage({
   return (
     <Container>
       <ConfirmationHeader />
+      <div className="mx-auto mt-6 flex max-w-[680px] flex-col items-center gap-3 print:hidden">
+        <Text className="text-center text-[15px] font-medium">
+          {t("completeRegistrationPrompt")}
+        </Text>
+        <ButtonLink
+          href={`/redno-usposabljanje/${termin}/obrazec?prijava=${registration.registrationCode}`}
+        >
+          {t("completeRegistration")}
+        </ButtonLink>
+      </div>
       <ConfirmationSummary
         title={registration.terminTitle}
         date={registration.dateISO}
@@ -54,14 +65,6 @@ export default async function PotrjenoPage({
         registrationCode={registration.registrationCode}
         location={registration.address}
       />
-      <div className="mx-auto mt-6 max-w-[680px] print:hidden">
-        <ButtonLink
-          href={`/redno-usposabljanje/${termin}/obrazec?prijava=${registration.registrationCode}`}
-          className="w-full justify-center"
-        >
-          {t("completeRegistration")}
-        </ButtonLink>
-      </div>
       <ConfirmationHelp />
       <div className="mt-24 lg:mt-32 print:mt-6">
         <SectionDivider />
