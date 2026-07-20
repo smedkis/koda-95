@@ -10,6 +10,18 @@ export async function searchDriversAction(query: string): Promise<DriverSearchRe
   return searchDrivers(query);
 }
 
+export const OBVESCANJE_SEEN_COOKIE = "obvescanje_seen_at";
+
+// Called on mount from the Obveščanje page — marks "now" as seen so the
+// nav's unread badge resets until the next new registration comes in.
+export async function markObvescanjeSeenAction(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set(OBVESCANJE_SEEN_COOKIE, new Date().toISOString(), {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+  });
+}
+
 export async function logout() {
   const cookieStore = await cookies();
   revokeSession(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
@@ -63,6 +64,12 @@ export function AdminStatistikaPageContent({
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [exportMonth, setExportMonth] = useState(ALL_MONTHS);
+
+  const formCompletedCount = useMemo(
+    () => registrations.filter(({ driver }) => driver.formStatus === "izpolnjen").length,
+    [registrations],
+  );
+  const formMissingCount = registrations.length - formCompletedCount;
 
   const monthlyCounts = useMemo(() => buildMonthlyCounts(registrations), [registrations]);
   const maxCount = Math.max(1, ...monthlyCounts.map((entry) => entry.count));
@@ -144,6 +151,20 @@ export function AdminStatistikaPageContent({
       </div>
 
       <div className="mt-16">
+        <Heading3>Izpolnjeni obrazci</Heading3>
+        <div className="mt-6 grid grid-cols-2 gap-4">
+          <Box className="bg-white">
+            <Eyebrow>Izpolnjen obrazec</Eyebrow>
+            <Heading2 className="mt-2">{formCompletedCount}</Heading2>
+          </Box>
+          <Box className="bg-white">
+            <Eyebrow>Manjka obrazec</Eyebrow>
+            <Heading2 className="mt-2">{formMissingCount}</Heading2>
+          </Box>
+        </div>
+      </div>
+
+      <div className="mt-16">
         <Heading3>Prijave po mesecih</Heading3>
         <Box className="mt-6 bg-white">
           {chartMonths.length > 0 ? (
@@ -204,7 +225,9 @@ export function AdminStatistikaPageContent({
                     <Text className="text-[14px]">{driver.registrationDate ?? "—"}</Text>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <Text className="text-[14px]">{terminTitle}</Text>
+                    <Link href={`/admin/termini/${terminId}`} className="hover:underline">
+                      <Text className="text-[14px] text-primary">{terminTitle}</Text>
+                    </Link>
                   </td>
                 </tr>
               ))}
