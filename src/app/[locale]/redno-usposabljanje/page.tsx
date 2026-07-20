@@ -44,10 +44,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RednaKoda95Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ vir?: string }>;
 }) {
   const { locale } = await params;
+  const { vir } = await searchParams;
   const t = await getTranslations("Programs.redna");
   const termini = await listPublicTermini("redna-koda-95", locale);
   return (
@@ -59,7 +62,7 @@ export default async function RednaKoda95Page({
         description={t("heroDescription")}
         accent="primary"
       />
-      <TerminiSection termini={termini} />
+      <TerminiSection termini={termini} vir={vir} />
       <LogosSection />
       <SectionDivider />
       <AboutSection />

@@ -46,10 +46,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ZacetnaKoda95Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ vir?: string }>;
 }) {
   const { locale } = await params;
+  const { vir } = await searchParams;
   const t = await getTranslations("Programs.zacetna");
   const termini = await listPublicTermini("zacetna-koda-95", locale);
   return (
@@ -61,7 +64,7 @@ export default async function ZacetnaKoda95Page({
         description={t("heroDescription")}
         accent="secondary"
       />
-      <TerminiSection termini={termini} />
+      <TerminiSection termini={termini} vir={vir} />
       <LogosSection />
       <SectionDivider />
       <AboutSection />

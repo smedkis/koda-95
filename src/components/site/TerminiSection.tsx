@@ -12,7 +12,7 @@ function getDaysUntil(dateISO: string): number {
   return Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-export function TerminiSection({ termini }: { termini: TerminEntry[] }) {
+export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?: string }) {
   const t = useTranslations("TerminiSection");
 
   // Cards are always shown with the soonest upcoming termin on top, followed
@@ -51,6 +51,7 @@ export function TerminiSection({ termini }: { termini: TerminEntry[] }) {
           >
             <TerminCard
               {...cardProps}
+              href={vir ? `${cardProps.href}?vir=${vir}` : cardProps.href}
               daysUntil={cardProps.href === nextHref ? getDaysUntil(dateISO) : undefined}
             />
           </div>

@@ -36,9 +36,11 @@ export type QuickRegistrationInput = {
   consentMarketing: boolean;
   consentTerms: boolean;
   locale: string;
-  // Set when the visitor arrived via a bulk "Pošlji obvestilo" email link
-  // (?vir=obvescanje) — surfaced in the driver's own history so it's clear
-  // where the registration actually came from.
+  // Carries the ?vir= query param through from the termin page's URL —
+  // "obvescanje" for the bulk "Pošlji obvestilo" email, "website" for links
+  // from tahograficuderman.si, undefined for direct/organic site traffic.
+  // Surfaced as prijave.source so Statistika can report on it and the
+  // driver's own history notes where the registration actually came from.
   source?: string;
 };
 
@@ -58,6 +60,8 @@ export async function submitQuickRegistration(
   if (!termin) return { error: "Termin ne obstaja." };
 
   const client = getSupabaseServerClient();
+  const sourceLabel =
+    input.source === "obvescanje" ? "Obveščanje" : input.source === "website" ? "Website" : "Obrazec";
 
   if (termin.capacity !== null) {
     const { count, error: countError } = await client
@@ -84,7 +88,7 @@ export async function submitQuickRegistration(
       voznik_id: voznik.id,
       consent_marketing: input.consentMarketing,
       consent_terms: input.consentTerms,
-      source: input.source === "obvescanje" ? "Obveščanje" : "Obrazec",
+      source: sourceLabel,
     })
     .select("id, registration_code")
     .single();
@@ -106,7 +110,7 @@ export async function submitQuickRegistration(
 
   await logRegistrationEvent(
     prijava.id,
-    input.source === "obvescanje" ? "Izpolnjena prijava (Vir: Obveščanje)" : "Izpolnjena prijava",
+    input.source ? `Izpolnjena prijava (Vir: ${sourceLabel})` : "Izpolnjena prijava",
   );
 
   if (input.email) {
