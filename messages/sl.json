@@ -126,7 +126,8 @@
     "iban": "TRR",
     "reference": "Referenca",
     "amount": "Cena",
-    "noValue": "—"
+    "noValue": "—",
+    "noPriceNotice": "O ceni in načinu plačila vas bomo obvestili."
   },
   "Programs": {
     "redna": {
@@ -180,7 +181,7 @@
       "greeting": "Pozdravljeni {name},",
       "body": "Uspešno ste dokončali prijavo na {terminTitle} ({date}).",
       "codeLabel": "Koda prijave:",
-      "noPriceText": "Cena za ta termin še ni določena. O načinu plačila vas obvestimo naknadno po e-pošti.",
+      "noPriceText": "O ceni in načinu plačila vas bomo obvestili.",
       "companyPaymentText": "Plačilo v znesku {amount} bo izvedeno prek podjetja{companyLabel} na podlagi izdanega računa.",
       "amountLabel": "Znesek",
       "ibanLabel": "IBAN",

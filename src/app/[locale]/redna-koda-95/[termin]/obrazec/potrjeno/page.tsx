@@ -32,6 +32,8 @@ export default async function ObrazecPotrjenoPage({
   const registration = prijava ? await getRegistrationByCode(prijava) : null;
   if (!registration) notFound();
 
+  const t = await getTranslations("Obrazec");
+
   const isCompany = registration.payerType === "company";
   const hasPrice = registration.priceEur !== null;
 
@@ -68,7 +70,7 @@ export default async function ObrazecPotrjenoPage({
             qrDataUrl={qrDataUrl}
           />
         ) : (
-          <Text>Cena za ta termin še ni določena. O načinu plačila vas obvestimo po e-pošti.</Text>
+          <Text>{t("noPriceNotice")}</Text>
         )}
       </div>
       <ConfirmationHelp />

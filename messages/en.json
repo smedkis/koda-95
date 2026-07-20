@@ -126,7 +126,8 @@
     "iban": "IBAN",
     "reference": "Reference",
     "amount": "Amount",
-    "noValue": "—"
+    "noValue": "—",
+    "noPriceNotice": "We'll let you know the price and payment details."
   },
   "Programs": {
     "redna": {
@@ -180,7 +181,7 @@
       "greeting": "Hello {name},",
       "body": "You have successfully completed your registration for {terminTitle} ({date}).",
       "codeLabel": "Registration code:",
-      "noPriceText": "The price for this session hasn't been set yet. We'll notify you by email about the payment method.",
+      "noPriceText": "We'll let you know the price and payment details.",
       "companyPaymentText": "Payment of {amount} will be made by the company{companyLabel} via invoice.",
       "amountLabel": "Amount",
       "ibanLabel": "IBAN",

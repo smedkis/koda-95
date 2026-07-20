@@ -126,7 +126,8 @@
     "iban": "Račun",
     "reference": "Poziv na broj",
     "amount": "Iznos",
-    "noValue": "—"
+    "noValue": "—",
+    "noPriceNotice": "O ceni i načinu plaćanja ćemo vas obavestiti."
   },
   "Programs": {
     "redna": {
@@ -180,7 +181,7 @@
       "greeting": "Poštovani {name},",
       "body": "Uspešno ste dovršili prijavu za {terminTitle} ({date}).",
       "codeLabel": "Kod prijave:",
-      "noPriceText": "Cena za ovaj termin još nije određena. Obavestićemo vas mejlom o načinu plaćanja.",
+      "noPriceText": "O ceni i načinu plaćanja ćemo vas obavestiti.",
       "companyPaymentText": "Plaćanje u iznosu {amount} biće izvršeno preko preduzeća{companyLabel} na osnovu izdatog računa.",
       "amountLabel": "Iznos",
       "ibanLabel": "IBAN",
