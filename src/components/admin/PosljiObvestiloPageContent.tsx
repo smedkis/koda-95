@@ -102,6 +102,7 @@ export function PosljiObvestiloPageContent({
   const [channels, setChannels] = useState<Channels>({ email: true });
   const [isSending, setIsSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [sendResult, setSendResult] = useState<{ sent: number; failed: number } | null>(null);
 
   const emailsByStatus = useMemo(() => {
     const map = new Map<NarocnikStatus, string[]>();
@@ -157,7 +158,7 @@ export function PosljiObvestiloPageContent({
       setSendError(result.error);
       return;
     }
-    router.push("/admin/obvescanje");
+    setSendResult(result);
   };
 
   return (
@@ -241,14 +242,21 @@ export function PosljiObvestiloPageContent({
       </Box>
 
       {sendError ? <Text className="mt-4 text-red-600">{sendError}</Text> : null}
+      {sendResult ? (
+        <Text className={`mt-4 ${sendResult.failed > 0 ? "text-amber-600" : "text-green-600"}`}>
+          {sendResult.failed > 0
+            ? `Poslano ${sendResult.sent} od ${sendResult.sent + sendResult.failed} e-poštnih sporočil. ${sendResult.failed} sporočil ni bilo mogoče poslati.`
+            : `Uspešno poslano ${sendResult.sent} e-poštnih sporočil.`}
+        </Text>
+      ) : null}
       <Button
         type="button"
         variant="primary"
         className="mt-8"
-        disabled={!canSend}
-        onClick={handleSend}
+        disabled={sendResult ? false : !canSend}
+        onClick={sendResult ? () => router.push("/admin/obvescanje") : handleSend}
       >
-        {isSending ? "Pošiljam …" : "Pošlji obvestilo"}
+        {sendResult ? "Nazaj na Obveščanje" : isSending ? "Pošiljam …" : "Pošlji obvestilo"}
       </Button>
     </div>
   );

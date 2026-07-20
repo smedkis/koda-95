@@ -97,6 +97,11 @@ export async function deleteNarocnik(id: string): Promise<{ error?: string }> {
 
 export type NotificationAudience = { never: boolean; wasEnrolled: boolean; enrolled: boolean };
 
+// Resend rate-limits at 2 requests/second on most plans — batching keeps us
+// under that instead of firing every recipient at once, which would start
+// silently failing sends partway through a large audience.
+const BULK_SEND_BATCH_SIZE = 5;
+
 // The bulk "Pošlji obvestilo" send — resolves termin slugs to their real,
 // current title/public URL server-side (never trusts client-supplied
 // content for what goes in the email), filters narocniki by enrollment
@@ -105,7 +110,7 @@ export type NotificationAudience = { never: boolean; wasEnrolled: boolean; enrol
 export async function sendBulkNotification(input: {
   audience: NotificationAudience;
   terminSlugs: string[];
-}): Promise<{ sent: number } | { error: string }> {
+}): Promise<{ sent: number; failed: number } | { error: string }> {
   const terminiData = await Promise.all(input.terminSlugs.map((slug) => getTerminBySlug(slug)));
   const termini = terminiData
     .filter((termin) => termin !== null)
@@ -122,27 +127,37 @@ export async function sendBulkNotification(input: {
     if (entry.enrollment.status === "was_enrolled") return input.audience.wasEnrolled;
     return input.audience.enrolled;
   });
-  if (recipients.length === 0) return { sent: 0 };
+  if (recipients.length === 0) return { sent: 0, failed: 0 };
 
   const attachments = [getLogoAttachment()];
-  await Promise.all(
-    recipients.map((recipient) => {
-      const unsubscribeHref = `${getSiteUrl()}/odjava?id=${recipient.id}`;
-      const { subject, html } = buildBulkNotificationEmail(termini, unsubscribeHref);
-      return sendEmail({ to: recipient.email, subject, html, attachments });
-    }),
-  );
+  const sentIds: string[] = [];
+  let failed = 0;
 
-  const client = getSupabaseServerClient();
-  await client
-    .from("narocniki")
-    .update({ last_notified_at: new Date().toISOString() })
-    .in(
-      "id",
-      recipients.map((recipient) => recipient.id),
+  for (let i = 0; i < recipients.length; i += BULK_SEND_BATCH_SIZE) {
+    const batch = recipients.slice(i, i + BULK_SEND_BATCH_SIZE);
+    const results = await Promise.all(
+      batch.map(async (recipient) => {
+        const unsubscribeHref = `${getSiteUrl()}/odjava?id=${recipient.id}`;
+        const { subject, html } = buildBulkNotificationEmail(termini, unsubscribeHref);
+        const ok = await sendEmail({ to: recipient.email, subject, html, attachments });
+        return { id: recipient.id, ok };
+      }),
     );
+    for (const result of results) {
+      if (result.ok) sentIds.push(result.id);
+      else failed += 1;
+    }
+  }
 
-  return { sent: recipients.length };
+  if (sentIds.length > 0) {
+    const client = getSupabaseServerClient();
+    await client
+      .from("narocniki")
+      .update({ last_notified_at: new Date().toISOString() })
+      .in("id", sentIds);
+  }
+
+  return { sent: sentIds.length, failed };
 }
 
 // Keeps the contacts list in sync whenever a registration is created —

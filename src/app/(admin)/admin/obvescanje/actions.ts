@@ -27,7 +27,7 @@ export async function deleteNarocnikAction(id: string): Promise<{ error?: string
 export async function sendBulkNotificationAction(
   audience: NotificationAudience,
   terminSlugs: string[],
-): Promise<{ sent: number } | { error: string }> {
+): Promise<{ sent: number; failed: number } | { error: string }> {
   const result = await sendBulkNotification({ audience, terminSlugs });
   if (!("error" in result)) revalidatePath("/admin/obvescanje");
   return result;
