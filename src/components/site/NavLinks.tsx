@@ -9,8 +9,8 @@ export function NavLinks() {
   const pathname = usePathname();
   const t = useTranslations("Nav");
   const LINKS = [
-    { href: "/redna-koda-95", label: t("redna"), accent: "decoration-primary" },
-    { href: "/zacetna-koda-95", label: t("zacetna"), accent: "decoration-secondary" },
+    { href: "/redno-usposabljanje", label: t("redna"), accent: "decoration-primary" },
+    { href: "/zacetno-usposabljanje", label: t("zacetna"), accent: "decoration-secondary" },
   ] as const;
 
   // Hide on the registration form and confirmation page — don't invite

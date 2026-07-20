@@ -258,8 +258,18 @@ export async function createTermin(input: TerminInput): Promise<TerminMutationRe
 
 // --- Public site (redna/zacetna landing + termin pages) -------------------
 
+// The public URL segment is deliberately decoupled from the ProgramKey
+// stored in the DB — renaming a route shouldn't ever require a data
+// migration, and the DB value ("redna-koda-95") is also the admin's
+// internal slug prefix, which has no reason to change just because the
+// public-facing URL wording does.
+const PUBLIC_PROGRAM_PATH: Record<ProgramKey, string> = {
+  "redna-koda-95": "redno-usposabljanje",
+  "zacetna-koda-95": "zacetno-usposabljanje",
+};
+
 export function publicTerminHref(program: ProgramKey, date: string): string {
-  return `/${program}/usposabljanje-${date}`;
+  return `/${PUBLIC_PROGRAM_PATH[program]}/usposabljanje-${date}`;
 }
 
 const PUBLIC_SLUG_PATTERN = /^usposabljanje-(\d{4}-\d{2}-\d{2})$/;

@@ -56,7 +56,7 @@ export default async function PotrjenoPage({
       />
       <div className="mx-auto mt-6 max-w-[680px] print:hidden">
         <ButtonLink
-          href={`/zacetna-koda-95/${termin}/obrazec?prijava=${registration.registrationCode}`}
+          href={`/zacetno-usposabljanje/${termin}/obrazec?prijava=${registration.registrationCode}`}
           className="w-full justify-center"
         >
           {t("completeRegistration")}

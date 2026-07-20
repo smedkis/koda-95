@@ -12,19 +12,24 @@ import { TerminDetails } from "@/components/site/TerminDetails";
 import { TerminRegistrationForm } from "@/components/site/TerminRegistrationForm";
 import { getDaysUntil, isNextTermin } from "@/lib/termin-dates";
 import { TERMIN_FAQ } from "@/lib/termin-faq";
-import { buildTerminTitle, formatSlovenianDate, formatTimeRange } from "@/lib/termini-format";
 import {
+  buildTerminTitle,
+  formatPriceEur,
+  formatSlovenianDate,
+  formatTimeRange,
+} from "@/lib/termini-format";
+import {
+  countsByTermin,
   getPublicTermin,
   listPublicTermini,
   parsePublicTerminSlug,
 } from "@/lib/data/termini";
 
-const PROGRAM = "zacetna-koda-95" as const;
+const PROGRAM = "redna-koda-95" as const;
 
 // Description text isn't part of the listing card data, so it's kept here.
-// No price since Začetna Koda 95 has no fixed price, and spots are unlimited.
 const DESCRIPTION =
-  "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) po predpisanem programu. Namenjeno je novim poklicnim voznikom kategorij C in D, ki še nimajo veljavne kode 95.";
+  "Redno usposabljanje za podaljšanje kode 95 po predpisanem programu za leto 2026. Usposabljanje traja 7 ur in je namenjeno vsem poklicnim voznikom kategorij C in D, ki morajo podaljšati veljavnost temeljne kvalifikacije.";
 
 async function getTermin(slug: string) {
   const dateISO = parsePublicTerminSlug(slug);
@@ -32,10 +37,15 @@ async function getTermin(slug: string) {
   const row = await getPublicTermin(PROGRAM, dateISO);
   if (!row) return null;
 
+  const counts = await countsByTermin([row.id]);
+  const registered = counts.get(row.id)?.registered ?? 0;
+  const hasCapacity = row.capacity !== null;
+
   return {
-    title: buildTerminTitle("zacetna", row.modul),
+    title: buildTerminTitle("redna", row.modul),
     description: DESCRIPTION,
-    spotsLabel: "Neomejeno prostih mest",
+    price: formatPriceEur(row.price_eur),
+    spotsLabel: hasCapacity ? `${registered}/${row.capacity} prostih mest` : "Neomejeno prostih mest",
     date: formatSlovenianDate(row.date),
     dateISO: row.date,
     timeRange: formatTimeRange(row.start_time, row.end_time),
@@ -81,9 +91,10 @@ export default async function TerminPage({
           <div className="grid grid-cols-1 gap-16 pb-32 lg:grid-cols-5 lg:gap-24">
             <div className="min-w-0 lg:col-span-2">
               <TerminDetails
-                programHref="/zacetna-koda-95"
+                programHref="/redno-usposabljanje"
                 title={termin.title}
                 description={termin.description}
+                price={termin.price}
                 spotsLabel={termin.spotsLabel}
                 date={termin.date}
                 timeRange={termin.timeRange}
@@ -95,7 +106,7 @@ export default async function TerminPage({
                 daysUntil={daysUntil}
                 program={PROGRAM}
                 dateISO={termin.dateISO}
-                terminPath={`/zacetna-koda-95/${slug}`}
+                terminPath={`/redno-usposabljanje/${slug}`}
               />
             </div>
           </div>

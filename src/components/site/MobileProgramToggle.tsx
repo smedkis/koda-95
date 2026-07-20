@@ -12,13 +12,13 @@ export function MobileProgramToggle() {
   const pathname = usePathname();
   const t = useTranslations("Nav");
   const LINKS = [
-    { href: "/redna-koda-95", label: t("rednaShort") },
-    { href: "/zacetna-koda-95", label: t("zacetnaShort") },
+    { href: "/redno-usposabljanje", label: t("rednaShort") },
+    { href: "/zacetno-usposabljanje", label: t("zacetnaShort") },
   ] as const;
 
   // Only on the two plain landing pages — not termin detail/obrazec/potrjeno
   // sub-routes, where switching programs mid-flow isn't useful.
-  if (pathname !== "/redna-koda-95" && pathname !== "/zacetna-koda-95") {
+  if (pathname !== "/redno-usposabljanje" && pathname !== "/zacetno-usposabljanje") {
     return null;
   }
 

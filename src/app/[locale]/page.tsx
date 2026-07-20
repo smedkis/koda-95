@@ -6,5 +6,5 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  permanentRedirect({ href: "/redna-koda-95", locale });
+  permanentRedirect({ href: "/redno-usposabljanje", locale });
 }
