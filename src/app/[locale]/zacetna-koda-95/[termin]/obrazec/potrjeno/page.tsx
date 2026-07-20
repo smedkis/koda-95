@@ -10,9 +10,7 @@ import { ObrazecPaymentBox } from "@/components/site/ObrazecPaymentBox";
 import { SectionDivider } from "@/components/site/SectionDivider";
 import { generateUpnQrDataUrl } from "@/lib/upn-qr";
 import { getRegistrationByCode } from "@/lib/data/public-registration";
-
-const RECIPIENT_IBAN = "SI56 0400 0027 8541 552";
-const RECIPIENT_NAME = "Tahografi Cuderman d.o.o.";
+import { RECIPIENT_IBAN, RECIPIENT_NAME } from "@/lib/payment-info";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Obrazec");

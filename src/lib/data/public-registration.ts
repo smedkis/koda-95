@@ -1,9 +1,13 @@
 import "server-only";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { getPublicTermin, programKeyToShort } from "./termini";
+import { getPublicTermin, programKeyToShort, publicTerminHref } from "./termini";
 import { syncNarocnikFromRegistration } from "./narocniki";
 import { logRegistrationEvent } from "./registrations";
-import { buildTerminTitle, formatTimeRange } from "@/lib/termini-format";
+import { buildTerminTitle, formatSlovenianDate, formatTimeRange } from "@/lib/termini-format";
+import { sendEmail } from "@/lib/email/resend";
+import { buildCompletionEmail, buildQuickRegistrationEmail } from "@/lib/email/templates";
+import { generateUpnQrDataUrl } from "@/lib/upn-qr";
+import { RECIPIENT_IBAN, RECIPIENT_NAME } from "@/lib/payment-info";
 import type {
   LicenceCategory,
   PayerType,
@@ -12,6 +16,10 @@ import type {
   TerminiRow,
   VozniciRow,
 } from "@/lib/supabase/database.types";
+
+function getSiteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://koda95.tahograficuderman.si";
+}
 
 export type QuickRegistrationInput = {
   program: ProgramKey;
@@ -86,6 +94,17 @@ export async function submitQuickRegistration(
 
   await logRegistrationEvent(prijava.id, "Izpolnjena prijava");
 
+  if (input.email) {
+    const { subject, html } = buildQuickRegistrationEmail({
+      driverName: input.fullName,
+      registrationCode: prijava.registration_code,
+      terminTitle: buildTerminTitle(programKeyToShort(termin.program), termin.modul),
+      terminDate: formatSlovenianDate(termin.date),
+      completeFormUrl: `${getSiteUrl()}${publicTerminHref(termin.program, termin.date)}/obrazec?prijava=${prijava.registration_code}`,
+    });
+    await sendEmail({ to: input.email, subject, html });
+  }
+
   return { code: prijava.registration_code };
 }
 
@@ -123,11 +142,13 @@ export async function completeRegistration(
   const client = getSupabaseServerClient();
   const { data: prijava, error: findError } = await client
     .from("prijave")
-    .select("id, voznik_id")
+    .select("id, voznik_id, termin_id")
     .eq("registration_code", code)
     .maybeSingle();
   if (findError) return { error: findError.message };
   if (!prijava) return { error: "Prijava ne obstaja." };
+
+  let finalVoznikId = prijava.voznik_id;
 
   const personalFields = {
     date_of_birth: input.dateOfBirth || null,
@@ -182,6 +203,7 @@ export async function completeRegistration(
       .eq("voznik_id", prijava.voznik_id);
 
     await client.from("vozniki").delete().eq("id", prijava.voznik_id);
+    finalVoznikId = existing.id;
   }
 
   const { error: prijavaError } = await client
@@ -197,6 +219,58 @@ export async function completeRegistration(
   if (prijavaError) return { error: prijavaError.message };
 
   await logRegistrationEvent(prijava.id, "Izpolnil obrazec");
+
+  const [{ data: voznik }, { data: terminRow }] = await Promise.all([
+    client.from("vozniki").select("full_name, email").eq("id", finalVoznikId).single(),
+    client.from("termini").select("*").eq("id", prijava.termin_id).single(),
+  ]);
+
+  if (voznik?.email && terminRow) {
+    const hasPrice = terminRow.price_eur !== null;
+    const amount = hasPrice
+      ? new Intl.NumberFormat("sl-SI", { style: "currency", currency: "EUR" }).format(
+          terminRow.price_eur as number,
+        )
+      : null;
+    const terminTitle = buildTerminTitle(programKeyToShort(terminRow.program), terminRow.modul);
+    const reference = `SI00${code}`;
+
+    let qrCid: string | undefined;
+    let qrContent: string | undefined;
+    if (hasPrice && input.payerType === "self") {
+      const qrDataUrl = await generateUpnQrDataUrl({
+        amount: terminRow.price_eur as number,
+        iban: RECIPIENT_IBAN,
+        reference,
+        recipientName: RECIPIENT_NAME,
+        purpose: terminTitle,
+      });
+      qrCid = "upn-qr";
+      qrContent = qrDataUrl.split(",")[1];
+    }
+
+    const { subject, html } = buildCompletionEmail({
+      driverName: voznik.full_name,
+      registrationCode: code,
+      terminTitle,
+      terminDate: formatSlovenianDate(terminRow.date),
+      amount,
+      payerType: input.payerType,
+      companyName: input.companyName,
+      iban: RECIPIENT_IBAN,
+      recipientName: RECIPIENT_NAME,
+      reference,
+      qrCid,
+    });
+    await sendEmail({
+      to: voznik.email,
+      subject,
+      html,
+      attachments: qrContent
+        ? [{ filename: "placilo-qr.png", content: qrContent, contentId: qrCid }]
+        : undefined,
+    });
+  }
 
   return { ok: true };
 }
