@@ -1,6 +1,7 @@
 import "server-only";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { programKeyToShort } from "./termini";
+import { logRegistrationEvent } from "./registrations";
 import { sendEmail } from "@/lib/email/resend";
 import { buildTerminReminderEmail, getLogoAttachment } from "@/lib/email/templates";
 import { buildTerminTitle, formatSlovenianDate, formatTimeRange } from "@/lib/termini-format";
@@ -75,6 +76,7 @@ export async function sendTerminReminders(
       .from("prijave")
       .update({ reminder_sent_at: new Date().toISOString() })
       .eq("id", row.id);
+    await logRegistrationEvent(row.id, "Voznik je bil obveščen o jutrišnjem terminu.");
   }
 
   return { sent, failed };
