@@ -5,12 +5,15 @@
 // 20260713120000_narocniki.sql,
 // 20260713140000_zacetna_location_time_optional.sql,
 // 20260716090000_prijava_dogodki.sql,
-// 20260720120000_admin_sessions.sql, and
-// 20260720140000_prijave_source.sql. Keep in sync with any new migration.
+// 20260720120000_admin_sessions.sql,
+// 20260720140000_prijave_source.sql,
+// 20260721110000_licence_category_d_delno.sql,
+// 20260721120000_prijave_form_completed.sql, and
+// 20260721130000_termin_reminder.sql. Keep in sync with any new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
-export type LicenceCategory = "C" | "D";
+export type LicenceCategory = "C" | "D" | "D-delno";
 export type PayerType = "self" | "company";
 export type PaymentStatus = "pending" | "paid";
 
@@ -59,7 +62,10 @@ export type PrijaveRow = {
   consent_marketing: boolean;
   consent_terms: boolean | null;
   payment_status: PaymentStatus;
+  form_completed: boolean;
   source: string | null;
+  locale: string;
+  reminder_sent_at: string | null;
   created_at: string;
   updated_at: string;
 };

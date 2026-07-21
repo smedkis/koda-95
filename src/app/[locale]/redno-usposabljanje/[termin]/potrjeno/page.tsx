@@ -41,15 +41,15 @@ export default async function PotrjenoPage({
   return (
     <Container>
       <ConfirmationHeader />
-      <div className="mx-auto mt-6 flex max-w-[680px] flex-col items-center gap-3 print:hidden">
-        <Text className="text-center text-[15px] font-medium">
-          {t("completeRegistrationPrompt")}
-        </Text>
+      <div className="mx-auto mt-6 flex max-w-[680px] flex-col items-start gap-3 print:hidden">
         <ButtonLink
           href={`/redno-usposabljanje/${termin}/obrazec?prijava=${registration.registrationCode}`}
         >
           {t("completeRegistration")}
         </ButtonLink>
+        <Text className="text-[14px] font-medium text-[#852600]">
+          {t("completeRegistrationPrompt")}
+        </Text>
       </div>
       <ConfirmationSummary
         title={registration.terminTitle}

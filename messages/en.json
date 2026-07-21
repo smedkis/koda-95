@@ -19,6 +19,7 @@
     "reserve": "Book this session",
     "dateLabel": "Date",
     "modulLabel": "Module",
+    "priceLabel": "Price",
     "spotsLabel": "Spots available",
     "unlimited": "Unlimited",
     "timeAgreed": "Time by arrangement",
@@ -73,7 +74,7 @@
     "location": "Location",
     "mapTitle": "Session location",
     "byArrangement": "By arrangement",
-    "spotsRatio": "{registered}/{capacity} spots taken",
+    "spotsLeft": "{count, plural, one {# spot left} other {# spots left}}",
     "unlimitedSpots": "Unlimited spots"
   },
   "TerminRegistrationForm": {
@@ -101,7 +102,7 @@
     "mapTitle": "Session location",
     "pageTitle": "Registration confirmed",
     "completeRegistration": "Fill out the form",
-    "completeRegistrationPrompt": "Fill out the form before arriving at the training",
+    "completeRegistrationPrompt": "Fill out the form before arriving at the training and skip the extra paperwork.",
     "byArrangement": "By arrangement",
     "priceTbd": "Price to be determined"
   },
@@ -119,11 +120,13 @@
     "next": "Next",
     "categoryC": "Category C",
     "categoryD": "Category D",
+    "categoryDPartial": "D - partial",
     "placeOfBirth": "Place of birth",
     "countryOfBirth": "Country of birth",
     "selectCountry": "Select a country",
     "citizenship": "Citizenship",
     "emso": "EMŠO (Slovenian personal ID)",
+    "noEmso": "I don't have an EMŠO number",
     "dateOfBirth": "Date of birth",
     "residenceType": "Type of residence *",
     "permanentResidence": "Permanent residence",
@@ -150,7 +153,7 @@
     "reference": "Reference",
     "amount": "Amount",
     "noValue": "—",
-    "noPriceNotice": "We'll let you know the price and payment details."
+    "noPriceNotice": "We'll be in touch with further details about the training."
   },
   "Programs": {
     "redna": {
@@ -175,7 +178,8 @@
       "terminDescription": "Initial training to obtain the driver's Certificate of Professional Competence (CPC) according to the prescribed programme. It's intended for new professional drivers holding category C or D who don't yet hold a valid Koda 95.",
       "heroTitlePrefix": "Register for",
       "heroTitleHighlight": "initial qualification",
-      "heroTitleSuffix": "— Koda 95"
+      "heroTitleSuffix": "— Koda 95",
+      "priceFrom": "Starting from €600"
     }
   },
   "RootMeta": {
@@ -221,6 +225,16 @@
       "body": "A quick reminder to fill out the remaining details for {terminTitle} ({date}).",
       "button": "Fill out the form",
       "footer": "If you've already filled out the form, please disregard this message."
+    },
+    "terminReminder": {
+      "subject": "Your training is tomorrow — don't forget",
+      "heading": "Your training is tomorrow, don't forget!",
+      "greeting": "Hello {name},",
+      "body": "Just a friendly reminder that we're expecting you tomorrow for {terminTitle}.",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "locationLabel": "Location",
+      "footer": "If you have any questions, reply to this email."
     }
   }
 }

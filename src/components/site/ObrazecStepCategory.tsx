@@ -28,6 +28,13 @@ export function ObrazecStepCategory({
           checked={value.categoryD}
           onChange={(e) => onChange({ categoryD: e.target.checked })}
         />
+        <Checkbox
+          name="categoryDPartial"
+          label={t("categoryDPartial")}
+          labelSize="md"
+          checked={value.categoryDPartial}
+          onChange={(e) => onChange({ categoryDPartial: e.target.checked })}
+        />
       </div>
     </Box>
   );

@@ -1,5 +1,6 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Box } from "@/components/ui/Box";
+import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { Radio } from "@/components/ui/Radio";
 import { Select } from "@/components/ui/Select";
@@ -61,18 +62,32 @@ export function ObrazecStepPersonal({
         ))}
       </Select>
 
-      <Input
-        label={t("emso")}
-        placeholder={t("emso")}
-        name="emso"
-        maxLength={13}
-        value={value.emso}
-        onChange={(e) => {
-          const emso = e.target.value;
-          const parsed = parseEmsoBirthDate(emso);
-          onChange(parsed ? { emso, dateOfBirth: parsed } : { emso });
-        }}
-      />
+      <div className="flex flex-col gap-2">
+        <Input
+          label={t("emso")}
+          placeholder={t("emso")}
+          name="emso"
+          inputMode="numeric"
+          required={!value.noEmso}
+          disabled={value.noEmso}
+          maxLength={13}
+          value={value.emso}
+          onChange={(e) => {
+            const emso = e.target.value.replace(/\D/g, "").slice(0, 13);
+            const parsed = parseEmsoBirthDate(emso);
+            onChange(parsed ? { emso, dateOfBirth: parsed } : { emso });
+          }}
+        />
+        <Checkbox
+          name="noEmso"
+          label={t("noEmso")}
+          checked={value.noEmso}
+          onChange={(e) => {
+            const noEmso = e.target.checked;
+            onChange(noEmso ? { noEmso, emso: "" } : { noEmso });
+          }}
+        />
+      </div>
 
       <Input
         label={t("dateOfBirth")}

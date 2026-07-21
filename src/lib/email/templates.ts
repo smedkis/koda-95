@@ -190,6 +190,64 @@ export async function buildFormReminderEmail({
   return { subject: t("subject"), html: wrapEmail(locale, body) };
 }
 
+// Sent once, the day before a driver's session, by the termin-reminders
+// cron job — a plain "don't forget" nudge, not tied to form/payment status.
+export async function buildTerminReminderEmail({
+  locale,
+  driverName,
+  terminTitle,
+  terminDate,
+  timeRange,
+  address,
+}: {
+  locale: string;
+  driverName: string;
+  terminTitle: string;
+  terminDate: string;
+  timeRange?: string;
+  address?: string;
+}): Promise<{ subject: string; html: string }> {
+  const t = await getTranslations({ locale, namespace: "Email.terminReminder" });
+
+  const summaryTable = `
+    <table role="presentation" width="100%" style="border-collapse:collapse;margin:0 0 24px;">
+      ${summaryRow(t("dateLabel"), terminDate)}
+      ${summaryRow(t("timeLabel"), timeRange ?? NO_VALUE)}
+      ${summaryRow(t("locationLabel"), address ?? NO_VALUE)}
+    </table>
+  `;
+
+  const body = `
+    <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">${t("heading")}</h1>
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("greeting", { name: driverName })}</p>
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("body", { terminTitle })}</p>
+    ${summaryTable}
+    <p style="margin:24px 0 0;font-size:13px;color:#999999;">${t("footer")}</p>
+  `;
+  return { subject: t("subject"), html: wrapEmail(locale, body) };
+}
+
+// Notifies admin's own inbox of every new public registration — always
+// Slovenian, same rationale as the bulk announcement below (admin has no
+// i18n, so there's no visitor locale to translate into here).
+export function buildAdminNewRegistrationEmail({
+  driverName,
+  terminTitle,
+  terminDate,
+}: {
+  driverName: string;
+  terminTitle: string;
+  terminDate: string;
+}): { subject: string; html: string } {
+  const body = `
+    <p style="margin:0;font-size:15px;line-height:1.6;">Voznik <strong>${driverName}</strong> se je prijavil na <strong>${terminTitle}</strong>, ${terminDate}.</p>
+  `;
+  return {
+    subject: `Nova prijava na termin ${terminTitle}`,
+    html: wrapEmail("sl", body),
+  };
+}
+
 // Admin's bulk "Pošlji obvestilo" announcement — always Slovenian, same as
 // the rest of admin. Narocniki aren't tied to a locale (they may never have
 // registered at all), so there's no real per-recipient language to send in.

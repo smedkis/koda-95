@@ -141,11 +141,13 @@ export function AdminVoznikEditContent({
   initialDriver,
   otherTermini,
   terminTitle,
+  program,
 }: {
   terminId: string;
   initialDriver: TerminDriver;
   otherTermini: { slug: string; label: string }[];
   terminTitle: string;
+  program: "redna" | "zacetna";
 }) {
   const router = useRouter();
   const [driver, setDriver] = useState(initialDriver);
@@ -377,27 +379,36 @@ export function AdminVoznikEditContent({
           </Box>
         </div>
 
-        <div>
-          <CardHeader icon="/Card.svg" label="Kategorija" />
-          <Box className="bg-white">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between gap-4">
-                <TextMedium>Kategorija C</TextMedium>
-                <YesNoToggle
-                  value={!!driver.categoryC}
-                  onChange={(value) => update("categoryC", value)}
-                />
+        {program === "zacetna" ? (
+          <div>
+            <CardHeader icon="/Card.svg" label="Kategorija" />
+            <Box className="bg-white">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-between gap-4">
+                  <TextMedium>Kategorija C</TextMedium>
+                  <YesNoToggle
+                    value={!!driver.categoryC}
+                    onChange={(value) => update("categoryC", value)}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <TextMedium>Kategorija D</TextMedium>
+                  <YesNoToggle
+                    value={!!driver.categoryD}
+                    onChange={(value) => update("categoryD", value)}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <TextMedium>D - delno</TextMedium>
+                  <YesNoToggle
+                    value={!!driver.categoryDPartial}
+                    onChange={(value) => update("categoryDPartial", value)}
+                  />
+                </div>
               </div>
-              <div className="flex items-center justify-between gap-4">
-                <TextMedium>Kategorija D</TextMedium>
-                <YesNoToggle
-                  value={!!driver.categoryD}
-                  onChange={(value) => update("categoryD", value)}
-                />
-              </div>
-            </div>
-          </Box>
-        </div>
+            </Box>
+          </div>
+        ) : null}
 
         {saveError ? <Text className="text-red-600">{saveError}</Text> : null}
         <div className="flex items-center justify-between">

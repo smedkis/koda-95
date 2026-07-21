@@ -11,6 +11,7 @@ import {
 } from "@/lib/termini-format";
 import { sendEmail } from "@/lib/email/resend";
 import {
+  buildAdminNewRegistrationEmail,
   buildCompletionEmail,
   buildQuickRegistrationEmail,
   getLogoAttachment,
@@ -26,6 +27,11 @@ import type {
   TerminiRow,
   VozniciRow,
 } from "@/lib/supabase/database.types";
+
+// Notified of every public registration regardless of which visitor locale
+// it came in — the shared admin inbox (same address shown as the contact
+// email across the site) plus a personal copy.
+const ADMIN_NOTIFICATION_EMAILS = ["koda95@tahograficuderman.si", "info@gregacuderman.com"];
 
 export type QuickRegistrationInput = {
   program: ProgramKey;
@@ -89,6 +95,7 @@ export async function submitQuickRegistration(
       consent_marketing: input.consentMarketing,
       consent_terms: input.consentTerms,
       source: sourceLabel,
+      locale: input.locale,
     })
     .select("id, registration_code")
     .single();
@@ -122,18 +129,32 @@ export async function submitQuickRegistration(
       terminDate: formatSlovenianDate(termin.date, input.locale),
       timeRange: formatTimeRange(termin.start_time, termin.end_time),
       address: termin.address ?? undefined,
-      price: formatPriceEur(termin.price_eur),
+      price: formatPriceEur(termin.price_eur, programKeyToShort(termin.program), input.locale),
       completeFormUrl: `${getSiteUrl()}${publicTerminHref(termin.program, termin.date)}/obrazec?prijava=${prijava.registration_code}`,
     });
     await sendEmail({ to: input.email, subject, html, attachments: [getLogoAttachment()] });
   }
+
+  const adminNotification = buildAdminNewRegistrationEmail({
+    driverName: input.fullName,
+    terminTitle: buildTerminTitle(programKeyToShort(termin.program), termin.modul),
+    terminDate: formatSlovenianDate(termin.date),
+  });
+  await sendEmail({
+    to: ADMIN_NOTIFICATION_EMAILS,
+    subject: adminNotification.subject,
+    html: adminNotification.html,
+    attachments: [getLogoAttachment()],
+  });
 
   return { code: prijava.registration_code };
 }
 
 export type CompleteRegistrationInput = {
   locale: string;
-  licenceCategories: LicenceCategory[];
+  // null for Redno usposabljanje — only Začetno usposabljanje drivers have a
+  // licence category to record.
+  licenceCategories: LicenceCategory[] | null;
   placeOfBirth: string;
   countryOfBirth: string;
   citizenship: string;
@@ -238,6 +259,7 @@ export async function completeRegistration(
       company_name: input.payerType === "company" ? input.companyName || null : null,
       company_tax_number: input.payerType === "company" ? input.companyTaxNumber || null : null,
       company_email: input.payerType === "company" ? input.companyEmail || null : null,
+      form_completed: true,
     })
     .eq("id", prijava.id);
   if (prijavaError) return { error: prijavaError.message };

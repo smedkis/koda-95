@@ -20,10 +20,19 @@ import { INITIAL_OBRAZEC_FORM_DATA, type ObrazecFormData } from "@/lib/obrazec-f
 import { completeRegistrationAction } from "@/app/[locale]/actions";
 import type { LicenceCategory } from "@/lib/supabase/database.types";
 
-export function ObrazecForm() {
+type StepKind = "category" | "personal" | "payment";
+
+// Only Začetno usposabljanje drivers have a licence category — Redno skips
+// straight to personal details, so its wizard is 2 steps, not 3.
+function stepsFor(program: "redna" | "zacetna"): StepKind[] {
+  return program === "zacetna" ? ["category", "personal", "payment"] : ["personal", "payment"];
+}
+
+export function ObrazecForm({ program }: { program: "redna" | "zacetna" }) {
   const t = useTranslations("Obrazec");
   const locale = useLocale();
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const steps = stepsFor(program);
+  const [stepIndex, setStepIndex] = useState(0);
   const [formData, setFormData] = useState<ObrazecFormData>(INITIAL_OBRAZEC_FORM_DATA);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -45,18 +54,19 @@ export function ObrazecForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const STEP_TITLES = {
-    1: t("step1Title"),
-    2: t("step2Title"),
-    3: t("step3Title"),
-  } as const;
+  const STEP_TITLE_BY_KIND: Record<StepKind, string> = {
+    category: t("step1Title"),
+    personal: t("step2Title"),
+    payment: t("step3Title"),
+  };
+  const currentStepKind = steps[stepIndex];
 
   const updateFormData = (patch: Partial<ObrazecFormData>) =>
     setFormData((current) => ({ ...current, ...patch }));
 
   const handleNext = async () => {
-    if (step < 3) {
-      setStep((current) => (current + 1) as 1 | 2 | 3);
+    if (stepIndex < steps.length - 1) {
+      setStepIndex((current) => current + 1);
       return;
     }
 
@@ -65,10 +75,14 @@ export function ObrazecForm() {
       return;
     }
 
-    const licenceCategories: LicenceCategory[] = [
-      ...(formData.categoryC ? (["C"] as const) : []),
-      ...(formData.categoryD ? (["D"] as const) : []),
-    ];
+    const licenceCategories: LicenceCategory[] | null =
+      program === "zacetna"
+        ? [
+            ...(formData.categoryC ? (["C"] as const) : []),
+            ...(formData.categoryD ? (["D"] as const) : []),
+            ...(formData.categoryDPartial ? (["D-delno"] as const) : []),
+          ]
+        : null;
 
     setIsSubmitting(true);
     setSubmitError(null);
@@ -101,47 +115,51 @@ export function ObrazecForm() {
 
   const handleBack = () => {
     setSubmitError(null);
-    setStep((current) => (current - 1) as 1 | 2 | 3);
+    setStepIndex((current) => current - 1);
   };
 
-  const step1Valid = formData.categoryC || formData.categoryD;
-  const step2Valid =
-    formData.placeOfBirth.trim() !== "" &&
-    formData.countryOfBirth.trim() !== "" &&
-    formData.citizenship.trim() !== "" &&
-    formData.dateOfBirth.trim() !== "" &&
-    formData.residenceType !== null &&
-    formData.address.trim() !== "" &&
-    formData.postalCode.trim() !== "" &&
-    formData.city.trim() !== "";
-  const step3Valid =
-    formData.payerType === "self" || formData.companyName.trim() !== "";
+  const stepValid: Record<StepKind, boolean> = {
+    category: formData.categoryC || formData.categoryD || formData.categoryDPartial,
+    personal:
+      formData.placeOfBirth.trim() !== "" &&
+      formData.countryOfBirth.trim() !== "" &&
+      formData.citizenship.trim() !== "" &&
+      (formData.noEmso || formData.emso.length === 13) &&
+      formData.dateOfBirth.trim() !== "" &&
+      formData.residenceType !== null &&
+      formData.address.trim() !== "" &&
+      formData.postalCode.trim() !== "" &&
+      formData.city.trim() !== "",
+    payment: formData.payerType === "self" || formData.companyName.trim() !== "",
+  };
 
   const nextDisabled =
-    (step === 1 && !step1Valid) ||
-    (step === 2 && !step2Valid) ||
-    (step === 3 && (!step3Valid || isSubmitting));
+    !stepValid[currentStepKind] || (currentStepKind === "payment" && isSubmitting);
 
   return (
     <>
-      <ObrazecProgress step={step} />
+      <ObrazecProgress step={stepIndex + 1} totalSteps={steps.length} />
       <Container>
         <ObrazecHeader />
-        <ObrazecStepHeader sectionTitle={STEP_TITLES[step]} step={step} />
+        <ObrazecStepHeader
+          sectionTitle={STEP_TITLE_BY_KIND[currentStepKind]}
+          step={stepIndex + 1}
+          totalSteps={steps.length}
+        />
         <div className="mx-auto mt-4 max-w-[680px]">
-          {step === 1 ? (
+          {currentStepKind === "category" ? (
             <ObrazecStepCategory value={formData} onChange={updateFormData} />
           ) : null}
-          {step === 2 ? (
+          {currentStepKind === "personal" ? (
             <ObrazecStepPersonal value={formData} onChange={updateFormData} />
           ) : null}
-          {step === 3 ? (
+          {currentStepKind === "payment" ? (
             <ObrazecStepPayment value={formData} onChange={updateFormData} />
           ) : null}
           {submitError ? <Text className="mt-4 text-red-600">{submitError}</Text> : null}
         </div>
         <ObrazecActions
-          showBack={step > 1}
+          showBack={stepIndex > 0}
           nextDisabled={nextDisabled}
           onNext={handleNext}
           onBack={handleBack}

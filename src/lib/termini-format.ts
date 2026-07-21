@@ -16,6 +16,7 @@ import sr from "../../messages/sr.json";
 type Messages = {
   Weekdays: string[];
   TerminTitle: { redna: string; zacetna: string };
+  Programs: { zacetna: { priceFrom: string } };
 };
 const MESSAGES: Record<string, Messages> = { sl, en, sr };
 
@@ -63,8 +64,18 @@ export function parseModul(title: string): string | undefined {
   return match ? match[1] : undefined;
 }
 
-export function formatPriceEur(priceEur: number | null): string | undefined {
-  if (priceEur === null) return undefined;
+// Začetno usposabljanje termini can go live with no fixed price yet — rather
+// than showing nothing, the public site shows a "starting from" estimate
+// (client-provided figure) instead. Redna termini always have a real price
+// by the time they're published, so no program arg means no fallback.
+export function formatPriceEur(
+  priceEur: number | null,
+  program?: "redna" | "zacetna",
+  locale = "sl",
+): string | undefined {
+  if (priceEur === null) {
+    return program === "zacetna" ? getMessages(locale).Programs.zacetna.priceFrom : undefined;
+  }
   return `${priceEur} EUR z DDV`;
 }
 

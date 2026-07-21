@@ -3,17 +3,15 @@
 import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 
-const TOTAL_STEPS = 3;
-
-export function ObrazecProgress({ step }: { step: 1 | 2 | 3 }) {
+export function ObrazecProgress({ step, totalSteps = 3 }: { step: number; totalSteps?: number }) {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
     // Start at 0 on mount, then animate to the target width on the next
     // frame so the fill visibly grows in rather than jumping straight there.
-    const frame = requestAnimationFrame(() => setWidth((step / TOTAL_STEPS) * 100));
+    const frame = requestAnimationFrame(() => setWidth((step / totalSteps) * 100));
     return () => cancelAnimationFrame(frame);
-  }, [step]);
+  }, [step, totalSteps]);
 
   return (
     <Container>

@@ -25,7 +25,7 @@ const CUSTOM_LOCATION = "drugo";
 // Redna Koda 95 is split into yearly modules (35h spread over 5 years) — the
 // module year shows up in the termin title, independent of the session's
 // actual calendar date. Začetna has no module concept, just dated sessions.
-const MODUL_OPTIONS = ["2026", "2025", "2024", "2023", "2022", "2021", "2020"];
+const MODUL_OPTIONS = ["2026", "2025", "2024", "2023", "2022"];
 
 function ProgramToggle({
   program,
@@ -82,7 +82,9 @@ export function AdminTerminForm({
     return initialAddress && !LOCATION_PRESETS.includes(initialAddress) ? initialAddress : "";
   });
   const address = locationChoice === CUSTOM_LOCATION ? customAddress : locationChoice;
-  const [capacity, setCapacity] = useState(initialTermin?.capacity ?? 24);
+  const [capacity, setCapacity] = useState(
+    initialTermin?.capacity ?? (program === "zacetna" ? 10 : 24),
+  );
   const [price, setPrice] = useState(initialTermin?.price?.match(/\d+/)?.[0] ?? "50");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -90,12 +92,20 @@ export function AdminTerminForm({
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
-  // Začetna Koda 95 has no fixed location, time, capacity or price — all
-  // agreed individually — so none of those fields apply/are required.
+  // Začetna Koda 95 has no fixed location, time or price — all agreed
+  // individually — but capacity is tracked the same way as Redna.
   const isValid =
     date.length > 0 &&
+    capacity > 0 &&
     (program === "zacetna" ||
-      (startTime.length > 0 && endTime.length > 0 && address.trim().length > 0 && capacity > 0));
+      (startTime.length > 0 && endTime.length > 0 && address.trim().length > 0));
+
+  const handleProgramChange = (nextProgram: Program) => {
+    setProgram(nextProgram);
+    // Only nudge the default on a fresh termin — never overwrite a real
+    // saved capacity if an existing termin's program is (unusually) edited.
+    if (!isEdit) setCapacity(nextProgram === "zacetna" ? 10 : 24);
+  };
 
   const title =
     program === "redna"
@@ -110,8 +120,8 @@ export function AdminTerminForm({
       date: date ? formatSlovenianDate(date) : "Izberi datum",
       address: program === "redna" ? address || "Vnesi lokacijo" : undefined,
       timeRange: program === "redna" ? formatTimeRange(startTime, endTime) : undefined,
-      attendeeCount: program === "zacetna" ? undefined : (initialTermin?.attendeeCount ?? 0),
-      capacity: program === "zacetna" ? undefined : capacity || 0,
+      attendeeCount: initialTermin?.attendeeCount ?? 0,
+      capacity: capacity || 0,
       registeredCount: initialTermin?.registeredCount ?? 0,
       formsCompletedCount: initialTermin?.formsCompletedCount ?? 0,
       paidCount: initialTermin?.paidCount ?? 0,
@@ -131,7 +141,7 @@ export function AdminTerminForm({
       startTime: program === "redna" ? startTime : undefined,
       endTime: program === "redna" ? endTime : undefined,
       address: program === "redna" ? address : undefined,
-      capacity: program === "redna" ? capacity : undefined,
+      capacity,
       price: program === "redna" ? Number(price) : undefined,
       modul: program === "redna" ? Number(modul) : undefined,
     };
@@ -168,7 +178,7 @@ export function AdminTerminForm({
         <div className="mt-6 flex flex-col gap-6">
           <div>
             <Eyebrow className="mb-2">Program</Eyebrow>
-            <ProgramToggle program={program} onChange={setProgram} />
+            <ProgramToggle program={program} onChange={handleProgramChange} />
           </div>
           {program === "redna" ? (
             <Select
@@ -232,14 +242,6 @@ export function AdminTerminForm({
                 ) : null}
               </div>
               <Input
-                label="Kapaciteta"
-                type="number"
-                min={1}
-                required
-                value={capacity}
-                onChange={(event) => setCapacity(Number(event.target.value))}
-              />
-              <Input
                 label="Cena (EUR)"
                 type="number"
                 min={0}
@@ -250,9 +252,17 @@ export function AdminTerminForm({
             </>
           ) : (
             <Text className="text-placeholder">
-              Lokacija, ura, kapaciteta in cena so pri Začetni Kodi 95 po dogovoru.
+              Lokacija, ura in cena so pri Začetni Kodi 95 po dogovoru.
             </Text>
           )}
+          <Input
+            label="Kapaciteta"
+            type="number"
+            min={1}
+            required
+            value={capacity}
+            onChange={(event) => setCapacity(Number(event.target.value))}
+          />
         </div>
         {errorMessage ? <Text className="mt-4 text-red-600">{errorMessage}</Text> : null}
         <div className="mt-8 flex items-center justify-between">

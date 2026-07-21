@@ -44,7 +44,7 @@ async function getTermin(slug: string, locale: string) {
     description: pt("terminDescription"),
     price: formatPriceEur(row.price_eur),
     spotsLabel: hasCapacity
-      ? td("spotsRatio", { registered, capacity: row.capacity as number })
+      ? td("spotsLeft", { count: Math.max(0, (row.capacity as number) - registered) })
       : td("unlimitedSpots"),
     date: formatSlovenianDate(row.date, locale),
     dateISO: row.date,

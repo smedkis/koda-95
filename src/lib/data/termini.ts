@@ -99,17 +99,16 @@ export async function countsByTermin(
   const client = getSupabaseServerClient();
   const { data, error } = await client
     .from("prijave")
-    .select("termin_id, licence_categories, payment_status")
+    .select("termin_id, form_completed, payment_status")
     .in("termin_id", terminIds);
   if (error) throw new Error(error.message);
 
   for (const row of data ?? []) {
     const current = counts.get(row.termin_id) ?? { registered: 0, formsCompleted: 0, paid: 0 };
     current.registered += 1;
-    // licence_categories is only ever written by completeRegistration, so
-    // its presence alone is a reliable "form finished" signal — see the
-    // matching note in registrations.ts's toTerminDriver.
-    if (row.licence_categories && row.licence_categories.length > 0) {
+    // form_completed is only ever set by completeRegistration, regardless of
+    // program — see the matching note in registrations.ts's toTerminDriver.
+    if (row.form_completed) {
       current.formsCompleted += 1;
     }
     if (row.payment_status === "paid") current.paid += 1;
@@ -303,7 +302,7 @@ function toPublicEntry(row: TerminiRow, registeredCount: number, locale: string)
     dateISO: row.date,
     address: row.address ?? undefined,
     timeRange: formatTimeRange(row.start_time, row.end_time),
-    price: formatPriceEur(row.price_eur),
+    price: formatPriceEur(row.price_eur, KEY_TO_PROGRAM[row.program], locale),
     attendeeCount: hasCapacity ? registeredCount : undefined,
     capacity: row.capacity ?? undefined,
     href: publicTerminHref(row.program, row.date),

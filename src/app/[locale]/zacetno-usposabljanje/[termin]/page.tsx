@@ -12,8 +12,14 @@ import { TerminDetails } from "@/components/site/TerminDetails";
 import { TerminRegistrationForm } from "@/components/site/TerminRegistrationForm";
 import { getDaysUntil, isNextTermin } from "@/lib/termin-dates";
 import { TERMIN_FAQ } from "@/lib/termin-faq";
-import { buildTerminTitle, formatSlovenianDate, formatTimeRange } from "@/lib/termini-format";
 import {
+  buildTerminTitle,
+  formatPriceEur,
+  formatSlovenianDate,
+  formatTimeRange,
+} from "@/lib/termini-format";
+import {
+  countsByTermin,
   getPublicTermin,
   listPublicTermini,
   parsePublicTerminSlug,
@@ -27,13 +33,19 @@ async function getTermin(slug: string, locale: string) {
   const row = await getPublicTermin(PROGRAM, dateISO);
   if (!row) return null;
 
+  const counts = await countsByTermin([row.id]);
+  const registered = counts.get(row.id)?.registered ?? 0;
+  const hasCapacity = row.capacity !== null;
   const td = await getTranslations({ locale, namespace: "TerminDetails" });
   const pt = await getTranslations({ locale, namespace: "Programs.zacetna" });
 
   return {
     title: buildTerminTitle("zacetna", row.modul, locale),
     description: pt("terminDescription"),
-    spotsLabel: td("unlimitedSpots"),
+    price: formatPriceEur(row.price_eur, "zacetna", locale),
+    spotsLabel: hasCapacity
+      ? td("spotsLeft", { count: Math.max(0, (row.capacity as number) - registered) })
+      : td("unlimitedSpots"),
     date: formatSlovenianDate(row.date, locale),
     dateISO: row.date,
     timeRange: formatTimeRange(row.start_time, row.end_time),
@@ -85,6 +97,7 @@ export default async function TerminPage({
                 programHref="/zacetno-usposabljanje"
                 title={termin.title}
                 description={termin.description}
+                price={termin.price}
                 spotsLabel={termin.spotsLabel}
                 date={termin.date}
                 timeRange={termin.timeRange}

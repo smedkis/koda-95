@@ -19,6 +19,7 @@
     "reserve": "Rezerviraj termin",
     "dateLabel": "Datum",
     "modulLabel": "Modul",
+    "priceLabel": "Cena",
     "spotsLabel": "Prosta mesta",
     "unlimited": "Neomejeno",
     "timeAgreed": "Ura po dogovoru",
@@ -73,7 +74,7 @@
     "location": "Lokacija",
     "mapTitle": "Lokacija termina",
     "byArrangement": "Po dogovoru",
-    "spotsRatio": "{registered}/{capacity} prostih mest",
+    "spotsLeft": "{count, plural, one {# prosto mesto} two {# prosti mesti} few {# prosta mesta} other {# prostih mest}}",
     "unlimitedSpots": "Neomejeno prostih mest"
   },
   "TerminRegistrationForm": {
@@ -101,7 +102,7 @@
     "mapTitle": "Lokacija termina",
     "pageTitle": "Prijava potrjena",
     "completeRegistration": "Izpolni obrazec",
-    "completeRegistrationPrompt": "Izpolni obrazec pred prihodom na usposabljanje",
+    "completeRegistrationPrompt": "Izpolni obrazec pred prihodom na usposabljanje in izogni se dodatni administraciji.",
     "byArrangement": "Po dogovoru",
     "priceTbd": "Cena bo znana naknadno"
   },
@@ -119,11 +120,13 @@
     "next": "Naprej",
     "categoryC": "Kategorija C",
     "categoryD": "Kategorija D",
+    "categoryDPartial": "D - delno",
     "placeOfBirth": "Kraj rojstva",
     "countryOfBirth": "Država rojstva",
     "selectCountry": "Izberite državo",
     "citizenship": "Državljanstvo",
     "emso": "EMŠO",
+    "noEmso": "Nimam EMŠO številke",
     "dateOfBirth": "Datum rojstva",
     "residenceType": "Vrsta prebivališča *",
     "permanentResidence": "Stalno prebivališče",
@@ -150,7 +153,7 @@
     "reference": "Referenca",
     "amount": "Cena",
     "noValue": "—",
-    "noPriceNotice": "O ceni in načinu plačila vas bomo obvestili."
+    "noPriceNotice": "Za dodatne informacije o usposabljanju vas bomo naknadno obvestili."
   },
   "Programs": {
     "redna": {
@@ -175,7 +178,8 @@
       "terminDescription": "Začetno usposabljanje za pridobitev temeljne kvalifikacije voznika (TKV) po predpisanem programu. Namenjeno je novim poklicnim voznikom kategorij C in D, ki še nimajo veljavne kode 95.",
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "začetno usposabljanje",
-      "heroTitleSuffix": "Koda 95"
+      "heroTitleSuffix": "Koda 95",
+      "priceFrom": "Že od 600 EUR naprej"
     }
   },
   "RootMeta": {
@@ -221,6 +225,16 @@
       "body": "Prijazno vas opominjamo, da izpolnite preostale podatke za {terminTitle} ({date}).",
       "button": "Izpolni obrazec",
       "footer": "Če ste obrazec že izpolnili, to sporočilo prezrite."
+    },
+    "terminReminder": {
+      "subject": "Jutri je usposabljanje — ne pozabite",
+      "heading": "Jutri je usposabljanje, ne pozabite!",
+      "greeting": "Pozdravljeni {name},",
+      "body": "To je prijazen opomnik, da vas jutri pričakujemo na {terminTitle}.",
+      "dateLabel": "Datum",
+      "timeLabel": "Ura",
+      "locationLabel": "Lokacija",
+      "footer": "Če imate vprašanja, nam pišite na to e-pošto."
     }
   }
 }

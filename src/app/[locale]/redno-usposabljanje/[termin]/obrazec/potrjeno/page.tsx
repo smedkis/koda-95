@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
-import { Text } from "@/components/ui/Typography";
 import { ConfirmationHelp } from "@/components/site/ConfirmationHelp";
 import { Footer } from "@/components/site/Footer";
 import { ObrazecConfirmedHeader } from "@/components/site/ObrazecConfirmedHeader";
@@ -58,9 +57,9 @@ export default async function ObrazecPotrjenoPage({
 
   return (
     <Container>
-      <ObrazecConfirmedHeader />
-      <div className="mx-auto mt-16 max-w-[680px]">
-        {hasPrice ? (
+      <ObrazecConfirmedHeader description={hasPrice ? undefined : t("noPriceNotice")} />
+      {hasPrice ? (
+        <div className="mx-auto mt-16 max-w-[680px]">
           <ObrazecPaymentBox
             payerType={isCompany ? "company" : "self"}
             companyName={registration.companyName ?? undefined}
@@ -71,10 +70,8 @@ export default async function ObrazecPotrjenoPage({
             recipientName={RECIPIENT_NAME}
             qrDataUrl={qrDataUrl}
           />
-        ) : (
-          <Text>{t("noPriceNotice")}</Text>
-        )}
-      </div>
+        </div>
+      ) : null}
       <ConfirmationHelp />
       <div className="mt-24 lg:mt-32">
         <SectionDivider />

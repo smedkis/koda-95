@@ -80,19 +80,24 @@ export function TerminCard({
     ? Math.round((displayedAttendeeCount / (capacity as number)) * 100)
     : 0;
   const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - displayedAttendeeCount) : 0;
-  const isScarce = hasCapacity && spotsLeft < 10;
+  const isScarce = hasCapacity && spotsLeft <= 3;
 
   // The two facts someone scans a termin card for first: when it is, and
   // either which module it is or whether there's still room. Price moves
   // down to the secondary row instead (client wanted these two swapped).
+  // Začetna has no modul, so its top-right slot shows price instead — spots
+  // availability lives exclusively in the progress bar below, not repeated
+  // here too.
   const heroRight = modul
     ? { icon: "/Category.svg", label: t("modulLabel"), value: modul }
-    : hasCapacity
-      ? { icon: "/icon-profile.svg", label: t("spotsLabel"), value: `${attendeeCount}/${capacity}` }
-      : { icon: "/icon-profile.svg", label: t("spotsLabel"), value: t("unlimited") };
+    : price
+      ? { icon: "/icon-ticket.svg", label: t("priceLabel"), value: price }
+      : hasCapacity
+        ? { icon: "/icon-profile.svg", label: t("spotsLabel"), value: `${attendeeCount}/${capacity}` }
+        : { icon: "/icon-profile.svg", label: t("spotsLabel"), value: t("unlimited") };
 
   const secondaryItems: { icon: string; label: string }[] = [];
-  if (price) secondaryItems.push({ icon: "/icon-ticket.svg", label: price });
+  if (price && modul) secondaryItems.push({ icon: "/icon-ticket.svg", label: price });
   secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? t("timeAgreed") });
   secondaryItems.push({ icon: "/icon-location.svg", label: address ?? t("locationAgreed") });
 

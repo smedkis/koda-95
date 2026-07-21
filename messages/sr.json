@@ -19,6 +19,7 @@
     "reserve": "Rezerviši termin",
     "dateLabel": "Datum",
     "modulLabel": "Modul",
+    "priceLabel": "Cena",
     "spotsLabel": "Slobodna mesta",
     "unlimited": "Neograničeno",
     "timeAgreed": "Vreme po dogovoru",
@@ -73,7 +74,7 @@
     "location": "Lokacija",
     "mapTitle": "Lokacija termina",
     "byArrangement": "Po dogovoru",
-    "spotsRatio": "{registered}/{capacity} zauzetih mesta",
+    "spotsLeft": "{count, plural, one {# slobodno mesto} few {# slobodna mesta} other {# slobodnih mesta}}",
     "unlimitedSpots": "Neograničeno mesta"
   },
   "TerminRegistrationForm": {
@@ -101,7 +102,7 @@
     "mapTitle": "Lokacija termina",
     "pageTitle": "Prijava potvrđena",
     "completeRegistration": "Popuni obrazac",
-    "completeRegistrationPrompt": "Popuni obrazac pre dolaska na obuku",
+    "completeRegistrationPrompt": "Popuni obrazac pre dolaska na obuku i izbegni dodatnu administraciju.",
     "byArrangement": "Po dogovoru",
     "priceTbd": "Cena će biti naknadno određena"
   },
@@ -119,11 +120,13 @@
     "next": "Dalje",
     "categoryC": "Kategorija C",
     "categoryD": "Kategorija D",
+    "categoryDPartial": "D - delimično",
     "placeOfBirth": "Mesto rođenja",
     "countryOfBirth": "Država rođenja",
     "selectCountry": "Izaberite državu",
     "citizenship": "Državljanstvo",
-    "emso": "EMŠO (slovenački lični broj)",
+    "emso": "JMBG",
+    "noEmso": "Nemam JMBG broj",
     "dateOfBirth": "Datum rođenja",
     "residenceType": "Vrsta prebivališta *",
     "permanentResidence": "Stalno prebivalište",
@@ -150,7 +153,7 @@
     "reference": "Poziv na broj",
     "amount": "Iznos",
     "noValue": "—",
-    "noPriceNotice": "O ceni i načinu plaćanja ćemo vas obavestiti."
+    "noPriceNotice": "O dodatnim informacijama o obuci ćemo vas naknadno obavestiti."
   },
   "Programs": {
     "redna": {
@@ -175,7 +178,8 @@
       "terminDescription": "Osnovna obuka za sticanje osnovne kvalifikacije vozača (TKV) po propisanom programu. Namenjena je novim profesionalnim vozačima kategorija C i D koji još uvek nemaju važeći kod 95.",
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "osnovnu kvalifikaciju",
-      "heroTitleSuffix": "Koda 95"
+      "heroTitleSuffix": "Koda 95",
+      "priceFrom": "Već od 600 EUR"
     }
   },
   "RootMeta": {
@@ -221,6 +225,16 @@
       "body": "Podsećamo vas da popunite preostale podatke za {terminTitle} ({date}).",
       "button": "Popuni obrazac",
       "footer": "Ako ste obrazac već popunili, zanemarite ovu poruku."
+    },
+    "terminReminder": {
+      "subject": "Sutra je obuka — ne zaboravite",
+      "heading": "Sutra je obuka, ne zaboravite!",
+      "greeting": "Poštovani {name},",
+      "body": "Ovo je prijateljski podsetnik da vas sutra očekujemo na {terminTitle}.",
+      "dateLabel": "Datum",
+      "timeLabel": "Vreme",
+      "locationLabel": "Lokacija",
+      "footer": "Ako imate pitanja, odgovorite na ovaj mejl."
     }
   }
 }

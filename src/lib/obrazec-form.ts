@@ -1,10 +1,12 @@
 export type ObrazecFormData = {
   categoryC: boolean;
   categoryD: boolean;
+  categoryDPartial: boolean;
   placeOfBirth: string;
   countryOfBirth: string;
   citizenship: string;
   emso: string;
+  noEmso: boolean;
   dateOfBirth: string;
   residenceType: "permanent" | "temporary" | null;
   address: string;
@@ -19,10 +21,12 @@ export type ObrazecFormData = {
 export const INITIAL_OBRAZEC_FORM_DATA: ObrazecFormData = {
   categoryC: false,
   categoryD: false,
+  categoryDPartial: false,
   placeOfBirth: "",
   countryOfBirth: "",
   citizenship: "",
   emso: "",
+  noEmso: false,
   dateOfBirth: "",
   residenceType: null,
   address: "",

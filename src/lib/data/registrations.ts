@@ -28,12 +28,10 @@ type JoinedPrijava = PrijaveRow & { vozniki: VozniciRow };
 
 function toTerminDriver(row: JoinedPrijava, priceEur: number | null): TerminDriver {
   const v = row.vozniki;
-  // licence_categories is only ever written by completeRegistration, so its
-  // presence alone reliably means the /obrazec form was finished — unlike
-  // consent_terms, which the admin's manual "Dodaj voznik" flow never sets
-  // at all (no consent checkbox there), so gating on it would keep every
-  // admin-added driver's form status stuck at "not completed" forever.
-  const hasForm = !!row.licence_categories && row.licence_categories.length > 0;
+  // form_completed is only ever set by completeRegistration, regardless of
+  // program — licence_categories can't be used for this anymore since Redno
+  // usposabljanje doesn't collect one at all (Začetna-only).
+  const hasForm = row.form_completed;
 
   return {
     id: row.id,
@@ -52,6 +50,7 @@ function toTerminDriver(row: JoinedPrijava, priceEur: number | null): TerminDriv
     city: v.city ?? undefined,
     categoryC: row.licence_categories?.includes("C") ?? false,
     categoryD: row.licence_categories?.includes("D") ?? false,
+    categoryDPartial: row.licence_categories?.includes("D-delno") ?? false,
     paymentMethod: row.payer_type === "company" ? "Nakazilo (podjetje)" : "Nakazilo",
     paymentAmount: priceEur !== null ? `${priceEur} EUR` : undefined,
     paymentReference: row.registration_code,
@@ -218,6 +217,7 @@ export async function updateRegistration(
   const licenceCategories = [
     ...(driver.categoryC ? (["C"] as const) : []),
     ...(driver.categoryD ? (["D"] as const) : []),
+    ...(driver.categoryDPartial ? (["D-delno"] as const) : []),
   ];
 
   const { error: prijavaError } = await client

@@ -23,6 +23,7 @@ export type TerminDriver = {
   city?: string;
   categoryC?: boolean;
   categoryD?: boolean;
+  categoryDPartial?: boolean;
   paymentMethod?: string;
   paymentAmount?: string;
   paymentReference?: string;
@@ -34,10 +35,12 @@ export type TerminDriver = {
 };
 
 export function formatDriverCategory(driver: TerminDriver): string {
-  if (driver.categoryC && driver.categoryD) return "C+D";
-  if (driver.categoryC) return "C";
-  if (driver.categoryD) return "D";
-  return "—";
+  const parts = [
+    ...(driver.categoryC ? ["C"] : []),
+    ...(driver.categoryD ? ["D"] : []),
+    ...(driver.categoryDPartial ? ["D - delno"] : []),
+  ];
+  return parts.length > 0 ? parts.join("+") : "—";
 }
 
 const COLUMNS = ["Voznik", "Kategorija", "Obrazec", "Plačilo", "Plačnik"];
