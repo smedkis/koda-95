@@ -1,6 +1,7 @@
 import { Heading1, TextBig } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
 import { Breadcrumbs } from "./Breadcrumbs";
+import { ProgramSwitch } from "./ProgramSwitch";
 
 type Crumb = {
   label: string;
@@ -39,6 +40,9 @@ export function Hero({
         {titleSuffix ? ` ${titleSuffix}` : null}
       </Heading1>
       <TextBig>{description}</TextBig>
+      <div className="mt-4">
+        <ProgramSwitch />
+      </div>
     </div>
   );
 }
