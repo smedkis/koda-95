@@ -94,9 +94,13 @@ export async function buildQuickRegistrationEmail({
     <h1 style="margin:0 0 16px;font-size:22px;color:#000000;">${t("heading")}</h1>
     <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("greeting", { name: driverName })}</p>
     <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("body", { terminTitle, date: terminDate })}</p>
-    <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
       ${t("codeLabel")} <strong style="color:#f58220;">${registrationCode}</strong>
     </p>
+    <p style="margin:0 0 8px;">
+      <a href="${completeFormUrl}" style="display:inline-block;background:#f58220;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-size:15px;font-weight:600;">${t("completeButton")}</a>
+    </p>
+    <p style="margin:0 0 24px;font-size:14px;font-weight:600;line-height:1.6;color:#852600;">${t("avoidAdminNotice")}</p>
     ${summaryTable}
     <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">${t("completeCta")}</p>
     <p style="margin:0 0 8px;">
@@ -244,6 +248,52 @@ export function buildAdminNewRegistrationEmail({
   `;
   return {
     subject: `Nova prijava na termin ${terminTitle}`,
+    html: wrapEmail("sl", body),
+  };
+}
+
+// Notifies accounting when a driver completes /obrazec and picks "plača
+// podjetje" — always Slovenian, same rationale as the two admin-only
+// templates above.
+export function buildAccountingNotificationEmail({
+  driverName,
+  driverEmail,
+  driverPhone,
+  terminTitle,
+  terminDate,
+  amount,
+  companyTaxNumber,
+  companyName,
+  companyEmail,
+}: {
+  driverName: string;
+  driverEmail?: string | null;
+  driverPhone?: string | null;
+  terminTitle: string;
+  terminDate: string;
+  amount: string | null;
+  companyTaxNumber?: string | null;
+  companyName?: string | null;
+  companyEmail?: string | null;
+}): { subject: string; html: string } {
+  const summaryTable = `
+    <table role="presentation" width="100%" style="border-collapse:collapse;margin:0 0 24px;">
+      ${summaryRow("Termin", terminTitle)}
+      ${summaryRow("Datum", terminDate)}
+      ${summaryRow("Cena", amount ?? NO_VALUE)}
+      ${summaryRow("Davčna številka podjetja", companyTaxNumber || NO_VALUE)}
+      ${summaryRow("Naziv podjetja", companyName || NO_VALUE)}
+      ${summaryRow("E-poštni naslov", companyEmail || NO_VALUE)}
+    </table>
+  `;
+
+  const body = `
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">Voznik <strong>${driverName}</strong> je izpolnil obrazec in označil, da je plačnik računa podjetje.</p>
+    ${summaryTable}
+    <p style="margin:0;font-size:13px;color:#999999;">V primeru, da podatki o podjetju niso popolni, je voznikova e-pošta ${driverEmail || NO_VALUE} in telefonska številka ${driverPhone || NO_VALUE}.</p>
+  `;
+  return {
+    subject: `Plačnik podjetje — ${terminTitle}`,
     html: wrapEmail("sl", body),
   };
 }

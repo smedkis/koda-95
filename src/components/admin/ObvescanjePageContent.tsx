@@ -7,7 +7,11 @@ import { AddNarocnikiModal } from "./AddNarocnikiModal";
 import { ObvescanjeTable, type ObvescanjeEntry } from "./ObvescanjeTable";
 import { Button } from "@/components/ui/Button";
 import { Heading2, Heading3 } from "@/components/ui/Typography";
-import { addNarocnikiAction, deleteNarocnikAction } from "@/app/(admin)/admin/obvescanje/actions";
+import {
+  addNarocnikiAction,
+  deleteNarocnikAction,
+  updateNarocnikAction,
+} from "@/app/(admin)/admin/obvescanje/actions";
 import type { AddNarocnikInput } from "@/lib/data/narocniki";
 
 export function ObvescanjePageContent({
@@ -24,6 +28,19 @@ export function ObvescanjePageContent({
     setEntries((current) => current.filter((entry) => entry.id !== id));
     const result = await deleteNarocnikAction(id);
     if (result.error) setEntries(previous);
+  };
+
+  const handleUpdate = async (id: string, input: { name: string; email: string; phone: string }) => {
+    const result = await updateNarocnikAction(id, input);
+    if (result.error) return result;
+    setEntries((current) =>
+      current.map((entry) =>
+        entry.id === id
+          ? { ...entry, driverName: input.name, email: input.email, phone: input.phone }
+          : entry,
+      ),
+    );
+    return {};
   };
 
   const handleAdd = async (parsedRows: AddNarocnikInput[]) => {
@@ -61,7 +78,7 @@ export function ObvescanjePageContent({
         </Button>
       </div>
       <div className="mt-6">
-        <ObvescanjeTable entries={entries} onDelete={handleDelete} />
+        <ObvescanjeTable entries={entries} onDelete={handleDelete} onUpdate={handleUpdate} />
       </div>
       {isAddOpen ? (
         <AddNarocnikiModal

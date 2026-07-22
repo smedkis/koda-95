@@ -1,9 +1,9 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Box } from "@/components/ui/Box";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { Combobox } from "@/components/ui/Combobox";
 import { Input } from "@/components/ui/Input";
 import { Radio } from "@/components/ui/Radio";
-import { Select } from "@/components/ui/Select";
 import { Eyebrow } from "@/components/ui/Typography";
 import { getCountries } from "@/lib/countries";
 import { parseEmsoBirthDate } from "@/lib/emso";
@@ -32,35 +32,25 @@ export function ObrazecStepPersonal({
         onChange={(e) => onChange({ placeOfBirth: e.target.value })}
       />
 
-      <Select
+      <Combobox
         label={t("countryOfBirth")}
         placeholder={t("selectCountry")}
         name="countryOfBirth"
         required
         value={value.countryOfBirth}
-        onChange={(e) => onChange({ countryOfBirth: e.target.value })}
-      >
-        {countries.map((country) => (
-          <option key={country} value={country}>
-            {country}
-          </option>
-        ))}
-      </Select>
+        onChange={(countryOfBirth) => onChange({ countryOfBirth })}
+        options={countries}
+      />
 
-      <Select
+      <Combobox
         label={t("citizenship")}
         placeholder={t("selectCountry")}
         name="citizenship"
         required
         value={value.citizenship}
-        onChange={(e) => onChange({ citizenship: e.target.value })}
-      >
-        {countries.map((country) => (
-          <option key={country} value={country}>
-            {country}
-          </option>
-        ))}
-      </Select>
+        onChange={(citizenship) => onChange({ citizenship })}
+        options={countries}
+      />
 
       <div className="flex flex-col gap-2">
         <Input

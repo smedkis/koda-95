@@ -11,6 +11,7 @@ import {
 } from "@/lib/termini-format";
 import { sendEmail } from "@/lib/email/resend";
 import {
+  buildAccountingNotificationEmail,
   buildAdminNewRegistrationEmail,
   buildCompletionEmail,
   buildQuickRegistrationEmail,
@@ -32,6 +33,10 @@ import type {
 // it came in — the shared admin inbox (same address shown as the contact
 // email across the site) plus a personal copy.
 const ADMIN_NOTIFICATION_EMAILS = ["koda95@tahograficuderman.si", "info@gregacuderman.com"];
+
+// Accounting's own inbox — notified whenever a driver's /obrazec submission
+// names a company as the payer, so they know to issue an invoice.
+const ACCOUNTING_EMAIL = "racuni@tahograficuderman.si";
 
 export type QuickRegistrationInput = {
   program: ProgramKey;
@@ -159,6 +164,7 @@ export type CompleteRegistrationInput = {
   countryOfBirth: string;
   citizenship: string;
   emso: string;
+  noEmso: boolean;
   dateOfBirth: string;
   residenceType: "permanent" | "temporary";
   address: string;
@@ -201,6 +207,7 @@ export async function completeRegistration(
     country_of_birth: input.countryOfBirth || null,
     citizenship: input.citizenship || null,
     emso: input.emso.trim() || null,
+    no_emso: input.noEmso,
     residence_type: input.residenceType,
     postal_code: input.postalCode || null,
     city: input.city || null,
@@ -267,11 +274,11 @@ export async function completeRegistration(
   await logRegistrationEvent(prijava.id, "Izpolnil obrazec");
 
   const [{ data: voznik }, { data: terminRow }] = await Promise.all([
-    client.from("vozniki").select("full_name, email").eq("id", finalVoznikId).single(),
+    client.from("vozniki").select("full_name, email, phone").eq("id", finalVoznikId).single(),
     client.from("termini").select("*").eq("id", prijava.termin_id).single(),
   ]);
 
-  if (voznik?.email && terminRow) {
+  if (terminRow) {
     const hasPrice = terminRow.price_eur !== null;
     const amount = hasPrice
       ? new Intl.NumberFormat("sl-SI", { style: "currency", currency: "EUR" }).format(
@@ -283,45 +290,69 @@ export async function completeRegistration(
       terminRow.modul,
       input.locale,
     );
-    const reference = buildRfReference(code);
+    const terminDate = formatSlovenianDate(terminRow.date, input.locale);
 
-    let qrCid: string | undefined;
-    let qrContent: string | undefined;
-    if (hasPrice && input.payerType === "self") {
-      const qrDataUrl = await generateUpnQrDataUrl({
-        amount: terminRow.price_eur as number,
+    if (voznik?.email) {
+      const reference = buildRfReference(code);
+
+      let qrCid: string | undefined;
+      let qrContent: string | undefined;
+      if (hasPrice && input.payerType === "self") {
+        const qrDataUrl = await generateUpnQrDataUrl({
+          amount: terminRow.price_eur as number,
+          iban: RECIPIENT_IBAN,
+          reference,
+          recipientName: RECIPIENT_NAME,
+          purpose: terminTitle,
+        });
+        qrCid = "upn-qr";
+        qrContent = qrDataUrl.split(",")[1];
+      }
+
+      const { subject, html } = await buildCompletionEmail({
+        locale: input.locale,
+        driverName: voznik.full_name,
+        registrationCode: code,
+        terminTitle,
+        terminDate,
+        amount,
+        payerType: input.payerType,
+        companyName: input.companyName,
         iban: RECIPIENT_IBAN,
-        reference,
         recipientName: RECIPIENT_NAME,
-        purpose: terminTitle,
+        reference,
+        qrCid,
       });
-      qrCid = "upn-qr";
-      qrContent = qrDataUrl.split(",")[1];
+      await sendEmail({
+        to: voznik.email,
+        subject,
+        html,
+        attachments: [
+          getLogoAttachment(),
+          ...(qrContent ? [{ filename: "placilo-qr.png", content: qrContent, contentId: qrCid }] : []),
+        ],
+      });
     }
 
-    const { subject, html } = await buildCompletionEmail({
-      locale: input.locale,
-      driverName: voznik.full_name,
-      registrationCode: code,
-      terminTitle,
-      terminDate: formatSlovenianDate(terminRow.date, input.locale),
-      amount,
-      payerType: input.payerType,
-      companyName: input.companyName,
-      iban: RECIPIENT_IBAN,
-      recipientName: RECIPIENT_NAME,
-      reference,
-      qrCid,
-    });
-    await sendEmail({
-      to: voznik.email,
-      subject,
-      html,
-      attachments: [
-        getLogoAttachment(),
-        ...(qrContent ? [{ filename: "placilo-qr.png", content: qrContent, contentId: qrCid }] : []),
-      ],
-    });
+    if (input.payerType === "company") {
+      const accountingNotification = buildAccountingNotificationEmail({
+        driverName: voznik?.full_name ?? "",
+        driverEmail: voznik?.email,
+        driverPhone: voznik?.phone,
+        terminTitle,
+        terminDate,
+        amount,
+        companyTaxNumber: input.companyTaxNumber,
+        companyName: input.companyName,
+        companyEmail: input.companyEmail,
+      });
+      await sendEmail({
+        to: ACCOUNTING_EMAIL,
+        subject: accountingNotification.subject,
+        html: accountingNotification.html,
+        attachments: [getLogoAttachment()],
+      });
+    }
   }
 
   return { ok: true };

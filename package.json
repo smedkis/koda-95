@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.110.2",
     "clsx": "^2.1.1",
+    "countries-list": "^3.4.1",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
     "next": "16.2.9",

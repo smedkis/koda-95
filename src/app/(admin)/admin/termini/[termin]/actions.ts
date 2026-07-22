@@ -28,7 +28,7 @@ export async function markTerminSeenAction(terminSlug: string): Promise<void> {
 
 export async function createRegistrationAction(
   terminSlug: string,
-  input: { fullName: string; email: string; phone: string },
+  input: { fullName: string; email: string; phone: string; notify: boolean },
 ): Promise<MutationResult> {
   const result = await createRegistration(terminSlug, input);
   if (!("error" in result)) {

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Eyebrow, Text } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
@@ -17,6 +18,7 @@ export type TerminDriver = {
   birthCountry?: string;
   citizenship?: string;
   emso?: string;
+  noEmso?: boolean;
   residenceType?: "permanent" | "temporary";
   streetAddress?: string;
   postalCode?: string;
@@ -30,6 +32,9 @@ export type TerminDriver = {
   formStatus: "izpolnjen" | "manjka";
   paymentStatus: "caka" | "poslano" | "poravnano";
   payer: "sam" | string;
+  companyName?: string;
+  companyTaxNumber?: string;
+  companyEmail?: string;
   events?: { message: string; timestamp: string }[];
   registrationSource?: string;
 };
@@ -90,6 +95,7 @@ export function AdminTerminDriversTable({
   terminId: string;
   drivers: TerminDriver[];
 }) {
+  const router = useRouter();
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -111,21 +117,22 @@ export function AdminTerminDriversTable({
       <div className="overflow-x-auto rounded-lg border border-divider bg-white">
         <table className="w-full min-w-[640px] border-collapse">
           <thead>
-            <tr className="border-b border-divider">
+            <tr className="border-b border-divider bg-[#9eb0a2]">
               {COLUMNS.map((label) => (
                 <th key={label} className="px-4 py-4 text-left">
-                  <Eyebrow className="text-[14px]">{label}</Eyebrow>
+                  <Eyebrow className="text-[14px] text-white">{label}</Eyebrow>
                 </th>
               ))}
-              <th className="sticky right-0 bg-white px-4 py-4 sm:static sm:bg-transparent" />
+              <th className="sticky right-0 bg-[#9eb0a2] px-4 py-4 sm:static" />
             </tr>
           </thead>
           <tbody>
             {paginatedDrivers.map((driver, index) => (
               <tr
                 key={driver.id}
+                onClick={() => router.push(`/admin/termini/${terminId}/vozniki/${driver.id}`)}
                 className={cn(
-                  "group hover:bg-secondary-bg",
+                  "group cursor-pointer hover:bg-secondary-bg",
                   index < paginatedDrivers.length - 1 && "border-b border-divider",
                 )}
               >
@@ -150,7 +157,8 @@ export function AdminTerminDriversTable({
                   <Link
                     href={`/admin/termini/${terminId}/vozniki/${driver.id}`}
                     aria-label={`Uredi ${driver.driverName}`}
-                    className="inline-flex cursor-pointer items-center hover:opacity-60"
+                    onClick={(event) => event.stopPropagation()}
+                    className="inline-flex cursor-pointer items-center gap-1.5 hover:opacity-60"
                   >
                     <Image
                       src="/Edit.svg"
@@ -159,6 +167,7 @@ export function AdminTerminDriversTable({
                       height={16}
                       className="size-4 shrink-0"
                     />
+                    <Text className="text-[14px]">Uredi</Text>
                   </Link>
                 </td>
               </tr>

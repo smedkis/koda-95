@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Heading3, Text } from "@/components/ui/Typography";
 
 function CloseIcon() {
@@ -19,12 +21,18 @@ export function AddVoznikModal({
   onClose,
 }: {
   error?: string | null;
-  onAdd: (input: { fullName: string; email: string; phone: string }) => Promise<void>;
+  onAdd: (input: {
+    fullName: string;
+    email: string;
+    phone: string;
+    notify: boolean;
+  }) => Promise<void>;
   onClose: () => void;
 }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [doNotNotify, setDoNotNotify] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isValid = fullName.trim().length > 0 && email.trim().length > 0 && phone.trim().length > 0;
@@ -32,7 +40,7 @@ export function AddVoznikModal({
   const handleSubmit = async () => {
     if (!isValid) return;
     setIsSubmitting(true);
-    await onAdd({ fullName, email, phone });
+    await onAdd({ fullName, email, phone, notify: !doNotNotify });
     setIsSubmitting(false);
   };
 
@@ -76,15 +84,23 @@ export function AddVoznikModal({
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
-          <Input
+          <PhoneInput
             label="Telefonska številka"
-            placeholder="Telefonska številka"
-            type="tel"
             required
             inputClassName="bg-secondary-bg"
             value={phone}
-            onChange={(event) => setPhone(event.target.value)}
+            onChange={setPhone}
           />
+        </div>
+        <div className="mt-6 flex flex-col gap-1">
+          <Checkbox
+            label={<span className="font-semibold">O prijavi ne obvesti voznika</span>}
+            checked={doNotNotify}
+            onChange={(event) => setDoNotNotify(event.target.checked)}
+          />
+          <Text className="ml-6 text-[13px] text-placeholder">
+            Voznik bo dan pred usposabljanjem vseeno prejel opomnik.
+          </Text>
         </div>
         {error ? <Text className="mt-4 text-red-600">{error}</Text> : null}
         <Button

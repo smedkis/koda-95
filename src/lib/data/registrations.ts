@@ -44,6 +44,7 @@ function toTerminDriver(row: JoinedPrijava, priceEur: number | null): TerminDriv
     birthCountry: v.country_of_birth ?? undefined,
     citizenship: v.citizenship ?? undefined,
     emso: v.emso ?? undefined,
+    noEmso: v.no_emso,
     residenceType: v.residence_type ?? undefined,
     streetAddress: v.street_address ?? undefined,
     postalCode: v.postal_code ?? undefined,
@@ -57,6 +58,9 @@ function toTerminDriver(row: JoinedPrijava, priceEur: number | null): TerminDriv
     formStatus: hasForm ? "izpolnjen" : "manjka",
     paymentStatus: row.payment_status === "paid" ? "poravnano" : "caka",
     payer: row.payer_type === "self" ? "sam" : (row.company_name ?? "Podjetje"),
+    companyName: row.company_name ?? undefined,
+    companyTaxNumber: row.company_tax_number ?? undefined,
+    companyEmail: row.company_email ?? undefined,
     registrationSource: row.source ?? undefined,
   };
 }
@@ -124,7 +128,7 @@ export type MutationResult = { id: string } | { error: string };
 
 export async function createRegistration(
   terminSlug: string,
-  input: { fullName: string; email: string; phone: string },
+  input: { fullName: string; email: string; phone: string; notify: boolean },
 ): Promise<MutationResult> {
   const termin = await getTerminRowBySlug(terminSlug);
   if (!termin) return { error: "Termin ne obstaja." };
@@ -157,9 +161,12 @@ export async function createRegistration(
     source: "Ročno dodano",
   });
 
-  await logRegistrationEvent(prijava.id, "Izpolnjena prijava");
+  await logRegistrationEvent(
+    prijava.id,
+    input.notify ? "Izpolnjena prijava" : "Izpolnjena prijava (brez obveščanja voznika)",
+  );
 
-  if (input.email) {
+  if (input.email && input.notify) {
     const { subject, html } = await buildQuickRegistrationEmail({
       locale: ADMIN_LOCALE,
       driverName: input.fullName,
@@ -206,6 +213,7 @@ export async function updateRegistration(
       country_of_birth: driver.birthCountry || null,
       citizenship: driver.citizenship || null,
       emso: driver.emso || null,
+      no_emso: driver.noEmso ?? false,
       residence_type: driver.residenceType ?? null,
       street_address: driver.streetAddress || null,
       postal_code: driver.postalCode || null,
@@ -220,11 +228,26 @@ export async function updateRegistration(
     ...(driver.categoryDPartial ? (["D-delno"] as const) : []),
   ];
 
+  // Admin filling in the same personal-info fields the /obrazec wizard
+  // would collect counts as "form completed" too — not just the public
+  // form. EMŠO isn't required here since admin has no noEmso toggle and may
+  // legitimately not have it yet.
+  const hasFormDetails =
+    !!driver.dateOfBirth &&
+    !!driver.birthPlace &&
+    !!driver.birthCountry &&
+    !!driver.citizenship &&
+    !!driver.residenceType &&
+    !!driver.streetAddress &&
+    !!driver.postalCode &&
+    !!driver.city;
+
   const { error: prijavaError } = await client
     .from("prijave")
     .update({
       licence_categories: licenceCategories.length > 0 ? licenceCategories : null,
       payment_status: driver.paymentStatus === "poravnano" ? "paid" : "pending",
+      form_completed: hasFormDetails,
     })
     .eq("id", registrationId);
   if (prijavaError) return { error: prijavaError.message };

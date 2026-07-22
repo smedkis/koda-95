@@ -8,8 +8,9 @@
 // 20260720120000_admin_sessions.sql,
 // 20260720140000_prijave_source.sql,
 // 20260721110000_licence_category_d_delno.sql,
-// 20260721120000_prijave_form_completed.sql, and
-// 20260721130000_termin_reminder.sql. Keep in sync with any new migration.
+// 20260721120000_prijave_form_completed.sql,
+// 20260721130000_termin_reminder.sql, and
+// 20260722080000_vozniki_no_emso.sql. Keep in sync with any new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -40,6 +41,7 @@ export type VozniciRow = {
   place_of_birth: string | null;
   country_of_birth: string | null;
   emso: string | null;
+  no_emso: boolean;
   citizenship: string | null;
   residence_type: ResidenceType | null;
   postal_code: string | null;

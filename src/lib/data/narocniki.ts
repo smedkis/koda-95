@@ -95,6 +95,23 @@ export async function deleteNarocnik(id: string): Promise<{ error?: string }> {
   return {};
 }
 
+export async function updateNarocnik(
+  id: string,
+  input: { name: string; email: string; phone: string },
+): Promise<{ error?: string }> {
+  const client = getSupabaseServerClient();
+  const { error } = await client
+    .from("narocniki")
+    .update({
+      full_name: input.name || null,
+      email: input.email,
+      phone: input.phone || null,
+    })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  return {};
+}
+
 export type NotificationAudience = { never: boolean; wasEnrolled: boolean; enrolled: boolean };
 
 // Resend rate-limits at 2 requests/second on most plans — batching keeps us

@@ -6,13 +6,20 @@ import { useState } from "react";
 import type { TerminDriver } from "./AdminTerminDriversTable";
 import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { Combobox } from "@/components/ui/Combobox";
 import { Input } from "@/components/ui/Input";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Select } from "@/components/ui/Select";
 import { Eyebrow, Heading3, Text, TextMedium } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
 import { fireConfetti } from "@/lib/confetti";
+import { getCountries } from "@/lib/countries";
 import { dmyToIso, isoToDmy } from "@/lib/date-format";
+import { parseEmsoBirthDate } from "@/lib/emso";
 import { generatePaymentPdf } from "@/lib/generate-payment-pdf";
+import { POSTAL_CODES } from "@/lib/postal-codes";
+import { buildRfReference } from "@/lib/upn-qr";
 import {
   deleteRegistrationAction,
   markRegistrationPaidAction,
@@ -150,6 +157,7 @@ export function AdminVoznikEditContent({
   program: "redna" | "zacetna";
 }) {
   const router = useRouter();
+  const countries = getCountries("sl");
   const [driver, setDriver] = useState(initialDriver);
   const [isSaving, setIsSaving] = useState(false);
   const [isMarkingPaid, setIsMarkingPaid] = useState(false);
@@ -271,6 +279,29 @@ export function AdminVoznikEditContent({
                 value={driver.driverName}
                 onChange={(event) => update("driverName", event.target.value)}
               />
+              <div className="flex flex-col gap-2">
+                <Input
+                  label="EMŠO"
+                  inputClassName={INPUT_BG}
+                  disabled={!!driver.noEmso}
+                  value={driver.emso ?? ""}
+                  onChange={(event) => {
+                    const emso = event.target.value.replace(/\D/g, "").slice(0, 13);
+                    const parsed = parseEmsoBirthDate(emso);
+                    update("emso", emso);
+                    if (parsed) update("dateOfBirth", isoToDmy(parsed));
+                  }}
+                />
+                <Checkbox
+                  label="Nimam EMŠO številke"
+                  checked={!!driver.noEmso}
+                  onChange={(event) => {
+                    const noEmso = event.target.checked;
+                    update("noEmso", noEmso);
+                    if (noEmso) update("emso", "");
+                  }}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <Input
                   label="Datum rojstva"
@@ -292,25 +323,21 @@ export function AdminVoznikEditContent({
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <Input
+                <Combobox
                   label="Država rojstva"
                   inputClassName={INPUT_BG}
                   value={driver.birthCountry ?? ""}
-                  onChange={(event) => update("birthCountry", event.target.value)}
+                  onChange={(value) => update("birthCountry", value)}
+                  options={countries}
                 />
-                <Input
+                <Combobox
                   label="Državljanstvo"
                   inputClassName={INPUT_BG}
                   value={driver.citizenship ?? ""}
-                  onChange={(event) => update("citizenship", event.target.value)}
+                  onChange={(value) => update("citizenship", value)}
+                  options={countries}
                 />
               </div>
-              <Input
-                label="EMŠO"
-                inputClassName={INPUT_BG}
-                value={driver.emso ?? ""}
-                onChange={(event) => update("emso", event.target.value)}
-              />
             </div>
           </Box>
         </div>
@@ -326,12 +353,11 @@ export function AdminVoznikEditContent({
                 value={driver.email ?? ""}
                 onChange={(event) => update("email", event.target.value)}
               />
-              <Input
+              <PhoneInput
                 label="Telefon"
-                type="tel"
                 inputClassName={INPUT_BG}
                 value={driver.phone ?? ""}
-                onChange={(event) => update("phone", event.target.value)}
+                onChange={(value) => update("phone", value)}
               />
             </div>
           </Box>
@@ -366,7 +392,12 @@ export function AdminVoznikEditContent({
                   label="Poštna številka"
                   inputClassName={INPUT_BG}
                   value={driver.postalCode ?? ""}
-                  onChange={(event) => update("postalCode", event.target.value)}
+                  onChange={(event) => {
+                    const postalCode = event.target.value;
+                    const match = POSTAL_CODES[postalCode];
+                    update("postalCode", postalCode);
+                    if (match) update("city", match);
+                  }}
                 />
                 <Input
                   label="Kraj"
@@ -481,7 +512,7 @@ export function AdminVoznikEditContent({
                 {isSendingReminder ? "Pošiljam …" : "Pošlji obvestilo"}
               </Button>
             )}
-            {!step3Done && driver.paymentAmount && driver.paymentReference ? (
+            {!step3Done && driver.payer === "sam" && driver.paymentAmount && driver.paymentReference ? (
               <Button
                 type="button"
                 variant="secondary"
@@ -496,7 +527,17 @@ export function AdminVoznikEditContent({
             <div className="flex flex-col gap-4">
               <InfoRow label="Način plačila" value={driver.paymentMethod ?? "—"} />
               <InfoRow label="Znesek" value={driver.paymentAmount ?? "—"} />
-              <InfoRow label="Referenca" value={driver.paymentReference ?? "—"} />
+              <InfoRow
+                label="Referenca"
+                value={driver.paymentReference ? buildRfReference(driver.paymentReference) : "—"}
+              />
+              {driver.payer !== "sam" ? (
+                <>
+                  <InfoRow label="Naziv podjetja" value={driver.companyName ?? "—"} />
+                  <InfoRow label="Davčna številka" value={driver.companyTaxNumber ?? "—"} />
+                  <InfoRow label="E-pošta podjetja" value={driver.companyEmail ?? "—"} />
+                </>
+              ) : null}
             </div>
           </Box>
         </div>

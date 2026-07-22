@@ -5,6 +5,7 @@ import {
   addNarocniki,
   deleteNarocnik,
   sendBulkNotification,
+  updateNarocnik,
   type AddNarocnikInput,
   type NotificationAudience,
 } from "@/lib/data/narocniki";
@@ -20,6 +21,15 @@ export async function addNarocnikiAction(
 
 export async function deleteNarocnikAction(id: string): Promise<{ error?: string }> {
   const result = await deleteNarocnik(id);
+  if (!result.error) revalidatePath("/admin/obvescanje");
+  return result;
+}
+
+export async function updateNarocnikAction(
+  id: string,
+  input: { name: string; email: string; phone: string },
+): Promise<{ error?: string }> {
+  const result = await updateNarocnik(id, input);
   if (!result.error) revalidatePath("/admin/obvescanje");
   return result;
 }

@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Eyebrow, Heading3, Text } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
 import { getPaginationRange } from "@/lib/pagination";
@@ -100,14 +102,26 @@ function EnrollmentBadge({ enrollment }: { enrollment: ObvescanjeEnrollment }) {
 export function ObvescanjeTable({
   entries,
   onDelete,
+  onUpdate,
 }: {
   entries: ObvescanjeEntry[];
   onDelete: (id: string) => void;
+  onUpdate: (
+    id: string,
+    input: { name: string; email: string; phone: string },
+  ) => Promise<{ error?: string }>;
 }) {
   const [sortKey, setSortKey] = useState<SortKey>("dateAdded");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const pendingDeleteRow = entries.find((row) => row.id === pendingDeleteId) ?? null;
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const editingRow = entries.find((row) => row.id === editingId) ?? null;
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editError, setEditError] = useState<string | null>(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -157,36 +171,62 @@ export function ObvescanjeTable({
     setPendingDeleteId(null);
   };
 
+  const openEdit = (row: ObvescanjeEntry) => {
+    setEditingId(row.id);
+    setEditName(row.driverName);
+    setEditEmail(row.email);
+    setEditPhone(row.phone);
+    setEditError(null);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingId) return;
+    setIsSavingEdit(true);
+    setEditError(null);
+    const result = await onUpdate(editingId, {
+      name: editName,
+      email: editEmail,
+      phone: editPhone,
+    });
+    setIsSavingEdit(false);
+    if (result.error) {
+      setEditError(result.error);
+      return;
+    }
+    setEditingId(null);
+  };
+
   return (
     <div>
       <div className="overflow-x-auto rounded-lg border border-divider bg-white">
       <table className="w-full min-w-[860px] border-collapse">
         <thead>
-          <tr className="border-b border-divider">
+          <tr className="border-b border-divider bg-[#9eb0a2]">
             {COLUMNS.map((column) => (
               <th key={column.key} className="px-4 py-4 text-left">
                 <button
                   type="button"
                   onClick={() => handleSort(column.key)}
-                  className="flex cursor-pointer items-center gap-1.5"
+                  className="flex cursor-pointer items-center gap-1.5 text-white"
                 >
-                  <Eyebrow className="text-[14px]">{column.label}</Eyebrow>
+                  <Eyebrow className="text-[14px] text-white">{column.label}</Eyebrow>
                   <SortIcon direction={sortKey === column.key ? sortDirection : null} />
                 </button>
               </th>
             ))}
             <th className="px-4 py-4 text-left">
-              <Eyebrow className="text-[14px]">Prijava</Eyebrow>
+              <Eyebrow className="text-[14px] text-white">Prijava</Eyebrow>
             </th>
-            <th className="sticky right-0 bg-white px-4 py-4 sm:static sm:bg-transparent" />
+            <th className="sticky right-0 bg-[#9eb0a2] px-4 py-4 sm:static" />
           </tr>
         </thead>
         <tbody>
           {paginatedRows.map((row, index) => (
             <tr
               key={row.id}
+              onClick={() => openEdit(row)}
               className={cn(
-                "group hover:bg-secondary-bg",
+                "group cursor-pointer hover:bg-secondary-bg",
                 index < paginatedRows.length - 1 && "border-b border-divider",
               )}
             >
@@ -214,11 +254,15 @@ export function ObvescanjeTable({
               <td className="sticky right-0 bg-white px-4 py-4 text-right group-hover:bg-secondary-bg sm:static sm:bg-transparent">
                 <button
                   type="button"
-                  onClick={() => setPendingDeleteId(row.id)}
-                  aria-label={`Izbriši ${row.driverName}`}
-                  className="inline-flex cursor-pointer items-center hover:opacity-60"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    openEdit(row);
+                  }}
+                  aria-label={`Uredi ${row.driverName}`}
+                  className="inline-flex cursor-pointer items-center gap-1.5 hover:opacity-60"
                 >
-                  <Image src="/Delete.svg" alt="" width={16} height={16} className="size-4 shrink-0" />
+                  <Image src="/Edit.svg" alt="" width={16} height={16} className="size-4 shrink-0" />
+                  <Text className="text-[14px]">Uredi</Text>
                 </button>
               </td>
             </tr>
@@ -273,6 +317,73 @@ export function ObvescanjeTable({
                 </button>
               ),
             )}
+          </div>
+        </div>
+      ) : null}
+      {editingRow ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setEditingId(null)}
+        >
+          <div
+            className="relative w-full max-w-[420px] rounded-lg border border-divider bg-white p-8"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setEditingId(null)}
+              aria-label="Zapri"
+              className="absolute top-4 right-4 cursor-pointer"
+            >
+              <CloseIcon />
+            </button>
+            <Heading3>Uredi naročnika</Heading3>
+            <div className="mt-6 flex flex-col gap-6">
+              <Input
+                label="Ime in priimek"
+                placeholder="Ime in priimek"
+                inputClassName="bg-secondary-bg"
+                value={editName}
+                onChange={(event) => setEditName(event.target.value)}
+              />
+              <Input
+                label="E-poštni naslov"
+                placeholder="E-poštni naslov"
+                type="email"
+                required
+                inputClassName="bg-secondary-bg"
+                value={editEmail}
+                onChange={(event) => setEditEmail(event.target.value)}
+              />
+              <PhoneInput
+                label="Telefonska številka"
+                inputClassName="bg-secondary-bg"
+                value={editPhone}
+                onChange={setEditPhone}
+              />
+            </div>
+            {editError ? <Text className="mt-4 text-red-600">{editError}</Text> : null}
+            <div className="mt-8 flex items-center justify-between">
+              <Button
+                type="button"
+                variant="secondary"
+                className="bg-white text-red-600 outline outline-1 outline-red-200 hover:bg-red-50"
+                onClick={() => {
+                  setPendingDeleteId(editingRow.id);
+                  setEditingId(null);
+                }}
+              >
+                Izbriši
+              </Button>
+              <Button
+                type="button"
+                variant="primary"
+                disabled={editEmail.trim() === "" || isSavingEdit}
+                onClick={handleSaveEdit}
+              >
+                {isSavingEdit ? "Shranjujem …" : "Shrani"}
+              </Button>
+            </div>
           </div>
         </div>
       ) : null}

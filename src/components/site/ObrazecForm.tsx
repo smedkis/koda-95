@@ -93,6 +93,7 @@ export function ObrazecForm({ program }: { program: "redna" | "zacetna" }) {
       countryOfBirth: formData.countryOfBirth,
       citizenship: formData.citizenship,
       emso: formData.emso,
+      noEmso: formData.noEmso,
       dateOfBirth: formData.dateOfBirth,
       residenceType: formData.residenceType ?? "permanent",
       address: formData.address,

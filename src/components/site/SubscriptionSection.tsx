@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Eyebrow, Heading2, Text } from "@/components/ui/Typography";
 import { subscribeToNotificationsAction } from "@/app/[locale]/actions";
 
@@ -59,13 +60,7 @@ export function SubscriptionSection() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <Input
-              type="tel"
-              label={t("phone")}
-              placeholder={t("phone")}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+            <PhoneInput label={t("phone")} value={phone} onChange={setPhone} />
             <Input
               type="email"
               label={t("email")}

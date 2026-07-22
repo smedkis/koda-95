@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { Eyebrow, Heading3, Text } from "@/components/ui/Typography";
+import { Input } from "@/components/ui/Input";
+import { PhoneInput } from "@/components/ui/PhoneInput";
+import { Heading3, Text } from "@/components/ui/Typography";
 import type { AddNarocnikInput } from "@/lib/data/narocniki";
 
 function CloseIcon() {
@@ -11,50 +13,6 @@ function CloseIcon() {
       <path d="M4 4L12 12M12 4L4 12" stroke="black" strokeWidth="1.25" strokeLinecap="round" />
     </svg>
   );
-}
-
-function isPhoneLike(value: string): boolean {
-  return /^[+\d][\d\s()+-]{3,}$/.test(value);
-}
-
-// Fields can appear in any order and name/phone/source are all optional —
-// the only field that's identified by position is whichever one contains
-// "@" (the email). Everything else is assigned by shape: phone-looking
-// values go to phone, the first remaining value goes to name, and any
-// value after that goes to source.
-function parsePastedText(
-  text: string,
-): { name: string; email: string; phone: string; source: string }[] {
-  return text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) =>
-      (line.includes("\t") ? line.split("\t") : line.split(","))
-        .map((part) => part.trim())
-        .filter(Boolean),
-    )
-    .map((fields) => {
-      const emailIndex = fields.findIndex((field) => field.includes("@"));
-      if (emailIndex === -1) return null;
-      const email = fields[emailIndex];
-      const rest = fields.filter((_, index) => index !== emailIndex);
-
-      let name = "";
-      let phone = "";
-      let source = "";
-      for (const field of rest) {
-        if (!phone && isPhoneLike(field)) {
-          phone = field;
-        } else if (!name) {
-          name = field;
-        } else if (!source) {
-          source = field;
-        }
-      }
-      return { name, email, phone, source: source.length > 0 ? source : "Ročno dodano" };
-    })
-    .filter((row): row is NonNullable<typeof row> => row !== null);
 }
 
 export function AddNarocnikiModal({
@@ -66,15 +24,17 @@ export function AddNarocnikiModal({
   onAdd: (entries: AddNarocnikInput[]) => Promise<void>;
   onClose: () => void;
 }) {
-  const [pastedText, setPastedText] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const parsedRows = useMemo(() => parsePastedText(pastedText), [pastedText]);
+  const isValid = email.trim().length > 0;
 
-  const handleConfirm = async () => {
-    if (parsedRows.length === 0) return;
+  const handleSubmit = async () => {
+    if (!isValid) return;
     setIsSubmitting(true);
-    await onAdd(parsedRows);
+    await onAdd([{ name, email, phone, source: "Ročno dodano" }]);
     setIsSubmitting(false);
   };
 
@@ -84,7 +44,7 @@ export function AddNarocnikiModal({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-[640px] rounded-lg border border-divider bg-white p-8"
+        className="relative w-full max-w-[420px] rounded-lg border border-divider bg-white p-8"
         onClick={(event) => event.stopPropagation()}
       >
         <button
@@ -95,66 +55,40 @@ export function AddNarocnikiModal({
         >
           <CloseIcon />
         </button>
-        <Heading3>Dodaj naročnike</Heading3>
-        <Text className="mt-4">
-          Prilepi podatke iz Excela ali drugega seznama. Eno vrstico na osebo, v obliki: Ime
-          Priimek, E-pošta, Telefonska številka, Vir (npr. podjetje). Edino e-pošta je obvezna,
-          ostalo lahko izpustiš.
-        </Text>
-        <textarea
-          value={pastedText}
-          onChange={(event) => setPastedText(event.target.value)}
-          placeholder={"Janez Novak, janez.novak@example.com, +386 41 123 456, Podjetje d.o.o."}
-          rows={6}
-          className="mt-4 w-full rounded border border-divider bg-white px-[14px] py-[10px] font-body text-[16px] text-paragraph placeholder-placeholder focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
-        />
-        {pastedText.trim() ? (
-          <div className="mt-6">
-            <Eyebrow className="text-[14px]">Predogled ({parsedRows.length})</Eyebrow>
-            <div className="mt-2 max-h-[240px] overflow-y-auto rounded-lg border border-divider">
-              {parsedRows.length === 0 ? (
-                <div className="flex items-center justify-center py-8">
-                  <Text className="text-[14px] text-placeholder">
-                    Ni prepoznanih vrstic. Preveri obliko podatkov.
-                  </Text>
-                </div>
-              ) : (
-                <table className="w-full border-collapse">
-                  <tbody>
-                    {parsedRows.map((row, index) => (
-                      <tr
-                        key={`${row.email}-${index}`}
-                        className={index < parsedRows.length - 1 ? "border-b border-divider" : ""}
-                      >
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <Text className="text-[14px]">{row.name}</Text>
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <Text className="text-[14px]">{row.email}</Text>
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <Text className="text-[14px]">{row.phone}</Text>
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <Text className="text-[14px]">{row.source}</Text>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
-        ) : null}
+        <Heading3>Dodaj naročnika</Heading3>
+        <div className="mt-6 flex flex-col gap-6">
+          <Input
+            label="Ime in priimek"
+            placeholder="Ime in priimek"
+            inputClassName="bg-secondary-bg"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+          <Input
+            label="E-poštni naslov"
+            placeholder="E-poštni naslov"
+            type="email"
+            required
+            inputClassName="bg-secondary-bg"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <PhoneInput
+            label="Telefonska številka"
+            inputClassName="bg-secondary-bg"
+            value={phone}
+            onChange={setPhone}
+          />
+        </div>
         {error ? <Text className="mt-4 text-red-600">{error}</Text> : null}
         <Button
           type="button"
           variant="primary"
           className="mt-8 w-full justify-center"
-          disabled={parsedRows.length === 0 || isSubmitting}
-          onClick={handleConfirm}
+          disabled={!isValid || isSubmitting}
+          onClick={handleSubmit}
         >
-          {isSubmitting ? "Dodajam …" : `Dodaj ${parsedRows.length > 0 ? `(${parsedRows.length})` : ""}`}
+          {isSubmitting ? "Dodajam …" : "Dodaj naročnika"}
         </Button>
       </div>
     </div>

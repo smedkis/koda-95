@@ -51,8 +51,8 @@ function QrCode({ dataUrl }: { dataUrl?: string }) {
       </div>
     );
   }
-  // eslint-disable-next-line @next/next/no-img-element -- data URI, not an optimizable static asset
   return (
+    // eslint-disable-next-line @next/next/no-img-element -- data URI, not an optimizable static asset
     <img
       src={dataUrl}
       alt={t("qrAlt")}

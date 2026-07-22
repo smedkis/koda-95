@@ -10,6 +10,7 @@ import {
   type QuickRegistrationResult,
 } from "@/lib/data/public-registration";
 import { addNarocniki } from "@/lib/data/narocniki";
+import { lookupCompanyByTaxNumber } from "@/lib/vies";
 
 export async function submitQuickRegistrationAction(
   input: QuickRegistrationInput,
@@ -32,6 +33,12 @@ export async function completeRegistrationAction(
     revalidatePath("/admin/statistika");
   }
   return result;
+}
+
+export async function lookupCompanyAction(
+  taxNumber: string,
+): Promise<{ name: string } | { error: string }> {
+  return lookupCompanyByTaxNumber(taxNumber);
 }
 
 export async function subscribeToNotificationsAction(input: {

@@ -6,6 +6,7 @@ import { Box } from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import { Text } from "@/components/ui/Typography";
 import { useRouter } from "@/i18n/navigation";
 import { submitQuickRegistrationAction } from "@/app/[locale]/actions";
@@ -98,16 +99,9 @@ export function TerminRegistrationForm({
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <Input
-        label={t("phone")}
-        placeholder={t("phone")}
-        name="phone"
-        type="tel"
-        required
-        className="mt-6"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-      />
+      <div className="mt-6">
+        <PhoneInput label={t("phone")} name="phone" required value={phone} onChange={setPhone} />
+      </div>
       <Checkbox
         name="consentMarketing"
         label={t("consentMarketing")}
