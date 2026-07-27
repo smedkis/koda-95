@@ -9,8 +9,8 @@ export function NavLinks() {
   const pathname = usePathname();
   const t = useTranslations("Nav");
   const LINKS = [
-    { href: "/redno-usposabljanje", label: t("redna") },
-    { href: "/zacetno-usposabljanje", label: t("zacetna") },
+    { href: "/redno-usposabljanje", label: t("redna"), accent: "bg-primary" },
+    { href: "/zacetno-usposabljanje", label: t("zacetna"), accent: "bg-secondary" },
   ] as const;
 
   // Hide on the registration form and confirmation page — don't invite
@@ -22,13 +22,17 @@ export function NavLinks() {
   return (
     <div className="hidden items-center gap-8 sm:flex">
       {LINKS.map((link) => (
-        <Link key={link.href} href={link.href}>
-          <TextMedium
-            as="span"
-            className={cn("transition-colors", pathname === link.href && "text-primary")}
-          >
-            {link.label}
-          </TextMedium>
+        <Link key={link.href} href={link.href} className="relative inline-block">
+          <TextMedium as="span">{link.label}</TextMedium>
+          {/* Grows left-to-right via scaleX from a fixed-origin left edge,
+              instead of text-decoration underline, so it can animate. */}
+          <span
+            className={cn(
+              "absolute -bottom-1 left-0 h-0.5 w-full origin-left scale-x-0 transition-transform duration-300 ease-out",
+              link.accent,
+              pathname === link.href && "scale-x-100",
+            )}
+          />
         </Link>
       ))}
     </div>
