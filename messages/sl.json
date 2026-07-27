@@ -167,7 +167,49 @@
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "redno usposabljanje",
       "heroTitleSuffix": "Koda 95",
-      "terminDescription": "Redno usposabljanje za podaljšanje kode 95 po predpisanem programu za leto 2026. Usposabljanje traja 7 ur in je namenjeno vsem poklicnim voznikom kategorij C in D, ki morajo podaljšati veljavnost temeljne kvalifikacije."
+      "terminDescription": "Redno usposabljanje za podaljšanje kode 95 po predpisanem programu za leto 2026. Usposabljanje traja 7 ur in je namenjeno vsem poklicnim voznikom kategorij C in D, ki morajo podaljšati veljavnost temeljne kvalifikacije.",
+      "faq": [
+        {
+          "question": "Kaj je redno usposabljanje za Kodo 95?",
+          "answer": "Redno usposabljanje je zakonsko obvezno izobraževanje poklicnih voznikov, s katerim se veljavnost Kode 95 podaljša za nadaljnjih 5 let. Poteka v obliki predavanj brez izpita, vsebine pa vsako leto predpiše ministrstvo, pristojno za infrastrukturo — poudarek je na varnosti v cestnem prometu, novostih v zakonodaji in racionalni vožnji."
+        },
+        {
+          "question": "Ali potrebujem redno ali začetno usposabljanje?",
+          "answer": "Če Kodo 95 že imate (tudi če vam je potekla), potrebujete redno usposabljanje. Začetno usposabljanje z izpitom je namenjeno samo voznikom, ki temeljne kvalifikacije še nikoli niso pridobili. Če niste prepričani, kaj velja za vas, nas pokličite, hitro preverimo vaš status in vam svetujemo pravi program."
+        },
+        {
+          "question": "Kako dolgo velja Koda 95?",
+          "answer": "Koda 95 velja 5 let. Po pridobitvi temeljne kvalifikacije jo podaljšujete izključno z rednim usposabljanjem."
+        },
+        {
+          "question": "Koliko ur traja redno usposabljanje za Kodo 95?",
+          "answer": "Redno usposabljanje obsega skupno 35 ur, razdeljenih na 5 predavanj po 7 ur. Vsako predavanje pokriva program enega leta, v enem dnevu pa lahko voznik opravi samo eno predavanje. Po vsakem predavanju prejmete potrdilo o udeležbi."
+        },
+        {
+          "question": "Kdaj moram opraviti redno usposabljanje?",
+          "answer": "Vseh 5 predavanj morate opraviti pred iztekom veljavnosti Kode 95. Najbolj priporočljivo je, da opravite eno 7-urno predavanje vsako leto. Tako obveznost enakomerno razporedite in se izognete gneči tik pred iztekom kode."
+        },
+        {
+          "question": "Ali lahko vseh 5 predavanj opravim v enem letu?",
+          "answer": "Da, vendar mora vsako predavanje pokrivati drug letni program (programe za zadnjih 5 let), v enem dnevu pa je dovoljeno poslušati le eno predavanje. To pomeni najmanj 5 različnih dni usposabljanja. Če ste s predavanji v zaostanku, vam pomagamo sestaviti razpored, s katerim manjkajoče programe nadoknadite pravočasno."
+        },
+        {
+          "question": "Ali moram po rednem usposabljanju opraviti izpit?",
+          "answer": "Ne, pri rednem usposabljanju ni izpita. Zadostuje udeležba na vseh 5 predavanjih. Po zadnjem predavanju vam izvajalec izda spričevalo o rednem usposabljanju, s katerim na upravni enoti podaljšate Kodo 95."
+        },
+        {
+          "question": "Kaj se zgodi, če mi je Koda 95 že potekla?",
+          "answer": "Potekla Koda 95 ni izgubljena. Ponovno jo aktivirate z rednim usposabljanjem, brez izpita. Opraviti morate predavanja po programu tekočega leta in preteklih štirih let (skupaj 35 ur). Pomembna razlika: pri pravočasnem podaljšanju teče novih 5 let od datuma izteka stare kode, pri potekli kodi pa od datuma zadnjega opravljenega predavanja."
+        },
+        {
+          "question": "Kakšna je kazen za vožnjo brez veljavne Kode 95?",
+          "answer": "Če nadzorni organ ugotovi, da poklicni voznik nima veljavne Kode 95, mu prepove nadaljevanje vožnje in izreče globo. Kaznovana sta lahko tako voznik kot prevozno podjetje. Ker se prepoved izreče na kraju samem, to pomeni tudi izpad prevoza in stroške za delodajalca. Pravočasno redno usposabljanje je zato bistveno cenejše od kazni."
+        },
+        {
+          "question": "Kako po opravljenih predavanjih podaljšam Kodo 95?",
+          "answer": "Ko zberete potrdila za vseh 5 predavanj, vam zadnji izvajalec izda spričevalo o rednem usposabljanju. S spričevalom na katerikoli upravni enoti vložite vlogo za podaljšanje — Koda 95 se vam podaljša za 5 let in vpiše v vozniško dovoljenje oziroma na izkaznico o vozniških kvalifikacijah."
+        }
+      ]
     },
     "zacetna": {
       "name": "Začetna Koda 95",
@@ -180,8 +222,112 @@
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "začetno usposabljanje",
       "heroTitleSuffix": "Koda 95",
-      "priceFrom": "Že od 600 EUR naprej"
+      "priceFrom": "Že od 600 EUR naprej",
+      "faq": [
+        {
+          "question": "Kaj je Koda 95 in kdo jo potrebuje?",
+          "answer": "Koda 95 je oznaka temeljne poklicne kvalifikacije, ki se vpiše v vozniško dovoljenje ali na izkaznico o vozniških kvalifikacijah. Potrebujejo jo vsi poklicni vozniki, ki opravljajo javne komercialne prevoze blaga z vozili nad 3.500 kg največje dovoljene mase ali prevoze potnikov z vozili z več kot 9 sedeži. Brez veljavne Kode 95 poklicna vožnja tovornjaka ali avtobusa ni dovoljena. Ne v Sloveniji, ne drugje v Evropski uniji."
+        },
+        {
+          "question": "Za katere kategorije vozil velja Koda 95?",
+          "answer": "Koda 95 velja za kategorije C1, C1E, C in CE (prevoz blaga) ter D1, D1E, D in DE (prevoz potnikov). Vpiše se ob tistih kategorijah v vozniškem dovoljenju, za katere ste opravili usposabljanje. Koda 95, pridobljena v Sloveniji, je priznana v vseh državah članicah EU."
+        },
+        {
+          "question": "Kdo mora opraviti začetno usposabljanje?",
+          "answer": "Začetno usposabljanje (pridobitev temeljne kvalifikacije) morajo opraviti vsi vozniki, ki Kode 95 še nimajo in želijo poklicno voziti tovorna vozila ali avtobuse. To velja za nove voznike po opravljenem vozniškem izpitu kategorije C ali D ter za voznike iz tretjih držav, ki se zaposlujejo pri slovenskih prevoznikih. Kdor Kodo 95 že ima, potrebuje le redno usposabljanje za podaljšanje."
+        },
+        {
+          "question": "Kakšni so pogoji za vključitev v začetno usposabljanje?",
+          "answer": "Za vključitev potrebujete veljavno vozniško dovoljenje ustrezne kategorije (najmanj C1 za prevoz blaga oz. D1 za prevoz potnikov) ali potrdilo o opravljenem vozniškem izpitu. Državljani tretjih držav (npr. Bosna in Hercegovina, Srbija, Severna Makedonija, Kosovo, Albanija) ob prijavi predložijo še dokazilo o nameri zaposlitve pri podjetju s sedežem v Sloveniji, kandidati brez stalnega prebivališča pa potrdilo o začasnem bivanju v Republiki Sloveniji."
+        },
+        {
+          "question": "Kako poteka začetno usposabljanje za Kodo 95?",
+          "answer": "Začetno usposabljanje poteka po pospešenem postopku pridobitve temeljne kvalifikacije in obsega teoretično usposabljanje. Predavanja pokrivajo varno in racionalno vožnjo, predpise o delovnem času in tahografih, varnost pri delu ter osnove prevozne dejavnosti. Po zaključenem usposabljanju sledi izpit."
+        },
+        {
+          "question": "Kako poteka izpit za pridobitev Kode 95?",
+          "answer": "Izpit se opravlja pred državno izpitno komisijo in je sestavljen iz dveh delov. Teoretični del poteka pisno v obliki izpitne pole z omejenim časom reševanja, praktični del pa je preizkus vožnje ob prisotnosti učitelja vožnje. Po uspešno opravljenem izpitu prejmete spričevalo o pridobljeni temeljni kvalifikaciji."
+        },
+        {
+          "question": "Ali lahko usposabljanje opravim, če še nimam kategorije C ali D?",
+          "answer": "Da, kandidat, ki še nima opravljenega vozniškega izpita ustrezne kategorije, lahko začne usposabljanje za pridobitev temeljne kvalifikacije. Na podlagi potrdila izvajalca o začetem usposabljanju lahko nato opravi tudi vozniški izpit. K izpitu za Kodo 95 pa sme pristopiti šele z veljavnim vozniškim dovoljenjem oziroma potrdilom o opravljenem izpitu ustrezne kategorije."
+        },
+        {
+          "question": "Kje in kako se Koda 95 vpiše po opravljenem izpitu?",
+          "answer": "Na podlagi spričevala o pridobljeni temeljni kvalifikaciji na katerikoli upravni enoti vložite vlogo za vpis kode 95 v vozniško dovoljenje. Voznikom, ki nimajo slovenskega vozniškega dovoljenja, se izda izkaznica o vozniških kvalifikacijah. Koda 95 velja 5 let od datuma opravljenega izpita."
+        },
+        {
+          "question": "Koliko stane začetno usposabljanje za Kodo 95?",
+          "answer": "Cena začetnega usposabljanja za Kodo 95 je od 600 EUR naprej. Končna cena je odvisna od kategorije oziroma vrste prevoza (tovorno vozilo ali avtobus) ter tudi od tega, ali je voznik slovenski državljan ali prihaja iz tujine, saj se lahko postopki in zahtevana dokumentacija razlikujejo. Cena vključuje teoretično usposabljanje, praktične ure vožnje in pripravo na izpit. Za aktualno ceno in prosti termin nas kontaktirajte."
+        },
+        {
+          "question": "Koliko časa traja od prijave do vpisa Kode 95?",
+          "answer": "Celoten postopek, od začetka predavanj, prek praktičnih voženj do izpita in vpisa na upravni enoti običajno traja nekaj tednov, odvisno od razpisanega termina in izpitnega roka. Ker se termini hitro zapolnijo, priporočamo čimprejšnjo prijavo, še posebej če imate dogovorjeno zaposlitev in Kodo 95 potrebujete hitro."
+        }
+      ]
     }
+  },
+  "TerminFaq": {
+    "redna": [
+      {
+        "question": "Kako se prijavim na izbrani termin rednega usposabljanja?",
+        "answer": "Prijava poteka v celoti prek spleta: pri izbranem terminu kliknite »Prijava«, izpolnite kratek obrazec in takoj prejmete potrditev na e-pošto s kodo prijave ter vsemi navodili. Postopek traja manj kot dve minuti, po prijavi pa vas pred usposabljanjem še pravočasno spomnimo na termin."
+      },
+      {
+        "question": "Do kdaj se lahko prijavim na termin?",
+        "answer": "Prijave sprejemamo do zapolnitve mest oziroma najkasneje dan pred usposabljanjem. Ker je število mest na posameznem terminu omejeno, priporočamo prijavo takoj, ko najdete termin, ki vam ustreza — priljubljeni datumi (predvsem sobote) se zapolnijo najhitreje."
+      },
+      {
+        "question": "Kaj prinesem s seboj na usposabljanje?",
+        "answer": "S seboj prinesite veljaven osebni dokument in vozniško dovoljenje. Vozniki brez slovenskega vozniškega dovoljenja prinesite izkaznico o vozniških kvalifikacijah. Priporočamo tudi, da imate pri roki potrdila o morebitnih že opravljenih predavanjih, da lahko preverimo, kateri letni programi vam še manjkajo."
+      },
+      {
+        "question": "Kako poteka dan usposabljanja?",
+        "answer": "Predavanje traja 7 pedagoških ur z vmesnimi odmori. Začnemo zjutraj in zaključimo v zgodnjih popoldanskih urah. Vsebine podajamo praktično, s primeri iz voznikovega vsakdana. Ob koncu dneva prejmete potrdilo o opravljenem predavanju za ustrezni letni program."
+      },
+      {
+        "question": "Kateri letni program pokriva posamezen termin in zakaj je to pomembno?",
+        "answer": "Za podaljšanje Kode 95 morate zbrati 5 predavanj po različnih letnih programih, zato je pri vsakem terminu jasno označeno, kateri program pokriva. Pred prijavo preverite, katere programe že imate opravljene, in izberite termin z manjkajočim programom. Če niste prepričani, nas kontaktirajte — preverimo namesto vas."
+      },
+      {
+        "question": "Kako plačam kotizacijo?",
+        "answer": "Po prijavi prejmete vse podatke za plačilo z UPN nalogom (tudi QR kodo za hitro plačilo prek mobilne banke). Kotizacijo poravnate pred izvedbo usposabljanja, na željo pa izdamo račun na podjetje. Veliko voznikom usposabljanje krije delodajalec."
+      },
+      {
+        "question": "Kaj, če se prijavljenega termina ne morem udeležiti?",
+        "answer": "Nič hudega, sporočite nam čim prej in vašo prijavo brezplačno prestavimo na naslednji razpisani termin z istim letnim programom. Že plačana kotizacija se v celoti upošteva pri novem terminu."
+      }
+    ],
+    "zacetna": [
+      {
+        "question": "Kako se prijavim na termin začetnega usposabljanja in do kdaj?",
+        "answer": "Pri izbranem terminu kliknete »Prijava« in izpolnite spletni obrazec. Potrditev s kodo prijave in navodili prejmete takoj na e-pošto. Ker začetno usposabljanje obsega obsežen program s praktičnimi vožnjami in izpitom, priporočamo prijavo vsaj nekaj dni pred začetkom, da uredimo dokumentacijo in razpored voženj."
+      },
+      {
+        "question": "Kako je razporejen urnik predavanj, ali je primeren tudi za zaposlene?",
+        "answer": "Da. Teoretični del je razporejen tako, da ga lahko opravite tudi ob službi. Točen urnik za posamezen termin prejmete ob prijavi, pri razporeditvi pa se maksimalno prilagodimo skupini."
+      },
+      {
+        "question": "Kdaj poteka praktični del in kako se dogovorim za termine voženj?",
+        "answer": "Praktični del obsega 2-urno vožnjo z vozilom ustrezne kategorije ter delo z tahografom in poteka pred, vzporedno ali po zaključku teoretičnega dela. Termine voženj uskladimo individualno z vsakim kandidatom, tudi zgodaj zjutraj ali ob vikendih, da se vožnje čim lažje uskladijo z vašimi obveznostmi."
+      },
+      {
+        "question": "Kdaj in kje poteka izpit?",
+        "answer": "Izpitni rok je razpisan ob koncu usposabljanja. Točen datum in lokacijo prejmete med usposabljanjem, pravočasno pa vas nanj tudi temeljito pripravimo. Izpit poteka pred državno komisijo in obsega pisni teoretični preizkus ter praktični del vožnje."
+      },
+      {
+        "question": "Kaj potrebujem prvi dan usposabljanja?",
+        "answer": "Prvi dan prinesite veljaven osebni dokument in vozniško dovoljenje ustrezne kategorije oziroma potrdilo o opravljenem vozniškem izpitu. Kandidati iz tretjih držav prinesite še dokazilo o nameri zaposlitve pri slovenskem podjetju ter potrdilo o začasnem bivanju, če nimate stalnega prebivališča v Sloveniji. Vse gradivo za predavanja prejmete pri nas."
+      },
+      {
+        "question": "Kaj vključuje cena in kako poteka plačilo?",
+        "answer": "Cena vključuje celoten teoretični program, učna gradiva in pripravo na izpit ter tako praktični kot teoretični izpit. Podatke za plačilo z UPN nalogom prejmete po prijavi, na željo izdamo račun na podjetje. Če vam usposabljanje krije bodoči delodajalec, uredimo vse potrebno neposredno z njim. Za aktualno ceno in možnosti plačila nas pokličite ali pišite."
+      },
+      {
+        "question": "Kaj sledi po uspešno opravljenem izpitu?",
+        "answer": "Po uspešno opravljenem izpitu prejmete spričevalo o pridobljeni temeljni kvalifikaciji. Z njim na katerikoli upravni enoti vložite vlogo za vpis Kode 95 v vozniško dovoljenje (oziroma za izdajo izkaznice o vozniških kvalifikacijah). Koda velja 5 let od datuma izpita in z njo lahko takoj začnete poklicno voziti po vsej EU."
+      }
+    ]
   },
   "RootMeta": {
     "title": "Koda 95 — Tahografi Cuderman",

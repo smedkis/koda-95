@@ -167,7 +167,49 @@
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "periodičnu obuku",
       "heroTitleSuffix": "Koda 95",
-      "terminDescription": "Periodična obuka za obnavljanje koda 95 po propisanom programu za 2026. godinu. Obuka traje 7 sati i namenjena je svim profesionalnim vozačima kategorija C i D koji treba da obnove valjanost osnovne kvalifikacije."
+      "terminDescription": "Periodična obuka za obnavljanje koda 95 po propisanom programu za 2026. godinu. Obuka traje 7 sati i namenjena je svim profesionalnim vozačima kategorija C i D koji treba da obnove valjanost osnovne kvalifikacije.",
+      "faq": [
+        {
+          "question": "Šta je redovna obuka za Koda 95?",
+          "answer": "Redovna obuka je zakonom propisana edukacija za profesionalne vozače, kojom se važenje Koda 95 produžava za narednih 5 godina. Obuka se odvija u obliku predavanja, bez polaganja ispita, a sadržaj svake godine propisuje ministarstvo nadležno za infrastrukturu. Naglasak je na bezbednosti u saobraćaju, novinama u zakonodavstvu i ekonomičnoj vožnji."
+        },
+        {
+          "question": "Da li mi je potrebna redovna ili početna obuka?",
+          "answer": "Ako već imate Koda 95 (čak i ako vam je istekla), potrebna vam je redovna obuka. Početna obuka sa polaganjem ispita namenjena je samo vozačima koji nikada nisu stekli početnu kvalifikaciju. Ako niste sigurni šta važi za vas, pozovite nas. Brzo ćemo proveriti vaš status i savetovati vas koji program je pravi za vas."
+        },
+        {
+          "question": "Koliko dugo važi Koda 95?",
+          "answer": "Koda 95 važi 5 godina. Nakon sticanja početne kvalifikacije, važenje Koda 95 produžavate isključivo redovnom obukom."
+        },
+        {
+          "question": "Koliko sati traje redovna obuka za Koda 95?",
+          "answer": "Redovna obuka obuhvata ukupno 35 sati, raspoređenih u 5 predavanja po 7 sati. Svako predavanje obuhvata program za jednu godinu, a vozač može da pohađa samo jedno predavanje dnevno. Nakon svakog predavanja dobijate potvrdu o učešću."
+        },
+        {
+          "question": "Kada moram da završim redovnu obuku?",
+          "answer": "Svih 5 predavanja morate završiti pre isteka važenja Koda 95. Najbolje je da svake godine završite jedno predavanje u trajanju od 7 sati. Na taj način ravnomerno raspoređujete obavezu i izbegavate gužvu neposredno pre isteka Koda 95."
+        },
+        {
+          "question": "Da li mogu da završim svih 5 predavanja u jednoj godini?",
+          "answer": "Da, ali svako predavanje mora da obuhvata drugačiji godišnji program (programe iz poslednjih 5 godina), a dozvoljeno je pohađati samo jedno predavanje dnevno. To znači najmanje 5 različitih dana obuke. Ako kasnite sa predavanjima, pomoći ćemo vam da napravite raspored kako biste na vreme nadoknadili propuštene programe."
+        },
+        {
+          "question": "Da li moram da polažem ispit nakon redovne obuke?",
+          "answer": "Ne, kod redovne obuke nema ispita. Potrebno je samo da prisustvujete svim 5 predavanjima. Nakon poslednjeg predavanja, organizator obuke će vam izdati potvrdu o završenoj redovnoj obuci, na osnovu koje u nadležnoj upravnoj jedinici produžavate Koda 95."
+        },
+        {
+          "question": "Šta se dešava ako mi je Koda 95 već istekla?",
+          "answer": "Istekla Koda 95 nije izgubljena. Ponovo je aktivirate redovnom obukom, bez polaganja ispita. Morate završiti predavanja prema programu za tekuću godinu i prethodne četiri godine (ukupno 35 sati). Važna razlika: ako na vreme produžite Koda 95, novi period važenja od 5 godina počinje od datuma isteka prethodne Koda 95. Ako vam je Koda 95 već istekla, novi period važenja od 5 godina počinje od datuma poslednjeg završenog predavanja."
+        },
+        {
+          "question": "Kolika je kazna za vožnju bez važeće Koda 95?",
+          "answer": "Ako nadležni organ utvrdi da profesionalni vozač nema važeću Koda 95, može mu zabraniti da nastavi vožnju i izreći novčanu kaznu. Kazna može biti izrečena i vozaču i prevozničkoj kompaniji. Pošto se zabrana vožnje izriče na licu mesta, to znači i prekid prevoza i dodatne troškove za poslodavca. Pravovremeno obavljanje redovne obuke zato je znatno jeftinije od plaćanja kazne."
+        },
+        {
+          "question": "Kako nakon završenih predavanja produžavam Koda 95?",
+          "answer": "Kada prikupite potvrde za svih 5 predavanja, poslednji organizator obuke će vam izdati potvrdu o završenoj redovnoj obuci. Sa tom potvrdom možete podneti zahtev za produženje u bilo kojoj upravnoj jedinici. Koda 95 će vam biti produžena za 5 godina i upisana u vozačku dozvolu ili karticu o vozačkim kvalifikacijama."
+        }
+      ]
     },
     "zacetna": {
       "name": "Osnovna kvalifikacija – Koda 95",
@@ -180,8 +222,112 @@
       "heroTitlePrefix": "Prijava na",
       "heroTitleHighlight": "osnovnu kvalifikaciju",
       "heroTitleSuffix": "Koda 95",
-      "priceFrom": "Već od 600 EUR"
+      "priceFrom": "Već od 600 EUR",
+      "faq": [
+        {
+          "question": "Šta je Koda 95 i kome je potrebna?",
+          "answer": "Koda 95 je oznaka profesionalne kvalifikacije vozača koja se upisuje u vozačku dozvolu ili na karticu o vozačkim kvalifikacijama. Potrebna je svim profesionalnim vozačima koji obavljaju komercijalni prevoz robe vozilima čija je najveća dozvoljena masa veća od 3.500 kg ili prevoz putnika vozilima sa više od 9 sedišta. Bez važeće Koda 95 nije dozvoljeno profesionalno upravljanje kamionom ili autobusom — ni u Sloveniji ni bilo gde drugde u Evropskoj uniji."
+        },
+        {
+          "question": "Za koje kategorije vozila važi Koda 95?",
+          "answer": "Koda 95 važi za kategorije C1, C1E, C i CE (prevoz robe) i D1, D1E, D i DE (prevoz putnika). Upisuje se uz one kategorije u vozačkoj dozvoli za koje ste završili potrebnu obuku. Koda 95 stečena u Sloveniji priznata je u svim državama članicama EU."
+        },
+        {
+          "question": "Ko mora da završi početnu obuku?",
+          "answer": "Početnu obuku (sticanje početne kvalifikacije) moraju da završe svi vozači koji još nemaju Koda 95 i žele profesionalno da upravljaju kamionima ili autobusima. To važi za nove vozače koji su položili vozački ispit za kategoriju C ili D, kao i za vozače iz trećih zemalja koji se zapošljavaju kod slovenačkih prevozničkih kompanija. Vozačima koji već imaju Koda 95 potrebna je samo redovna obuka za produženje važenja."
+        },
+        {
+          "question": "Koji su uslovi za upis početne obuke?",
+          "answer": "Za upis vam je potrebna važeća vozačka dozvola odgovarajuće kategorije (najmanje C1 za prevoz robe ili D1 za prevoz putnika) ili potvrda o položenom vozačkom ispitu. Državljani trećih zemalja (npr. Bosne i Hercegovine, Srbije, Severne Makedonije, Kosova ili Albanije) prilikom prijave moraju da prilože i dokaz o nameri zaposlenja kod kompanije sa sedištem u Sloveniji. Kandidati koji nemaju stalno prebivalište moraju da prilože i potvrdu o privremenom boravku u Republici Sloveniji."
+        },
+        {
+          "question": "Kako izgleda početna obuka za Koda 95?",
+          "answer": "Početna obuka se odvija po ubrzanom postupku za sticanje početne kvalifikacije i obuhvata teorijsku obuku. Predavanja obuhvataju bezbednu i ekonomičnu vožnju, propise o radnom vremenu i tahografima, bezbednost na radu i osnove transportne delatnosti. Nakon završene obuke polaže se ispit."
+        },
+        {
+          "question": "Kako izgleda ispit za sticanje Koda 95?",
+          "answer": "Ispit se polaže pred državnom ispitnom komisijom i sastoji se iz dva dela. Teorijski deo se polaže pismeno u obliku ispitnog testa sa ograničenim vremenom za rešavanje, dok je praktični deo provera vožnje uz prisustvo instruktora vožnje. Nakon uspešno položenog ispita dobijate sertifikat o stečenoj početnoj kvalifikaciji."
+        },
+        {
+          "question": "Da li mogu da završim obuku ako još nemam kategoriju C ili D?",
+          "answer": "Da. Kandidat koji još nije položio vozački ispit za odgovarajuću kategoriju može da započne obuku za sticanje početne kvalifikacije. Na osnovu potvrde organizatora obuke o započetoj obuci, kandidat zatim može da polaže i vozački ispit. Međutim, ispitu za Koda 95 može pristupiti tek kada ima važeću vozačku dozvolu ili potvrdu o položenom vozačkom ispitu za odgovarajuću kategoriju."
+        },
+        {
+          "question": "Gde i kako se Koda 95 upisuje nakon položenog ispita?",
+          "answer": "Na osnovu sertifikata o stečenoj početnoj kvalifikaciji, zahtev za upis Koda 95 u vozačku dozvolu možete podneti u bilo kojoj upravnoj jedinici. Vozačima koji nemaju slovenačku vozačku dozvolu izdaje se kartica o vozačkim kvalifikacijama. Koda 95 važi 5 godina od datuma položenog ispita."
+        },
+        {
+          "question": "Koliko košta početna obuka za Koda 95?",
+          "answer": "Cena početne obuke za Koda 95 počinje od 600 EUR. Konačna cena zavisi od kategorije odnosno vrste prevoza (kamion ili autobus), kao i od toga da li je vozač državljanin Slovenije ili dolazi iz inostranstva, jer se postupci i potrebna dokumentacija mogu razlikovati. Cena uključuje teorijsku obuku, praktične časove vožnje i pripremu za ispit. Za aktuelnu cenu i slobodne termine kontaktirajte nas."
+        },
+        {
+          "question": "Koliko traje postupak od prijave do upisa Koda 95?",
+          "answer": "Ceo postupak, od početka predavanja, preko praktičnih časova vožnje i ispita do upisa u upravnoj jedinici, obično traje nekoliko nedelja, u zavisnosti od dostupnog termina obuke i termina za polaganje ispita. Pošto se termini brzo popunjavaju, preporučujemo da se prijavite što ranije, posebno ako imate dogovoreno zaposlenje i Koda 95 vam je potrebna što pre."
+        }
+      ]
     }
+  },
+  "TerminFaq": {
+    "redna": [
+      {
+        "question": "Kako da se prijavim za izabrani termin redovne obuke?",
+        "answer": "Prijava se obavlja u potpunosti putem interneta: kod izabranog termina kliknite na „Prijava“, popunite kratak obrazac i odmah ćete na e-mail dobiti potvrdu sa kodom prijave i svim potrebnim uputstvima. Postupak traje manje od dva minuta, a nakon prijave ćemo vas blagovremeno podsetiti na termin pre početka obuke."
+      },
+      {
+        "question": "Do kada mogu da se prijavim za termin?",
+        "answer": "Prijave primamo dok se ne popune sva mesta, a najkasnije dan pre početka obuke. Pošto je broj mesta za svaki termin ograničen, preporučujemo da se prijavite čim pronađete termin koji vam odgovara — popularni datumi, posebno subote, najbrže se popunjavaju."
+      },
+      {
+        "question": "Šta treba da ponesem sa sobom na obuku?",
+        "answer": "Ponesite važeći lični dokument i vozačku dozvolu. Vozači koji nemaju slovenačku vozačku dozvolu treba da ponesu i karticu o vozačkim kvalifikacijama. Preporučujemo i da ponesete potvrde o eventualno već završenim predavanjima, kako bismo mogli da proverimo koji vam godišnji programi još nedostaju."
+      },
+      {
+        "question": "Kako izgleda dan obuke?",
+        "answer": "Predavanje traje 7 nastavnih sati, sa pauzama između. Počinjemo ujutro i završavamo u ranim popodnevnim satima. Sadržaj predstavljamo na praktičan način, uz primere iz svakodnevnog rada vozača. Na kraju dana dobijate potvrdu o završenom predavanju za odgovarajući godišnji program."
+      },
+      {
+        "question": "Koji godišnji program obuhvata pojedinačni termin i zašto je to važno?",
+        "answer": "Za produženje Koda 95 morate završiti 5 predavanja iz različitih godišnjih programa, zato je kod svakog termina jasno navedeno koji program obuhvata. Pre prijave proverite koje ste programe već završili i izaberite termin sa programom koji vam nedostaje. Ako niste sigurni, kontaktirajte nas — proverićemo umesto vas."
+      },
+      {
+        "question": "Kako plaćam naknadu za obuku?",
+        "answer": "Nakon prijave dobićete sve podatke za plaćanje putem UPN naloga, uključujući i QR kod za brzo plaćanje putem mobilnog bankarstva. Naknadu za obuku potrebno je uplatiti pre početka obuke. Na zahtev možemo izdati račun na kompaniju. Mnogim vozačima obuku plaća poslodavac."
+      },
+      {
+        "question": "Šta ako ne mogu da prisustvujem terminu za koji sam se prijavio?",
+        "answer": "Nema problema. Obavestite nas što je pre moguće i vašu prijavu ćemo besplatno prebaciti na sledeći dostupni termin sa istim godišnjim programom. Već uplaćena naknada za obuku u potpunosti će biti uračunata u novi termin."
+      }
+    ],
+    "zacetna": [
+      {
+        "question": "Kako da se prijavim za termin početne obuke i do kada?",
+        "answer": "Kod izabranog termina kliknite na „Prijava“ i popunite online obrazac. Potvrdu sa kodom prijave i uputstvima odmah ćete dobiti na e-mail. Pošto početna obuka obuhvata obiman program sa praktičnim časovima vožnje i ispitom, preporučujemo da se prijavite najmanje nekoliko dana pre početka, kako bismo na vreme uredili dokumentaciju i raspored vožnje."
+      },
+      {
+        "question": "Kako je organizovan raspored predavanja i da li je obuka pogodna i za zaposlene?",
+        "answer": "Da. Teorijski deo je organizovan tako da obuku možete da završite i uz posao. Tačan raspored za izabrani termin dobićete prilikom prijave, a pri organizaciji rasporeda maksimalno se prilagođavamo grupi."
+      },
+      {
+        "question": "Kada se održava praktični deo i kako dogovaram termine vožnje?",
+        "answer": "Praktični deo obuhvata 2 sata vožnje vozilom odgovarajuće kategorije, kao i rad sa tahografom, a održava se pre, tokom ili nakon završetka teorijskog dela. Termine vožnje dogovaramo individualno sa svakim kandidatom, uključujući rano ujutro ili vikendom, kako bi se vožnja što lakše uskladila sa vašim obavezama."
+      },
+      {
+        "question": "Kada i gde se održava ispit?",
+        "answer": "Termin za polaganje ispita zakazuje se na kraju obuke. Tačan datum i lokaciju dobićete tokom obuke, a na vreme ćemo vas i temeljno pripremiti za ispit. Ispit se polaže pred državnom komisijom i obuhvata pisani teorijski test i praktični deo vožnje."
+      },
+      {
+        "question": "Šta mi je potrebno prvog dana obuke?",
+        "answer": "Prvog dana ponesite važeći lični dokument i vozačku dozvolu odgovarajuće kategorije ili potvrdu o položenom vozačkom ispitu. Kandidati iz trećih zemalja treba da ponesu i dokaz o nameri zaposlenja kod slovenačke kompanije, kao i potvrdu o privremenom boravku ako nemaju stalno prebivalište u Sloveniji. Sav materijal za predavanja dobićete kod nas."
+      },
+      {
+        "question": "Šta je uključeno u cenu i kako se vrši plaćanje?",
+        "answer": "Cena uključuje kompletan teorijski program, nastavne materijale i pripremu za ispit, kao i praktični i teorijski ispit. Podatke za plaćanje putem UPN naloga dobićete nakon prijave, a na zahtev možemo izdati račun na kompaniju. Ako troškove obuke pokriva vaš budući poslodavac, sve potrebno možemo urediti direktno sa njim. Za aktuelnu cenu i mogućnosti plaćanja pozovite nas ili nam pišite."
+      },
+      {
+        "question": "Šta sledi nakon uspešno položenog ispita?",
+        "answer": "Nakon uspešno položenog ispita dobijate sertifikat o stečenoj početnoj kvalifikaciji. Sa tim sertifikatom možete u bilo kojoj upravnoj jedinici podneti zahtev za upis Koda 95 u vozačku dozvolu (odnosno za izdavanje kartice o vozačkim kvalifikacijama). Koda 95 važi 5 godina od datuma polaganja ispita i sa njom možete odmah početi da se profesionalno bavite vožnjom širom EU."
+      }
+    ]
   },
   "RootMeta": {
     "title": "Koda 95 — Tahografi Cuderman",

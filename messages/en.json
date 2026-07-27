@@ -167,7 +167,49 @@
       "heroTitlePrefix": "Register for",
       "heroTitleHighlight": "periodic training",
       "heroTitleSuffix": "— Koda 95",
-      "terminDescription": "Periodic training to renew Koda 95 according to the prescribed 2026 programme. The training lasts 7 hours and is intended for all professional drivers holding category C or D who need to renew their basic qualification."
+      "terminDescription": "Periodic training to renew Koda 95 according to the prescribed 2026 programme. The training lasts 7 hours and is intended for all professional drivers holding category C or D who need to renew their basic qualification.",
+      "faq": [
+        {
+          "question": "What is periodic training for Koda 95?",
+          "answer": "Periodic training is legally required education for professional drivers that extends the validity of Koda 95 for another 5 years. It consists of classroom-based lectures with no exam. The topics are prescribed each year by the ministry responsible for infrastructure, with an emphasis on road safety, changes in legislation, and economical driving."
+        },
+        {
+          "question": "Do I need periodic or initial training?",
+          "answer": "If you already have Koda 95 (even if it has expired), you need periodic training. Initial training with an exam is intended only for drivers who have never obtained the required initial qualification. If you are not sure which option applies to you, give us a call. We will quickly check your status and advise you on the right programme."
+        },
+        {
+          "question": "How long is Koda 95 valid for?",
+          "answer": "Koda 95 is valid for 5 years. After obtaining the initial qualification, you can extend its validity exclusively through periodic training."
+        },
+        {
+          "question": "How many hours does periodic training for Koda 95 take?",
+          "answer": "Periodic training consists of a total of 35 hours, divided into 5 lectures of 7 hours each. Each lecture covers the programme for one year, and a driver can complete only one lecture per day. After each lecture, you receive a certificate of attendance."
+        },
+        {
+          "question": "When do I need to complete periodic training?",
+          "answer": "You must complete all 5 lectures before your Koda 95 expires. It is highly recommended that you complete one 7-hour lecture each year. This way, you can spread the obligation evenly and avoid the rush just before your Koda 95 expires."
+        },
+        {
+          "question": "Can I complete all 5 lectures in one year?",
+          "answer": "Yes, but each lecture must cover a different annual programme (the programmes from the last 5 years), and you are allowed to attend only one lecture per day. This means a minimum of 5 different training days. If you are behind with your lectures, we can help you create a schedule to catch up on the missing programmes in time."
+        },
+        {
+          "question": "Do I have to take an exam after completing periodic training?",
+          "answer": "No, there is no exam for periodic training. You only need to attend all 5 lectures. After the final lecture, the training provider will issue you a certificate of periodic training, which you can use to extend your Koda 95 at the administrative unit."
+        },
+        {
+          "question": "What happens if my Koda 95 has already expired?",
+          "answer": "An expired Koda 95 is not lost. You can reactivate it by completing periodic training, without taking an exam. You must complete the lectures covering the programme for the current year and the previous four years (35 hours in total). An important difference: if you renew Koda 95 on time, the new 5-year validity period starts from the expiry date of the previous Koda 95. If your Koda 95 has already expired, the new 5-year validity period starts from the date of your last completed lecture."
+        },
+        {
+          "question": "What is the penalty for driving without a valid Koda 95?",
+          "answer": "If a supervisory authority determines that a professional driver does not have a valid Koda 95, the driver may be prohibited from continuing the journey and may receive a fine. Both the driver and the transport company may be fined. Since the driving ban is imposed on the spot, this also means interrupted transport operations and additional costs for the employer. Completing periodic training on time is therefore significantly cheaper than paying a fine."
+        },
+        {
+          "question": "How do I extend my Koda 95 after completing the lectures?",
+          "answer": "Once you have collected certificates for all 5 lectures, the last training provider will issue you a certificate of periodic training. With this certificate, you can submit an application for an extension at any administrative unit. Your Koda 95 will be extended for 5 years and entered on your driving licence or driver qualification card."
+        }
+      ]
     },
     "zacetna": {
       "name": "Initial Qualification – Koda 95",
@@ -180,8 +222,112 @@
       "heroTitlePrefix": "Register for",
       "heroTitleHighlight": "initial qualification",
       "heroTitleSuffix": "— Koda 95",
-      "priceFrom": "Starting from €600"
+      "priceFrom": "Starting from €600",
+      "faq": [
+        {
+          "question": "What is Koda 95 and who needs it?",
+          "answer": "Koda 95 is a designation of professional driver qualification that is entered on a driving licence or on a driver qualification card. It is required by all professional drivers who carry out commercial road transport of goods using vehicles with a maximum authorised mass of more than 3,500 kg, or transport passengers in vehicles with more than 9 seats. Without a valid Koda 95, professional driving of a truck or bus is not permitted — neither in Slovenia nor elsewhere in the European Union."
+        },
+        {
+          "question": "Which vehicle categories does Koda 95 apply to?",
+          "answer": "Koda 95 applies to categories C1, C1E, C and CE (transport of goods) and D1, D1E, D and DE (transport of passengers). It is entered next to the relevant categories on your driving licence for which you have completed the required training. Koda 95 obtained in Slovenia is recognised in all EU member states."
+        },
+        {
+          "question": "Who needs to complete initial training?",
+          "answer": "Initial training (obtaining the initial qualification) must be completed by all drivers who do not yet have Koda 95 and want to drive trucks or buses professionally. This applies to new drivers who have passed their category C or D driving test, as well as drivers from third countries who are employed by Slovenian transport companies. Drivers who already have Koda 95 only need to complete periodic training to extend its validity."
+        },
+        {
+          "question": "What are the requirements for enrolling in initial training?",
+          "answer": "To enrol, you need a valid driving licence for the appropriate category (at least C1 for the transport of goods or D1 for the transport of passengers) or a certificate confirming that you have passed the driving test. Third-country nationals (e.g. citizens of Bosnia and Herzegovina, Serbia, North Macedonia, Kosovo or Albania) must also submit proof of their intention to take up employment with a company based in Slovenia when registering. Candidates without permanent residence must also provide proof of temporary residence in the Republic of Slovenia."
+        },
+        {
+          "question": "How does initial training for Koda 95 work?",
+          "answer": "Initial training follows the accelerated procedure for obtaining the initial qualification and consists of theoretical training. The lectures cover safe and economical driving, regulations on working hours and tachographs, occupational safety, and the basics of transport operations. After completing the training, you must take an exam."
+        },
+        {
+          "question": "How does the exam for obtaining Koda 95 work?",
+          "answer": "The exam is conducted by a state examination commission and consists of two parts. The theoretical part is a written test with a limited time for completion, while the practical part is a driving test conducted in the presence of a driving instructor. After successfully passing the exam, you receive a certificate confirming that you have obtained the initial qualification."
+        },
+        {
+          "question": "Can I complete the training if I do not yet have a C or D category driving licence?",
+          "answer": "Yes. A candidate who has not yet passed the driving test for the appropriate category can begin training to obtain the initial qualification. Based on a certificate from the training provider confirming that the training has started, the candidate can then also take the driving test. However, you may only take the Koda 95 exam once you have a valid driving licence or a certificate confirming that you have passed the driving test for the appropriate category."
+        },
+        {
+          "question": "Where and how is Koda 95 entered after passing the exam?",
+          "answer": "Based on the certificate confirming that you have obtained the initial qualification, you can submit an application at any administrative unit to have Koda 95 entered on your driving licence. Drivers who do not have a Slovenian driving licence are issued a driver qualification card. Koda 95 is valid for 5 years from the date of passing the exam."
+        },
+        {
+          "question": "How much does initial training for Koda 95 cost?",
+          "answer": "The price of initial training for Koda 95 starts at EUR 600. The final price depends on the category and type of transport (truck or bus), as well as on whether the driver is a Slovenian citizen or comes from abroad, as the procedures and required documentation may differ. The price includes theoretical training, practical driving lessons and exam preparation. For the current price and available dates, please contact us."
+        },
+        {
+          "question": "How long does it take from registration to having Koda 95 entered?",
+          "answer": "The entire process, from the start of the lectures through practical driving lessons and the exam to the registration at the administrative unit, usually takes a few weeks, depending on the available training date and exam schedule. Since available dates fill up quickly, we recommend registering as early as possible, especially if you have agreed on employment and need Koda 95 quickly."
+        }
+      ]
     }
+  },
+  "TerminFaq": {
+    "redna": [
+      {
+        "question": "How do I register for my chosen periodic training date?",
+        "answer": "Registration is completed entirely online: click \"Register\" next to your chosen date, fill in the short form and you will immediately receive a confirmation email with your registration code and all the necessary instructions. The process takes less than two minutes, and after registration, we will also remind you of the date in good time before the training."
+      },
+      {
+        "question": "How late can I register for a training date?",
+        "answer": "Registration is open until all places are filled, or at the latest until the day before the training. Since the number of places for each date is limited, we recommend registering as soon as you find a date that suits you — popular dates, especially Saturdays, fill up the fastest."
+      },
+      {
+        "question": "What do I need to bring to the training?",
+        "answer": "Please bring a valid identity document and your driving licence. Drivers without a Slovenian driving licence should also bring their driver qualification card. We also recommend having certificates for any lectures you have already completed with you, so we can check which annual programmes you still need to complete."
+      },
+      {
+        "question": "What does a training day look like?",
+        "answer": "The lecture lasts 7 teaching hours with breaks in between. We start in the morning and finish in the early afternoon. The content is presented in a practical way, with examples from a driver's everyday work. At the end of the day, you receive a certificate confirming completion of the lecture for the relevant annual programme."
+      },
+      {
+        "question": "Which annual programme does each training date cover, and why is this important?",
+        "answer": "To extend your Koda 95, you must complete 5 lectures covering different annual programmes, which is why each training date clearly indicates which programme it covers. Before registering, check which programmes you have already completed and choose a date covering a programme you are missing. If you are not sure, contact us — we will check it for you."
+      },
+      {
+        "question": "How do I pay the training fee?",
+        "answer": "After registering, you will receive all payment details via a UPN payment order, including a QR code for quick payment through mobile banking. The training fee must be paid before the training takes place. Upon request, we can issue an invoice to a company. Many drivers have their training paid for by their employer."
+      },
+      {
+        "question": "What if I cannot attend the date I registered for?",
+        "answer": "No problem. Let us know as soon as possible and we will transfer your registration free of charge to the next available date covering the same annual programme. Any training fee you have already paid will be fully credited towards the new date."
+      }
+    ],
+    "zacetna": [
+      {
+        "question": "How do I register for initial training, and when is the deadline?",
+        "answer": "Click \"Register\" next to your chosen date and fill in the online form. You will immediately receive a confirmation email with your registration code and instructions. Since initial training includes an extensive programme with practical driving lessons and an exam, we recommend registering at least a few days before the start so that we can arrange the necessary documentation and driving schedule."
+      },
+      {
+        "question": "How are the lectures scheduled, and is the training suitable for employed people?",
+        "answer": "Yes. The theoretical part is scheduled in a way that allows you to complete it alongside your job. You will receive the exact schedule for your chosen date upon registration, and we will make every effort to adapt the schedule to the group."
+      },
+      {
+        "question": "When does the practical part take place, and how do I arrange the driving lessons?",
+        "answer": "The practical part includes 2 hours of driving a vehicle of the appropriate category, as well as work with a tachograph, and takes place before, during or after the theoretical part. Driving lessons are arranged individually with each candidate, including early mornings or weekends, so that the lessons can be coordinated as easily as possible with your other commitments."
+      },
+      {
+        "question": "When and where does the exam take place?",
+        "answer": "The exam date is scheduled at the end of the training. You will receive the exact date and location during the training, and we will thoroughly prepare you for the exam in good time. The exam is conducted before a state commission and consists of a written theoretical test and a practical driving test."
+      },
+      {
+        "question": "What do I need on the first day of training?",
+        "answer": "On the first day, bring a valid identity document and a driving licence for the appropriate category or a certificate confirming that you have passed the driving test. Candidates from third countries should also bring proof of their intention to take up employment with a Slovenian company and proof of temporary residence if they do not have permanent residence in Slovenia. You will receive all training materials from us."
+      },
+      {
+        "question": "What does the price include, and how does payment work?",
+        "answer": "The price includes the complete theoretical programme, study materials, exam preparation, as well as both the practical and theoretical exams. You will receive payment details via a UPN payment order after registration, and upon request, we can issue an invoice to a company. If your future employer is covering the cost of your training, we can arrange everything directly with them. For the current price and payment options, please call or write to us."
+      },
+      {
+        "question": "What happens after successfully passing the exam?",
+        "answer": "After successfully passing the exam, you receive a certificate confirming that you have obtained the initial qualification. With this certificate, you can submit an application at any administrative unit to have Koda 95 entered on your driving licence (or to have a driver qualification card issued). Koda 95 is valid for 5 years from the date of the exam, and with it you can immediately start driving professionally throughout the EU."
+      }
+    ]
   },
   "RootMeta": {
     "title": "Koda 95 — Tahografi Cuderman",

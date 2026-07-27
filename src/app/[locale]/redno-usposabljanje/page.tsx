@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { AboutSection } from "@/components/site/AboutSection";
-import { FaqSection } from "@/components/site/FaqSection";
+import { FaqSection, type FaqItemData } from "@/components/site/FaqSection";
 import { Footer } from "@/components/site/Footer";
 import { Hero } from "@/components/site/Hero";
 import { LogosSection } from "@/components/site/LogosSection";
@@ -12,29 +12,8 @@ import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminiSection } from "@/components/site/TerminiSection";
 import { listPublicTermini } from "@/lib/data/termini";
 import { buildAlternates } from "@/lib/seo/alternates";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import { ogImagePath, ogImages, ogLocale } from "@/lib/seo/og-image";
-
-const PLACEHOLDER_FAQ = [
-  {
-    question: "Kako pogosto moram opraviti usposabljanje Koda 95?",
-    answer:
-      "Redno usposabljanje Koda 95 je zakonsko obvezno vsakih 5 let za poklicne voznike s kategorijo C ali D.",
-  },
-  {
-    question: "Kaj potrebujem za prijavo na termin?",
-    answer:
-      "Za prijavo potrebujete osebne podatke, veljavno vozniško dovoljenje ustrezne kategorije in podatke za plačilo.",
-  },
-  {
-    question: "Kako poteka plačilo usposabljanja?",
-    answer: "Plačilo se izvede preko UPN QR kode, ki jo prejmete po oddaji prijave.",
-  },
-  {
-    question: "Ali lahko usposabljanje plača podjetje namesto mene?",
-    answer:
-      "Da, pri prijavi lahko izberete, da plačilo izvede podjetje, in vnesete njegove podatke.",
-  },
-];
 
 export async function generateMetadata({
   params,
@@ -73,8 +52,14 @@ export default async function RednaKoda95Page({
   const { vir } = await searchParams;
   const t = await getTranslations("Programs.redna");
   const termini = await listPublicTermini("redna-koda-95", locale);
+  const faqs = t.raw("faq") as FaqItemData[];
+  const faqJsonLd = buildFaqJsonLd(faqs);
   return (
     <Container>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <Hero
         titlePrefix={t("heroTitlePrefix")}
         titleHighlight={t("heroTitleHighlight")}
@@ -87,7 +72,7 @@ export default async function RednaKoda95Page({
       <SectionDivider />
       <AboutSection />
       <NumbersSection />
-      <FaqSection faqs={PLACEHOLDER_FAQ} />
+      <FaqSection faqs={faqs} />
       <SubscriptionSection />
       <Footer />
     </Container>

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { ColumnGuides } from "@/components/site/ColumnGuides";
-import { FaqSection } from "@/components/site/FaqSection";
+import { FaqSection, type FaqItemData } from "@/components/site/FaqSection";
 import { Footer } from "@/components/site/Footer";
 import { MobileStickyReserve } from "@/components/site/MobileStickyReserve";
 import { SectionDivider } from "@/components/site/SectionDivider";
@@ -11,7 +11,6 @@ import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminDetails } from "@/components/site/TerminDetails";
 import { TerminRegistrationForm } from "@/components/site/TerminRegistrationForm";
 import { getDaysUntil, isNextTermin } from "@/lib/termin-dates";
-import { TERMIN_FAQ } from "@/lib/termin-faq";
 import {
   buildTerminTitle,
   formatPriceEur,
@@ -25,6 +24,7 @@ import {
   parsePublicTerminSlug,
 } from "@/lib/data/termini";
 import { buildAlternates } from "@/lib/seo/alternates";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import { ogImagePath, ogImages, ogLocale } from "@/lib/seo/og-image";
 import { buildTerminJsonLd } from "@/lib/seo/termin-jsonld";
 
@@ -114,6 +114,8 @@ export default async function TerminPage({
   );
   const daysUntil = isNext ? getDaysUntil(termin.dateISO) : undefined;
   const t = await getTranslations("TerminRegistrationForm");
+  const tf = await getTranslations({ locale, namespace: "TerminFaq" });
+  const faqs = tf.raw("redna") as FaqItemData[];
   const alternates = buildAlternates(`/redno-usposabljanje/${slug}`, locale);
   const jsonLd = buildTerminJsonLd({
     title: termin.title,
@@ -125,9 +127,14 @@ export default async function TerminPage({
     priceEur: termin.priceEur,
     url: alternates.canonical,
   });
+  const faqJsonLd = buildFaqJsonLd(faqs);
   return (
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="relative">
         <ColumnGuides />
         <div className="relative z-10 pt-24 lg:pt-32">
@@ -155,7 +162,7 @@ export default async function TerminPage({
             </div>
           </div>
           <SectionDivider />
-          <FaqSection faqs={TERMIN_FAQ} />
+          <FaqSection faqs={faqs} />
           <SubscriptionSection />
         </div>
       </div>
