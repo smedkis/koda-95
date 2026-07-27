@@ -10,22 +10,29 @@ import { getSiteUrl } from "@/lib/site-url";
 
 type JoinedPrijava = PrijaveRow & { termini: TerminiRow };
 type JoinedNarocnik = NarocnikiRow & {
-  vozniki: (VozniciRow & { prijave: JoinedPrijava[] }) | null;
+  vozniki: (VozniciRow & { prijave: JoinedPrijava[]; zunanja_usposabljanja: { date: string }[] }) | null;
 };
 
-function computeEnrollment(prijave: JoinedPrijava[] | undefined): ObvescanjeEnrollment {
-  if (!prijave || prijave.length === 0) return { status: "never" };
+// Past attendance can come from a real prijava on this platform or from an
+// imported completion at another provider (zunanja_usposabljanja) — both
+// count as "was_enrolled" for the badge, since the point is just "has this
+// driver already done training," not where.
+function computeEnrollment(
+  prijave: JoinedPrijava[] | undefined,
+  zunanjaDates: string[] | undefined,
+): ObvescanjeEnrollment {
   const today = todayIso();
 
-  const upcoming = prijave
+  const upcoming = (prijave ?? [])
     .filter((p) => p.termini.date >= today)
     .sort((a, b) => a.termini.date.localeCompare(b.termini.date));
   if (upcoming.length > 0) return { status: "enrolled", date: upcoming[0].termini.date };
 
-  const past = prijave
-    .filter((p) => p.termini.date < today)
-    .sort((a, b) => b.termini.date.localeCompare(a.termini.date));
-  if (past.length > 0) return { status: "was_enrolled", date: past[0].termini.date };
+  const pastDates = [
+    ...(prijave ?? []).filter((p) => p.termini.date < today).map((p) => p.termini.date),
+    ...(zunanjaDates ?? []),
+  ].sort((a, b) => b.localeCompare(a));
+  if (pastDates.length > 0) return { status: "was_enrolled", date: pastDates[0] };
 
   return { status: "never" };
 }
@@ -39,19 +46,40 @@ function toEntry(row: JoinedNarocnik): ObvescanjeEntry {
     dateAdded: row.created_at.slice(0, 10),
     source: row.source ?? "Ročno dodano",
     lastNotified: row.last_notified_at ? row.last_notified_at.slice(0, 10) : null,
-    enrollment: computeEnrollment(row.vozniki?.prijave),
+    enrollment: computeEnrollment(
+      row.vozniki?.prijave,
+      row.vozniki?.zunanja_usposabljanja.map((z) => z.date),
+    ),
   };
 }
 
+// PostgREST caps every response — including a ranged one — at the
+// project's "max rows" API setting: requesting .range(0, 999) still comes
+// back truncated to that cap (200 on this project), not the 1000 asked
+// for. So the page size here must sit safely under that cap, or a batch
+// that got silently truncated would look identical to a real last page
+// and stop the loop early.
+const NAROCNIKI_PAGE_SIZE = 100;
+
 export async function getNarocniki(): Promise<ObvescanjeEntry[]> {
   const client = getSupabaseServerClient();
-  const { data, error } = await client
-    .from("narocniki")
-    .select("*, vozniki(*, prijave(*, termini(*)))")
-    .order("created_at", { ascending: false });
-  if (error) throw new Error(error.message);
+  const rows: JoinedNarocnik[] = [];
 
-  return (data as unknown as JoinedNarocnik[]).map(toEntry);
+  for (let page = 0; ; page += 1) {
+    const from = page * NAROCNIKI_PAGE_SIZE;
+    const to = from + NAROCNIKI_PAGE_SIZE - 1;
+    const { data, error } = await client
+      .from("narocniki")
+      .select("*, vozniki(*, prijave(*, termini(*)), zunanja_usposabljanja(date))")
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (error) throw new Error(error.message);
+
+    rows.push(...(data as unknown as JoinedNarocnik[]));
+    if (!data || data.length < NAROCNIKI_PAGE_SIZE) break;
+  }
+
+  return rows.map(toEntry);
 }
 
 export type AddNarocnikInput = { name: string; email: string; phone: string; source: string };
@@ -97,7 +125,7 @@ export async function deleteNarocnik(id: string): Promise<{ error?: string }> {
 
 export async function updateNarocnik(
   id: string,
-  input: { name: string; email: string; phone: string },
+  input: { name: string; email: string; phone: string; source: string },
 ): Promise<{ error?: string }> {
   const client = getSupabaseServerClient();
   const { error } = await client
@@ -106,6 +134,7 @@ export async function updateNarocnik(
       full_name: input.name || null,
       email: input.email,
       phone: input.phone || null,
+      source: input.source || null,
     })
     .eq("id", id);
   if (error) return { error: error.message };

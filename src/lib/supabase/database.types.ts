@@ -9,8 +9,9 @@
 // 20260720140000_prijave_source.sql,
 // 20260721110000_licence_category_d_delno.sql,
 // 20260721120000_prijave_form_completed.sql,
-// 20260721130000_termin_reminder.sql, and
-// 20260722080000_vozniki_no_emso.sql. Keep in sync with any new migration.
+// 20260721130000_termin_reminder.sql,
+// 20260722080000_vozniki_no_emso.sql, and
+// 20260727130000_zunanja_usposabljanja.sql. Keep in sync with any new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -110,6 +111,16 @@ export type NarocnikiRow = {
   created_at: string;
 };
 
+export type ZunanjeUsposabljanjeRow = {
+  id: string;
+  voznik_id: string;
+  program: ProgramKey;
+  modul: number | null;
+  date: string;
+  note: string | null;
+  created_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -155,6 +166,13 @@ export interface Database {
         Row: AdminSessionRow;
         Insert: AdminSessionRow;
         Update: Partial<AdminSessionRow>;
+        Relationships: [];
+      };
+      zunanja_usposabljanja: {
+        Row: ZunanjeUsposabljanjeRow;
+        Insert: Partial<Omit<ZunanjeUsposabljanjeRow, "id" | "created_at">> &
+          Pick<ZunanjeUsposabljanjeRow, "voznik_id" | "program" | "date">;
+        Update: Partial<Omit<ZunanjeUsposabljanjeRow, "id" | "created_at">>;
         Relationships: [];
       };
     };

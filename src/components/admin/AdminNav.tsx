@@ -55,6 +55,16 @@ function ChartIcon({ className }: { className?: string }) {
   );
 }
 
+function UploadIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={cn("size-5 shrink-0", className)}>
+      <path d="M12 15.5V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.5 8.5L12 4L16.5 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4.75 15.5V17.25C4.75 18.9069 6.09315 20.25 7.75 20.25H16.25C17.9069 20.25 19.25 18.9069 19.25 17.25V15.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function BellIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={cn("size-5 shrink-0", className)}>
@@ -198,6 +208,15 @@ export function AdminNav() {
             <Link href="/admin/statistika" aria-label="Statistika" className="flex items-center">
               <ChartIcon
                 className={pathname === "/admin/statistika" ? "text-primary" : "text-[#402E32]"}
+              />
+            </Link>
+            <Link
+              href="/admin/uvoz"
+              aria-label="Uvoz preteklih usposabljanj"
+              className="flex items-center"
+            >
+              <UploadIcon
+                className={pathname === "/admin/uvoz" ? "text-primary" : "text-[#402E32]"}
               />
             </Link>
             <form action={logout}>

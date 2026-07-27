@@ -2,6 +2,7 @@ import "server-only";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getTerminRowBySlug, programKeyToShort, publicTerminHref, terminSlug } from "./termini";
 import { syncNarocnikFromRegistration } from "./narocniki";
+import { getZunanjaUsposabljanjaForVoznik } from "./zunanja-usposabljanja";
 import type { PrijaveRow, TerminiRow, VozniciRow } from "@/lib/supabase/database.types";
 import type { TerminDriver } from "@/components/admin/AdminTerminDriversTable";
 import { dmyToIso, formatDateTimeSl, isoToDmy } from "@/lib/date-format";
@@ -35,6 +36,7 @@ function toTerminDriver(row: JoinedPrijava, priceEur: number | null): TerminDriv
 
   return {
     id: row.id,
+    voznikId: row.voznik_id,
     driverName: v.full_name,
     email: v.email ?? undefined,
     phone: v.phone ?? undefined,
@@ -99,6 +101,13 @@ export async function getRegistration(
 
   const driver = toTerminDriver(data as unknown as JoinedPrijava, termin.price_eur);
   driver.events = await getRegistrationEvents(registrationId);
+  const zunanja = await getZunanjaUsposabljanjaForVoznik(driver.voznikId as string);
+  driver.previousTrainings = zunanja.map((entry) => ({
+    program: programKeyToShort(entry.program),
+    modul: entry.modul,
+    date: entry.date,
+    note: entry.note,
+  }));
   return driver;
 }
 

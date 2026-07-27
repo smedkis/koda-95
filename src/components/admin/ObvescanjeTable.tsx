@@ -108,7 +108,7 @@ export function ObvescanjeTable({
   onDelete: (id: string) => void;
   onUpdate: (
     id: string,
-    input: { name: string; email: string; phone: string },
+    input: { name: string; email: string; phone: string; source: string },
   ) => Promise<{ error?: string }>;
 }) {
   const [sortKey, setSortKey] = useState<SortKey>("dateAdded");
@@ -120,6 +120,7 @@ export function ObvescanjeTable({
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const [editPhone, setEditPhone] = useState("");
+  const [editSource, setEditSource] = useState("");
   const [editError, setEditError] = useState<string | null>(null);
   const [isSavingEdit, setIsSavingEdit] = useState(false);
   const [pageSize, setPageSize] = useState(10);
@@ -176,6 +177,7 @@ export function ObvescanjeTable({
     setEditName(row.driverName);
     setEditEmail(row.email);
     setEditPhone(row.phone);
+    setEditSource(row.source);
     setEditError(null);
   };
 
@@ -187,6 +189,7 @@ export function ObvescanjeTable({
       name: editName,
       email: editEmail,
       phone: editPhone,
+      source: editSource,
     });
     setIsSavingEdit(false);
     if (result.error) {
@@ -360,6 +363,13 @@ export function ObvescanjeTable({
                 inputClassName="bg-secondary-bg"
                 value={editPhone}
                 onChange={setEditPhone}
+              />
+              <Input
+                label="Vir"
+                placeholder="Ročno dodano"
+                inputClassName="bg-secondary-bg"
+                value={editSource}
+                onChange={(event) => setEditSource(event.target.value)}
               />
             </div>
             {editError ? <Text className="mt-4 text-red-600">{editError}</Text> : null}

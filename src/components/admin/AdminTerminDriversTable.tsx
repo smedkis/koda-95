@@ -37,6 +37,8 @@ export type TerminDriver = {
   companyEmail?: string;
   events?: { message: string; timestamp: string }[];
   registrationSource?: string;
+  voznikId?: string;
+  previousTrainings?: { program: "redna" | "zacetna"; modul: number | null; date: string; note: string | null }[];
 };
 
 export function formatDriverCategory(driver: TerminDriver): string {

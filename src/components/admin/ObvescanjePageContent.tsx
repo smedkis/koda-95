@@ -30,13 +30,22 @@ export function ObvescanjePageContent({
     if (result.error) setEntries(previous);
   };
 
-  const handleUpdate = async (id: string, input: { name: string; email: string; phone: string }) => {
+  const handleUpdate = async (
+    id: string,
+    input: { name: string; email: string; phone: string; source: string },
+  ) => {
     const result = await updateNarocnikAction(id, input);
     if (result.error) return result;
     setEntries((current) =>
       current.map((entry) =>
         entry.id === id
-          ? { ...entry, driverName: input.name, email: input.email, phone: input.phone }
+          ? {
+              ...entry,
+              driverName: input.name,
+              email: input.email,
+              phone: input.phone,
+              source: input.source,
+            }
           : entry,
       ),
     );

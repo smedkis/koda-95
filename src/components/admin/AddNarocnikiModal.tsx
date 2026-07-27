@@ -27,6 +27,7 @@ export function AddNarocnikiModal({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [source, setSource] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isValid = email.trim().length > 0;
@@ -34,7 +35,7 @@ export function AddNarocnikiModal({
   const handleSubmit = async () => {
     if (!isValid) return;
     setIsSubmitting(true);
-    await onAdd([{ name, email, phone, source: "Ročno dodano" }]);
+    await onAdd([{ name, email, phone, source: source.trim() || "Ročno dodano" }]);
     setIsSubmitting(false);
   };
 
@@ -78,6 +79,13 @@ export function AddNarocnikiModal({
             inputClassName="bg-secondary-bg"
             value={phone}
             onChange={setPhone}
+          />
+          <Input
+            label="Vir"
+            placeholder="Ročno dodano"
+            inputClassName="bg-secondary-bg"
+            value={source}
+            onChange={(event) => setSource(event.target.value)}
           />
         </div>
         {error ? <Text className="mt-4 text-red-600">{error}</Text> : null}

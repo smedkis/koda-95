@@ -542,6 +542,34 @@ export function AdminVoznikEditContent({
           </Box>
         </div>
 
+        {driver.previousTrainings && driver.previousTrainings.length > 0 ? (
+          <div>
+            <CardHeader icon="/icon-clock.svg" label="Pretekla usposabljanja (drug izvajalec)" />
+            <Box className="bg-white">
+              <div className="flex flex-col">
+                {driver.previousTrainings.map((entry, index) => (
+                  <div
+                    key={index}
+                    className={cn(
+                      "py-3",
+                      index === 0 && "pt-0",
+                      index < driver.previousTrainings!.length - 1 && "border-b border-divider",
+                    )}
+                  >
+                    <Text className="text-[16px]">
+                      {entry.program === "redna" ? "Redna" : "Začetna"}
+                      {entry.modul ? ` · Modul ${entry.modul}` : ""} · {isoToDmy(entry.date)}
+                    </Text>
+                    {entry.note ? (
+                      <Text className="mt-1 text-[12px] text-placeholder">{entry.note}</Text>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </Box>
+          </div>
+        ) : null}
+
         <div>
           <CardHeader icon="/icon-clock.svg" label="Zgodovina" />
           <Box className="bg-white">

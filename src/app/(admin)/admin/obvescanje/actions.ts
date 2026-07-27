@@ -27,7 +27,7 @@ export async function deleteNarocnikAction(id: string): Promise<{ error?: string
 
 export async function updateNarocnikAction(
   id: string,
-  input: { name: string; email: string; phone: string },
+  input: { name: string; email: string; phone: string; source: string },
 ): Promise<{ error?: string }> {
   const result = await updateNarocnik(id, input);
   if (!result.error) revalidatePath("/admin/obvescanje");
