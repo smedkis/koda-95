@@ -58,7 +58,12 @@ export function TerminDetails({
           {t("backToTermini")}
         </TextMedium>
       </Link>
-      <Heading2 className="mt-6">{title}</Heading2>
+      {/* This is the page's only heading, so it's the h1 semantically —
+          kept at Heading2's visual size since that's the established look
+          for this page. */}
+      <Heading2 as="h1" className="mt-6">
+        {title}
+      </Heading2>
       <Text className="mt-4">{description}</Text>
       <Eyebrow className="mt-8">{t("detailsHeading")}</Eyebrow>
       <div className="mt-4 grid grid-cols-2 gap-4">

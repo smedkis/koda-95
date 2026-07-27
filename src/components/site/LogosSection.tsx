@@ -13,7 +13,13 @@ const LOGOS = [
 function LogoImage({ src }: { src: string }) {
   return (
     <div className="flex items-center justify-center">
-      <Image src={src} alt="" width={125} height={50} className="h-12 w-auto shrink-0" />
+      <Image
+        src={src}
+        alt="Logotip partnerskega podjetja"
+        width={125}
+        height={50}
+        className="h-12 w-auto shrink-0"
+      />
     </div>
   );
 }

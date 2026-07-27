@@ -187,6 +187,9 @@
     "title": "Koda 95 — Tahografi Cuderman",
     "description": "Prijave za obuke Koda 95"
   },
+  "Seo": {
+    "terminMetaSuffix": "Termin: {date}, {location}. Prijavite se putem online obrasca."
+  },
   "Email": {
     "quickRegistration": {
       "subject": "Prijava potvrđena — {code}",

@@ -24,6 +24,9 @@ import {
   listPublicTermini,
   parsePublicTerminSlug,
 } from "@/lib/data/termini";
+import { buildAlternates } from "@/lib/seo/alternates";
+import { ogImagePath, ogImages, ogLocale } from "@/lib/seo/og-image";
+import { buildTerminJsonLd } from "@/lib/seo/termin-jsonld";
 
 const PROGRAM = "redna-koda-95" as const;
 
@@ -38,18 +41,26 @@ async function getTermin(slug: string, locale: string) {
   const hasCapacity = row.capacity !== null;
   const td = await getTranslations({ locale, namespace: "TerminDetails" });
   const pt = await getTranslations({ locale, namespace: "Programs.redna" });
+  const seo = await getTranslations({ locale, namespace: "Seo" });
+
+  const date = formatSlovenianDate(row.date, locale);
+  const address = row.address ?? undefined;
 
   return {
     title: buildTerminTitle("redna", row.modul, locale),
     description: pt("terminDescription"),
+    metaDescription: `${pt("terminDescription")} ${seo("terminMetaSuffix", { date, location: address ?? td("byArrangement") })}`,
     price: formatPriceEur(row.price_eur),
     spotsLabel: hasCapacity
       ? td("spotsLeft", { count: Math.max(0, (row.capacity as number) - registered) })
       : td("unlimitedSpots"),
-    date: formatSlovenianDate(row.date, locale),
+    date,
     dateISO: row.date,
+    startTime: row.start_time,
+    endTime: row.end_time,
+    priceEur: row.price_eur,
     timeRange: formatTimeRange(row.start_time, row.end_time),
-    address: row.address ?? undefined,
+    address,
   };
 }
 
@@ -61,9 +72,26 @@ export async function generateMetadata({
   const { termin: slug, locale } = await params;
   const termin = await getTermin(slug, locale);
   if (!termin) return {};
+  const title = `${termin.title} — ${termin.date} | Tahografi Cuderman`;
+  const alternates = buildAlternates(`/redno-usposabljanje/${slug}`, locale);
   return {
-    title: `${termin.title} | Tahografi Cuderman`,
-    description: termin.description,
+    title,
+    description: termin.metaDescription,
+    alternates,
+    openGraph: {
+      title,
+      description: termin.metaDescription,
+      url: alternates.canonical,
+      type: "website",
+      locale: ogLocale(locale),
+      images: ogImages(title, locale),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: termin.metaDescription,
+      images: [ogImagePath(locale)],
+    },
   };
 }
 
@@ -86,8 +114,20 @@ export default async function TerminPage({
   );
   const daysUntil = isNext ? getDaysUntil(termin.dateISO) : undefined;
   const t = await getTranslations("TerminRegistrationForm");
+  const alternates = buildAlternates(`/redno-usposabljanje/${slug}`, locale);
+  const jsonLd = buildTerminJsonLd({
+    title: termin.title,
+    description: termin.metaDescription,
+    dateISO: termin.dateISO,
+    startTime: termin.startTime,
+    endTime: termin.endTime,
+    address: termin.address,
+    priceEur: termin.priceEur,
+    url: alternates.canonical,
+  });
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="relative">
         <ColumnGuides />
         <div className="relative z-10 pt-24 lg:pt-32">

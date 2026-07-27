@@ -187,6 +187,9 @@
     "title": "Koda 95 — Tahografi Cuderman",
     "description": "Registration for Koda 95 training"
   },
+  "Seo": {
+    "terminMetaSuffix": "Session: {date}, {location}. Register online today."
+  },
   "Email": {
     "quickRegistration": {
       "subject": "Registration confirmed — {code}",

@@ -1,17 +1,47 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Nav } from "@/components/site/Nav";
 import { montserrat, sourceSans } from "@/fonts";
 import { routing } from "@/i18n/routing";
+import { ogImagePath, ogImages, ogLocale } from "@/lib/seo/og-image";
+import { getSiteUrl } from "@/lib/site-url";
 import "../globals.css";
 
-export async function generateMetadata(): Promise<Metadata> {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#fafafa",
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations("RootMeta");
+  const title = t("title");
+  const description = t("description");
   return {
-    title: t("title"),
-    description: t("description"),
+    metadataBase: new URL(getSiteUrl()),
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      siteName: "Koda 95 — Tahografi Cuderman",
+      locale: ogLocale(locale),
+      type: "website",
+      images: ogImages(title, locale),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImagePath(locale)],
+    },
   };
 }
 

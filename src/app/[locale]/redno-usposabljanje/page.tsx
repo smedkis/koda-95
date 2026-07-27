@@ -11,6 +11,8 @@ import { SectionDivider } from "@/components/site/SectionDivider";
 import { SubscriptionSection } from "@/components/site/SubscriptionSection";
 import { TerminiSection } from "@/components/site/TerminiSection";
 import { listPublicTermini } from "@/lib/data/termini";
+import { buildAlternates } from "@/lib/seo/alternates";
+import { ogImagePath, ogImages, ogLocale } from "@/lib/seo/og-image";
 
 const PLACEHOLDER_FAQ = [
   {
@@ -34,11 +36,29 @@ const PLACEHOLDER_FAQ = [
   },
 ];
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations("Programs.redna");
+  const title = t("metaTitle");
+  const description = t("metaDescription");
+  const alternates = buildAlternates("/redno-usposabljanje", locale);
   return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
+    title,
+    description,
+    alternates,
+    openGraph: {
+      title,
+      description,
+      url: alternates.canonical,
+      type: "website",
+      locale: ogLocale(locale),
+      images: ogImages(title, locale),
+    },
+    twitter: { card: "summary_large_image", title, description, images: [ogImagePath(locale)] },
   };
 }
 
