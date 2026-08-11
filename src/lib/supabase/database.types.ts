@@ -10,8 +10,10 @@
 // 20260721110000_licence_category_d_delno.sql,
 // 20260721120000_prijave_form_completed.sql,
 // 20260721130000_termin_reminder.sql,
-// 20260722080000_vozniki_no_emso.sql, and
-// 20260727130000_zunanja_usposabljanja.sql. Keep in sync with any new migration.
+// 20260722080000_vozniki_no_emso.sql,
+// 20260727130000_zunanja_usposabljanja.sql, and
+// 20260811090000_narocniki_notified_termin_ids.sql. Keep in sync with any
+// new migration.
 
 export type ProgramKey = "redna-koda-95" | "zacetna-koda-95";
 export type ResidenceType = "permanent" | "temporary";
@@ -108,6 +110,7 @@ export type NarocnikiRow = {
   source: string | null;
   voznik_id: string | null;
   last_notified_at: string | null;
+  notified_termin_ids: string[];
   created_at: string;
 };
 

@@ -22,6 +22,10 @@ export type ObvescanjeEntry = {
   dateAdded: string;
   source: string;
   lastNotified: string | null;
+  // Which termin slugs this contact has already been sent a bulk
+  // notification about — lets a resumed send skip only the termini they've
+  // actually heard of, regardless of what day that happened on.
+  notifiedTerminIds: string[];
   enrollment: ObvescanjeEnrollment;
 };
 

@@ -103,6 +103,7 @@ export function PosljiObvestiloPageContent({
   const [isSending, setIsSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
   const [sendResult, setSendResult] = useState<{ sent: number; failed: number } | null>(null);
+  const [sendProgress, setSendProgress] = useState<{ done: number; total: number } | null>(null);
 
   const emailsByStatus = useMemo(() => {
     const map = new Map<NarocnikStatus, string[]>();
@@ -152,13 +153,37 @@ export function PosljiObvestiloPageContent({
     if (!canSend) return;
     setIsSending(true);
     setSendError(null);
-    const result = await sendBulkNotificationAction(audience, Array.from(selectedTerminIds));
-    setIsSending(false);
-    if ("error" in result) {
-      setSendError(result.error);
-      return;
+    setSendProgress(null);
+
+    const terminSlugs = Array.from(selectedTerminIds);
+    let sent = 0;
+    let failed = 0;
+    let total: number | null = null;
+
+    // Sent as several short chunked calls rather than one long request —
+    // Vercel's free-tier function timeout (60s) can't cover sending to a
+    // large audience in one go at the pace Resend's rate limit requires.
+    // No offset is passed: each call re-reads whichever recipients haven't
+    // been notified yet today, so it can't drift out of sync with a pool
+    // that shrinks as sends succeed (see sendBulkNotification for why an
+    // offset-based version of this used to skip people).
+    for (;;) {
+      const result = await sendBulkNotificationAction(audience, terminSlugs);
+      if ("error" in result) {
+        setSendError(result.error);
+        if (sent + failed > 0) setSendResult({ sent, failed });
+        setIsSending(false);
+        return;
+      }
+      sent += result.sent;
+      failed += result.failed;
+      if (total === null) total = result.processed + result.remaining;
+      setSendProgress({ done: sent + failed, total });
+      if (result.processed === 0) break;
     }
-    setSendResult(result);
+
+    setIsSending(false);
+    setSendResult({ sent, failed });
   };
 
   return (
@@ -256,7 +281,13 @@ export function PosljiObvestiloPageContent({
         disabled={sendResult ? false : !canSend}
         onClick={sendResult ? () => router.push("/admin/obvescanje") : handleSend}
       >
-        {sendResult ? "Nazaj na Obveščanje" : isSending ? "Pošiljam …" : "Pošlji obvestilo"}
+        {sendResult
+          ? "Nazaj na Obveščanje"
+          : isSending
+            ? sendProgress
+              ? `Pošiljam … (${sendProgress.done}/${sendProgress.total})`
+              : "Pošiljam …"
+            : "Pošlji obvestilo"}
       </Button>
     </div>
   );
