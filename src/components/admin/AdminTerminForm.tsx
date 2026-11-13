@@ -25,7 +25,7 @@ const CUSTOM_LOCATION = "drugo";
 // Redna Koda 95 is split into yearly modules (35h spread over 5 years) — the
 // module year shows up in the termin title, independent of the session's
 // actual calendar date. Začetna has no module concept, just dated sessions.
-const MODUL_OPTIONS = ["2026", "2025", "2024", "2023", "2022"];
+const MODUL_OPTIONS = ["2027", "2026", "2025", "2024", "2023", "2022"];
 
 function ProgramToggle({
   program,
