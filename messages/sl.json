@@ -30,7 +30,9 @@
     "payLater": "Prijavi se zdaj, plačaj kasneje"
   },
   "TerminiSection": {
-    "heading": "Izberite termin usposabljanja"
+    "heading": "Izberite termin usposabljanja",
+    "emptyHeading": "Trenutno ni razpisanih terminov",
+    "emptyBody": "Novi termini bodo objavljeni kmalu. Za več informacij nas pokličite ali pišite na <email>koda95@tahograficuderman.si</email>."
   },
   "LogosSection": {
     "trust": "Za izobraževanje Kode 95 nam zaupajo vozniki iz več kot 250 podjetij"

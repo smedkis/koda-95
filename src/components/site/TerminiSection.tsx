@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { Eyebrow } from "@/components/ui/Typography";
+import { Eyebrow, Text } from "@/components/ui/Typography";
 import { cn } from "@/lib/cn";
 import { TerminCard, type TerminCardProps } from "./TerminCard";
 
@@ -26,6 +26,23 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
     if (daysA < 0 && daysB >= 0) return 1;
     return daysA - daysB;
   });
+
+  if (sortedTermini.length === 0) {
+    return (
+      <div id="termini" className="mx-auto mt-16 flex max-w-[680px] flex-col items-center gap-4 text-center">
+        <Eyebrow>{t("emptyHeading")}</Eyebrow>
+        <Text>
+          {t.rich("emptyBody", {
+            email: (chunks) => (
+              <a href="mailto:koda95@tahograficuderman.si" className="underline hover:no-underline">
+                {chunks}
+              </a>
+            ),
+          })}
+        </Text>
+      </div>
+    );
+  }
 
   const nextHref = sortedTermini.find((termin) => getDaysUntil(termin.dateISO) >= 0)?.href;
   const isSingle = sortedTermini.length === 1;

@@ -30,7 +30,9 @@
     "payLater": "Prijavi se sada, plati kasnije"
   },
   "TerminiSection": {
-    "heading": "Izaberite termin obuke"
+    "heading": "Izaberite termin obuke",
+    "emptyHeading": "Trenutno nema raspisanih termina",
+    "emptyBody": "Novi termini će uskoro biti objavljeni. Za više informacija pozovite nas ili pišite na <email>koda95@tahograficuderman.si</email>."
   },
   "LogosSection": {
     "trust": "Vozači iz više od 250 kompanija nam veruju za obuku Koda 95"

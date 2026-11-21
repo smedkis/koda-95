@@ -30,7 +30,9 @@
     "payLater": "Register now, pay later"
   },
   "TerminiSection": {
-    "heading": "Choose a training session"
+    "heading": "Choose a training session",
+    "emptyHeading": "There are currently no scheduled sessions",
+    "emptyBody": "New sessions will be announced soon. For more information, call us or write to <email>koda95@tahograficuderman.si</email>."
   },
   "LogosSection": {
     "trust": "Drivers from more than 250 companies trust us with their Koda 95 training"
