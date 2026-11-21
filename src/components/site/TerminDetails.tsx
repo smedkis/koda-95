@@ -54,14 +54,17 @@ export function TerminDetails({
     <div>
       <Link
         href={programHref}
-        className="inline-flex items-center gap-1.5 text-placeholder hover:text-paragraph hover:underline"
+        className="flex w-fit items-center gap-1.5 text-placeholder hover:text-paragraph hover:underline lg:-mt-14"
       >
         <ArrowLeftIcon />
         <TextMedium as="span" className="text-inherit">
           {t("backToTermini")}
         </TextMedium>
       </Link>
-      <CalendarTile dateISO={dateISO} className="mt-8" />
+      {/* On desktop the back link is pulled up so the tile's top lines up
+          with the registration form beside it; the slight tilt makes it
+          read as a calendar page set down on the page. */}
+      <CalendarTile dateISO={dateISO} className="mt-8 ml-1 -rotate-6" />
       {/* This is the page's only heading, so it's the h1 semantically —
           kept at Heading2's visual size since that's the established look
           for this page. */}
