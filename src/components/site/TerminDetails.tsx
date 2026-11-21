@@ -61,26 +61,36 @@ export function TerminDetails({
           {t("backToTermini")}
         </TextMedium>
       </Link>
+      <CalendarTile dateISO={dateISO} className="mt-8" />
       {/* This is the page's only heading, so it's the h1 semantically —
           kept at Heading2's visual size since that's the established look
           for this page. */}
-      <Heading2 as="h1" className="mt-6">
+      <Heading2 as="h1" className="mt-8">
         {title}
       </Heading2>
       <Text className="mt-4">{description}</Text>
       <Eyebrow className="mt-8">{t("detailsHeading")}</Eyebrow>
-      <div className="mt-5 flex items-center gap-5">
-        <CalendarTile dateISO={dateISO} />
-        <div className="min-w-0">
-          <p className="font-heading text-[20px] leading-[28px] font-semibold text-heading">
-            {date}
-          </p>
-          <Text className="mt-1">{timeRange ?? t("byArrangement")}</Text>
-        </div>
-      </div>
-      <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2">
-        {price ? <DetailRow icon="/icon-ticket.svg">{price}</DetailRow> : null}
-        <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
+      <div className="mt-4 grid grid-cols-2 gap-4">
+        {price ? (
+          <>
+            <div className="flex flex-col gap-2">
+              <DetailRow icon="/icon-ticket.svg">{price}</DetailRow>
+              <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
+            </div>
+            <div className="flex flex-col gap-2">
+              <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
+              <DetailRow icon="/icon-clock.svg">{timeRange ?? t("byArrangement")}</DetailRow>
+            </div>
+          </>
+        ) : (
+          <>
+            <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
+            <DetailRow icon="/icon-clock.svg">{timeRange ?? t("byArrangement")}</DetailRow>
+            <div className="col-span-2">
+              <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
+            </div>
+          </>
+        )}
       </div>
       <Eyebrow className="mt-6">{t("location")}</Eyebrow>
       <div className="mt-4">
