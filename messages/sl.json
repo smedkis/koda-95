@@ -36,6 +36,11 @@
     "companies": "Zaupa nam 250+ podjetij",
     "imageAlt": "Inštruktor med usposabljanjem vozniku razlaga izpis tahografa"
   },
+  "ProgramCrossLink": {
+    "toZacetna": "Iščete začetno usposabljanje (pridobitev kode 95)?",
+    "toRedna": "Iščete redno usposabljanje (podaljšanje kode 95)?",
+    "cta": "Poglejte termine"
+  },
   "TerminiSection": {
     "heading": "Izberite termin usposabljanja",
     "emptyHeading": "Trenutno ni razpisanih terminov",

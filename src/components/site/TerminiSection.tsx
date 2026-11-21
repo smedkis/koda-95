@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Eyebrow, Text } from "@/components/ui/Typography";
 import { Box } from "@/components/ui/Box";
 import { cn } from "@/lib/cn";
-import { ProgramSwitch } from "./ProgramSwitch";
+import { ProgramCrossLink } from "./ProgramCrossLink";
 import { TerminCard, type TerminCardProps } from "./TerminCard";
 
 export type TerminEntry = Omit<TerminCardProps, "daysUntil">;
@@ -39,11 +39,7 @@ export function TerminiSection({
 
   if (sortedTermini.length === 0) {
     return (
-      <div
-        id="termini"
-        className="mt-10 flex scroll-mt-6 flex-col items-center gap-8"
-      >
-        <ProgramSwitch />
+      <div id="termini" className="mt-16 flex flex-col items-center gap-6">
         <Box className="mx-auto flex max-w-[680px] flex-col items-center gap-4 border-notice-border bg-notice-bg text-center">
           <Eyebrow as="h2">{t("emptyHeading")}</Eyebrow>
           <Text>
@@ -59,6 +55,7 @@ export function TerminiSection({
             })}
           </Text>
         </Box>
+        <ProgramCrossLink />
       </div>
     );
   }
@@ -69,15 +66,8 @@ export function TerminiSection({
   const isSingle = sortedTermini.length === 1;
 
   return (
-    <div
-      id="termini"
-      className="mt-10 flex scroll-mt-6 flex-col items-center gap-8"
-    >
-      {/* The program tabs sit right above the cards (they switch which
-          termini you see), so they double as this section's visible header.
-          The h2 stays for screen readers and search engines. */}
-      <h2 className="sr-only">{t("heading")}</h2>
-      <ProgramSwitch />
+    <div id="termini" className="mt-16 flex flex-col items-center gap-8">
+      <Eyebrow as="h2">{t("heading")}</Eyebrow>
       <div
         className={
           isSingle
@@ -106,6 +96,7 @@ export function TerminiSection({
           </div>
         ))}
       </div>
+      <ProgramCrossLink />
     </div>
   );
 }

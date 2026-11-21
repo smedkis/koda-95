@@ -36,6 +36,11 @@
     "companies": "Veruje nam 250+ kompanija",
     "imageAlt": "Instruktor tokom obuke vozačima objašnjava ispis tahografa"
   },
+  "ProgramCrossLink": {
+    "toZacetna": "Tražite osnovnu kvalifikaciju (sticanje Koda 95)?",
+    "toRedna": "Tražite periodičnu obuku (obnavljanje Koda 95)?",
+    "cta": "Pogledajte termine"
+  },
   "TerminiSection": {
     "heading": "Izaberite termin obuke",
     "emptyHeading": "Trenutno nema raspisanih termina",

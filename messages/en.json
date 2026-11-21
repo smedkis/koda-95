@@ -36,6 +36,11 @@
     "companies": "Trusted by 250+ companies",
     "imageAlt": "An instructor explaining a tachograph printout to drivers during training"
   },
+  "ProgramCrossLink": {
+    "toZacetna": "Looking for the initial qualification (getting Koda 95)?",
+    "toRedna": "Looking for periodic training (renewing Koda 95)?",
+    "cta": "See sessions"
+  },
   "TerminiSection": {
     "heading": "Choose a training session",
     "emptyHeading": "There are currently no scheduled sessions",
