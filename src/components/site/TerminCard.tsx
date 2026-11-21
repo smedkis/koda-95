@@ -1,8 +1,9 @@
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Box } from "@/components/ui/Box";
 import { Text } from "@/components/ui/Typography";
 import { Link } from "@/i18n/navigation";
-import { formatLongDate, parseModul } from "@/lib/termini-format";
+import { getCalendarParts, parseModul } from "@/lib/termini-format";
 import { cn } from "@/lib/cn";
 
 // Deterministic per-termin jitter (same termin always gets the same value,
@@ -57,14 +58,13 @@ export function TerminCard({
   const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - displayedAttendeeCount) : 0;
   const isScarce = hasCapacity && spotsLeft <= 3;
 
-  const longDate = formatLongDate(dateISO, locale);
-  const eyebrow = modul ? `${cleanTitle} · ${t("modulLabel")} ${modul}` : cleanTitle;
-  const details = [timeRange ?? t("timeAgreed"), address ?? t("locationAgreed")].join(" · ");
+  const calendar = getCalendarParts(dateISO, locale);
 
-  // Kept deliberately plain and in the site's own vocabulary (flat grey Box,
-  // hairline divider, the hero's orange button) rather than chips/shadows:
-  // the date is the headline because "when" is what people scan for first,
-  // and the bottom row pairs the price with the one action.
+  // Reads as an appointment: a tear-off calendar page on the left (month in
+  // the brand orange, big day number) next to what/when/where, then the
+  // price and the one action. Kept in the site's own vocabulary (flat grey
+  // Box, hairline divider, the hero's orange button) rather than chips or
+  // drop shadows.
   return (
     <Box
       as={Link}
@@ -80,13 +80,41 @@ export function TerminCard({
         </span>
       ) : null}
 
-      <h3 className="font-body text-[13px] font-semibold uppercase tracking-[0.06em] text-placeholder">
-        {eyebrow}
-      </h3>
-      <p className="mt-3 font-heading text-[26px] leading-[32px] font-semibold text-heading sm:text-[30px] sm:leading-[38px]">
-        {longDate}
-      </p>
-      <Text className="mt-2 text-[16px] text-paragraph">{details}</Text>
+      <div className="flex gap-5 sm:gap-6">
+        <div
+          aria-hidden="true"
+          className="w-[76px] shrink-0 self-start overflow-hidden rounded-lg border border-divider bg-white text-center sm:w-[88px]"
+        >
+          <div className="bg-primary py-1 font-body text-[13px] font-semibold tracking-[0.08em] text-white">
+            {calendar.month}
+          </div>
+          <div className="font-heading text-[34px] leading-[40px] font-semibold text-heading sm:text-[40px] sm:leading-[48px]">
+            {calendar.day}
+          </div>
+          <div className="pb-2 font-body text-[13px] text-paragraph">{calendar.weekday}</div>
+        </div>
+
+        <div className="min-w-0">
+          <h3 className="font-heading text-[18px] leading-[24px] font-semibold text-heading sm:text-[20px] sm:leading-[28px]">
+            {cleanTitle}
+          </h3>
+          {modul ? (
+            <Text className="mt-0.5 text-[14px] text-placeholder">
+              {t("modulLabel")} {modul}
+            </Text>
+          ) : null}
+          <div className="mt-3 flex flex-col gap-1.5">
+            <div className="flex items-center gap-2">
+              <Image src="/icon-clock.svg" alt="" width={16} height={16} className="size-4 shrink-0" />
+              <Text className="text-[15px] text-paragraph">{timeRange ?? t("timeAgreed")}</Text>
+            </div>
+            <div className="flex items-center gap-2">
+              <Image src="/icon-location.svg" alt="" width={16} height={16} className="size-4 shrink-0" />
+              <Text className="text-[15px] text-paragraph">{address ?? t("locationAgreed")}</Text>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-divider pt-6">
         <div>

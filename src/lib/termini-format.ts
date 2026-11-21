@@ -32,19 +32,21 @@ export function formatSlovenianDate(isoDate: string, locale = "sl"): string {
   return `${weekday}, ${day}.${month}. ${date.getFullYear()}`;
 }
 
-// Long human date for the public termin card headline, e.g. "Petek, 4. december"
-// / "Friday, 4 December" / "Petak, 4. decembar". Serbian is pinned to Latin
-// script (plain "sr" formats in Cyrillic, unlike the rest of the site).
+// Pieces for the tear-off-calendar tile on the public termin card.
+// Serbian is pinned to Latin script (plain "sr" formats in Cyrillic, unlike
+// the rest of the site).
 const LONG_DATE_LOCALES: Record<string, string> = { sl: "sl-SI", en: "en-GB", sr: "sr-Latn-RS" };
 
-export function formatLongDate(isoDate: string, locale = "sl"): string {
+// { month: "DEC", day: "4", weekday: "petek" }.
+export function getCalendarParts(isoDate: string, locale = "sl") {
   const date = new Date(`${isoDate}T00:00:00`);
-  const formatted = new Intl.DateTimeFormat(LONG_DATE_LOCALES[locale] ?? "sl-SI", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  }).format(date);
-  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+  const intlLocale = LONG_DATE_LOCALES[locale] ?? "sl-SI";
+  const month = new Intl.DateTimeFormat(intlLocale, { month: "short" })
+    .format(date)
+    .replace(".", "")
+    .toUpperCase();
+  const weekday = new Intl.DateTimeFormat(intlLocale, { weekday: "long" }).format(date);
+  return { month, day: String(date.getDate()), weekday };
 }
 
 // Postgres `time` columns come back as "HH:MM:SS" — both this and a plain
