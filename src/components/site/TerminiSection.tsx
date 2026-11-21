@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Eyebrow, Text } from "@/components/ui/Typography";
 import { Box } from "@/components/ui/Box";
 import { cn } from "@/lib/cn";
+import { ProgramSwitch } from "./ProgramSwitch";
 import { TerminCard, type TerminCardProps } from "./TerminCard";
 
 export type TerminEntry = Omit<TerminCardProps, "daysUntil">;
@@ -10,10 +11,18 @@ function getDaysUntil(dateISO: string): number {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const target = new Date(`${dateISO}T00:00:00`);
-  return Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  return Math.round(
+    (target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+  );
 }
 
-export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?: string }) {
+export function TerminiSection({
+  termini,
+  vir,
+}: {
+  termini: TerminEntry[];
+  vir?: string;
+}) {
   const t = useTranslations("TerminiSection");
 
   // Cards are always shown with the soonest upcoming termin on top, followed
@@ -30,30 +39,45 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
 
   if (sortedTermini.length === 0) {
     return (
-      <Box
+      <div
         id="termini"
-        className="mx-auto mt-16 flex max-w-[680px] flex-col items-center gap-4 border-notice-border bg-notice-bg text-center"
+        className="mt-10 flex scroll-mt-6 flex-col items-center gap-8"
       >
-        <Eyebrow as="h2">{t("emptyHeading")}</Eyebrow>
-        <Text>
-          {t.rich("emptyBody", {
-            email: (chunks) => (
-              <a href="mailto:koda95@tahograficuderman.si" className="underline hover:no-underline">
-                {chunks}
-              </a>
-            ),
-          })}
-        </Text>
-      </Box>
+        <ProgramSwitch />
+        <Box className="mx-auto flex max-w-[680px] flex-col items-center gap-4 border-notice-border bg-notice-bg text-center">
+          <Eyebrow as="h2">{t("emptyHeading")}</Eyebrow>
+          <Text>
+            {t.rich("emptyBody", {
+              email: (chunks) => (
+                <a
+                  href="mailto:koda95@tahograficuderman.si"
+                  className="underline hover:no-underline"
+                >
+                  {chunks}
+                </a>
+              ),
+            })}
+          </Text>
+        </Box>
+      </div>
     );
   }
 
-  const nextHref = sortedTermini.find((termin) => getDaysUntil(termin.dateISO) >= 0)?.href;
+  const nextHref = sortedTermini.find(
+    (termin) => getDaysUntil(termin.dateISO) >= 0,
+  )?.href;
   const isSingle = sortedTermini.length === 1;
 
   return (
-    <div id="termini" className="mt-16 flex flex-col items-center gap-8">
-      <Eyebrow as="h2">{t("heading")}</Eyebrow>
+    <div
+      id="termini"
+      className="mt-10 flex scroll-mt-6 flex-col items-center gap-8"
+    >
+      {/* The program tabs sit right above the cards (they switch which
+          termini you see), so they double as this section's visible header.
+          The h2 stays for screen readers and search engines. */}
+      <h2 className="sr-only">{t("heading")}</h2>
+      <ProgramSwitch />
       <div
         className={
           isSingle
@@ -73,7 +97,11 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
             <TerminCard
               {...cardProps}
               href={vir ? `${cardProps.href}?vir=${vir}` : cardProps.href}
-              daysUntil={cardProps.href === nextHref ? getDaysUntil(cardProps.dateISO) : undefined}
+              daysUntil={
+                cardProps.href === nextHref
+                  ? getDaysUntil(cardProps.dateISO)
+                  : undefined
+              }
             />
           </div>
         ))}
