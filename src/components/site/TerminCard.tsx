@@ -87,7 +87,7 @@ export function TerminCard({
         <div aria-hidden="true" className="relative w-[76px] shrink-0 self-start sm:w-[88px]">
           <div className="absolute inset-x-1.5 -bottom-1.5 h-4 rounded-b-lg border border-divider bg-[#F4F4F4]" />
           <div className="relative overflow-hidden rounded-lg border border-[#E6E6E6] bg-white text-center shadow-[0_1px_0_rgba(0,0,0,0.04),0_6px_14px_-4px_rgba(64,46,50,0.22)]">
-            <div className="bg-linear-to-b from-[#5a4247] to-paragraph py-1 font-body text-[13px] font-semibold tracking-[0.08em] text-white shadow-[inset_0_-1px_0_rgba(0,0,0,0.25)]">
+            <div className="bg-linear-to-b from-[#1fc49d] to-[#00a07e] py-1 font-body text-[13px] font-semibold tracking-[0.08em] text-white shadow-[inset_0_-1px_0_rgba(0,0,0,0.2)]">
               {calendar.month}
             </div>
             <div className="bg-linear-to-b from-white to-[#F7F7F7]">
