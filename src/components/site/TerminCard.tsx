@@ -81,22 +81,21 @@ export function TerminCard({
       ) : null}
 
       <div className="flex gap-5 sm:gap-6">
-        <div
-          aria-hidden="true"
-          className="relative mt-1.5 w-[76px] shrink-0 self-start rounded-xl border border-[#F3D9C2] bg-[#FFF6EE] pt-3 pb-2.5 text-center sm:w-[88px]"
-        >
-          {/* Two binder rings peeking over the top edge — the small detail
-              that makes the tile read as a desk calendar page. */}
-          <span className="absolute -top-1.5 left-[22px] h-3 w-1.5 rounded-full bg-paragraph sm:left-[26px]" />
-          <span className="absolute -top-1.5 right-[22px] h-3 w-1.5 rounded-full bg-paragraph sm:right-[26px]" />
-          <div className="font-body text-[12px] font-semibold tracking-[0.12em] text-primary">
-            {calendar.month}
-          </div>
-          <div className="mt-0.5 font-heading text-[34px] leading-[38px] font-semibold text-heading sm:text-[40px] sm:leading-[46px]">
-            {calendar.day}
-          </div>
-          <div className="mx-3 mt-1.5 border-t border-[#F3D9C2] pt-1.5 font-body text-[13px] text-paragraph">
-            {calendar.weekday}
+        {/* Tear-off calendar page. The slight 3D comes from a top-lit
+            gradient on the header band, a soft drop shadow, and a second
+            "page" peeking out underneath. */}
+        <div aria-hidden="true" className="relative w-[76px] shrink-0 self-start sm:w-[88px]">
+          <div className="absolute inset-x-1.5 -bottom-1.5 h-4 rounded-b-lg border border-divider bg-[#F4F4F4]" />
+          <div className="relative overflow-hidden rounded-lg border border-[#E6E6E6] bg-white text-center shadow-[0_1px_0_rgba(0,0,0,0.04),0_6px_14px_-4px_rgba(64,46,50,0.22)]">
+            <div className="bg-linear-to-b from-[#5a4247] to-paragraph py-1 font-body text-[13px] font-semibold tracking-[0.08em] text-white shadow-[inset_0_-1px_0_rgba(0,0,0,0.25)]">
+              {calendar.month}
+            </div>
+            <div className="bg-linear-to-b from-white to-[#F7F7F7]">
+              <div className="font-heading text-[34px] leading-[40px] font-semibold text-heading sm:text-[40px] sm:leading-[48px]">
+                {calendar.day}
+              </div>
+              <div className="pb-2 font-body text-[13px] text-paragraph">{calendar.weekday}</div>
+            </div>
           </div>
         </div>
 
