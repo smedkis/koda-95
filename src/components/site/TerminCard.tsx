@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Box } from "@/components/ui/Box";
 import { Text } from "@/components/ui/Typography";
 import { Link } from "@/i18n/navigation";
-import { getCalendarParts, parseModul } from "@/lib/termini-format";
+import { parseModul } from "@/lib/termini-format";
 import { cn } from "@/lib/cn";
+import { CalendarTile } from "./CalendarTile";
 
 // Deterministic per-termin jitter (same termin always gets the same value,
 // so it doesn't change on every reload) so the "spots left" count below
@@ -42,7 +43,6 @@ export function TerminCard({
   daysUntil,
 }: TerminCardProps) {
   const t = useTranslations("TerminCard");
-  const locale = useLocale();
   const isNext = daysUntil !== undefined;
   const modul = parseModul(title);
   const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, "");
@@ -58,7 +58,6 @@ export function TerminCard({
   const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - displayedAttendeeCount) : 0;
   const isScarce = hasCapacity && spotsLeft <= 3;
 
-  const calendar = getCalendarParts(dateISO, locale);
 
   // Reads as an appointment: a tear-off calendar page on the left (month in
   // the brand orange, big day number) next to what/when/where, then the
@@ -81,23 +80,7 @@ export function TerminCard({
       ) : null}
 
       <div className="flex gap-5 sm:gap-6">
-        {/* Tear-off calendar page. The slight 3D comes from a top-lit
-            gradient on the header band, a soft drop shadow, and a second
-            "page" peeking out underneath. */}
-        <div aria-hidden="true" className="relative w-[76px] shrink-0 self-start sm:w-[88px]">
-          <div className="absolute inset-x-1.5 -bottom-1.5 h-4 rounded-b-lg border border-divider bg-[#F4F4F4]" />
-          <div className="relative overflow-hidden rounded-lg border border-[#E6E6E6] bg-white text-center shadow-[0_1px_0_rgba(0,0,0,0.04),0_6px_14px_-4px_rgba(64,46,50,0.22)]">
-            <div className="bg-linear-to-b from-[#afbfb3] to-[#9eb0a2] py-1 font-body text-[13px] font-bold tracking-[0.08em] text-white shadow-[inset_0_-1px_0_rgba(0,0,0,0.2)]">
-              {calendar.month}
-            </div>
-            <div className="bg-linear-to-b from-white to-[#F7F7F7]">
-              <div className="font-heading text-[34px] leading-[40px] font-semibold text-heading sm:text-[40px] sm:leading-[48px]">
-                {calendar.day}
-              </div>
-              <div className="pb-2 font-body text-[13px] text-paragraph">{calendar.weekday}</div>
-            </div>
-          </div>
-        </div>
+        <CalendarTile dateISO={dateISO} className="self-start" />
 
         <div className="min-w-0">
           <h3 className="font-heading text-[18px] leading-[24px] font-semibold text-heading sm:text-[20px] sm:leading-[28px]">

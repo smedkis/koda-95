@@ -147,6 +147,7 @@ export default async function TerminPage({
                 price={termin.price}
                 spotsLabel={termin.spotsLabel}
                 date={termin.date}
+                dateISO={termin.dateISO}
                 timeRange={termin.timeRange}
                 address={termin.address}
               />

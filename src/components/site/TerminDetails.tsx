@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Eyebrow, Heading2, Text, TextMedium } from "@/components/ui/Typography";
 import { Link } from "@/i18n/navigation";
+import { CalendarTile } from "./CalendarTile";
 
 function DetailRow({ icon, children }: { icon: string; children: ReactNode }) {
   return (
@@ -34,6 +35,7 @@ export function TerminDetails({
   price,
   spotsLabel,
   date,
+  dateISO,
   timeRange,
   address,
 }: {
@@ -43,6 +45,7 @@ export function TerminDetails({
   price?: string;
   spotsLabel: string;
   date: string;
+  dateISO: string;
   timeRange?: string;
   address?: string;
 }) {
@@ -66,27 +69,18 @@ export function TerminDetails({
       </Heading2>
       <Text className="mt-4">{description}</Text>
       <Eyebrow className="mt-8">{t("detailsHeading")}</Eyebrow>
-      <div className="mt-4 grid grid-cols-2 gap-4">
-        {price ? (
-          <>
-            <div className="flex flex-col gap-2">
-              <DetailRow icon="/icon-ticket.svg">{price}</DetailRow>
-              <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
-            </div>
-            <div className="flex flex-col gap-2">
-              <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
-              <DetailRow icon="/icon-clock.svg">{timeRange ?? t("byArrangement")}</DetailRow>
-            </div>
-          </>
-        ) : (
-          <>
-            <DetailRow icon="/icon-calendar.svg">{date}</DetailRow>
-            <DetailRow icon="/icon-clock.svg">{timeRange ?? t("byArrangement")}</DetailRow>
-            <div className="col-span-2">
-              <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
-            </div>
-          </>
-        )}
+      <div className="mt-5 flex items-center gap-5">
+        <CalendarTile dateISO={dateISO} />
+        <div className="min-w-0">
+          <p className="font-heading text-[20px] leading-[28px] font-semibold text-heading">
+            {date}
+          </p>
+          <Text className="mt-1">{timeRange ?? t("byArrangement")}</Text>
+        </div>
+      </div>
+      <div className="mt-6 flex flex-wrap gap-x-8 gap-y-2">
+        {price ? <DetailRow icon="/icon-ticket.svg">{price}</DetailRow> : null}
+        <DetailRow icon="/icon-profile.svg">{spotsLabel}</DetailRow>
       </div>
       <Eyebrow className="mt-6">{t("location")}</Eyebrow>
       <div className="mt-4">
