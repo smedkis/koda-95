@@ -70,17 +70,9 @@ export function Hero({
             {titleSuffix ? ` ${titleSuffix}` : null}
           </Heading1>
           <TextBig className="text-white/90">{description}</TextBig>
-          <div className="mt-2 flex flex-wrap gap-3">
-            <ButtonLink href="#termini" variant="primary" className="px-6 py-3">
-              {t("cta")}
-            </ButtonLink>
-            <a
-              href="tel:+38641433825"
-              className="inline-flex items-center justify-center rounded border border-white/60 px-6 py-3 font-body text-[16px] font-medium text-white transition-colors hover:bg-white/10"
-            >
-              {t("call")}
-            </a>
-          </div>
+          <ButtonLink href="#termini" variant="primary" className="mt-2 px-6 py-3">
+            {t("cta")}
+          </ButtonLink>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-body text-[15px] text-white/90">
             <span>{t("rating")}</span>
             <span
