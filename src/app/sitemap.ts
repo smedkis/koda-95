@@ -11,7 +11,6 @@ function entryFor(href: string, priority: number): MetadataRoute.Sitemap[number]
   }
   return {
     url: languages[routing.defaultLocale],
-    lastModified: new Date(),
     changeFrequency: "weekly",
     priority,
     alternates: { languages },

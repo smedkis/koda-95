@@ -34,7 +34,7 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
         id="termini"
         className="mx-auto mt-16 flex max-w-[680px] flex-col items-center gap-4 border-notice-border bg-notice-bg text-center"
       >
-        <Eyebrow>{t("emptyHeading")}</Eyebrow>
+        <Eyebrow as="h2">{t("emptyHeading")}</Eyebrow>
         <Text>
           {t.rich("emptyBody", {
             email: (chunks) => (
@@ -53,7 +53,7 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
 
   return (
     <div id="termini" className="mt-16 flex flex-col items-center gap-8">
-      <Eyebrow>{t("heading")}</Eyebrow>
+      <Eyebrow as="h2">{t("heading")}</Eyebrow>
       <div
         className={
           isSingle

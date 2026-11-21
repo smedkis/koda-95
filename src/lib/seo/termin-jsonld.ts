@@ -1,5 +1,5 @@
 import { RECIPIENT_NAME } from "@/lib/payment-info";
-import { getSiteUrl } from "@/lib/site-url";
+import { ORGANIZATION_ID } from "@/lib/seo/organization-jsonld";
 
 const ORGANIZER_ADDRESS = "Pot za krajem 35, 4000 Kranj, Slovenija";
 
@@ -45,9 +45,10 @@ export function buildTerminJsonLd({
       : { "@type": "Place", name: "Po dogovoru z organizatorjem" },
     organizer: {
       "@type": "Organization",
+      "@id": ORGANIZATION_ID,
       name: RECIPIENT_NAME,
       address: ORGANIZER_ADDRESS,
-      url: getSiteUrl(),
+      url: "https://www.tahograficuderman.si",
     },
     offers:
       priceEur !== null

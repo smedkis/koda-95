@@ -13,6 +13,7 @@ import { TerminiSection } from "@/components/site/TerminiSection";
 import { listPublicTermini } from "@/lib/data/termini";
 import { buildAlternates } from "@/lib/seo/alternates";
 import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
+import { buildProgramJsonLd } from "@/lib/seo/organization-jsonld";
 import { ogImagePath, ogImages, ogLocale } from "@/lib/seo/og-image";
 
 export async function generateMetadata({
@@ -54,11 +55,22 @@ export default async function RednaKoda95Page({
   const termini = await listPublicTermini("redna-koda-95", locale);
   const faqs = t.raw("faq") as FaqItemData[];
   const faqJsonLd = buildFaqJsonLd(faqs);
+  const tNav = await getTranslations("Nav");
+  const programJsonLd = buildProgramJsonLd({
+    name: `${tNav("redna")} Koda 95`,
+    description: t("metaDescription"),
+    url: buildAlternates("/redno-usposabljanje", locale).canonical,
+    locale,
+  });
   return (
     <Container>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(programJsonLd) }}
       />
       <Hero
         titlePrefix={t("heroTitlePrefix")}
