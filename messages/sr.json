@@ -37,9 +37,10 @@
     "imageAlt": "Instruktor tokom obuke vozačima objašnjava ispis tahografa"
   },
   "ProgramCrossLink": {
-    "toZacetna": "Tražite osnovnu kvalifikaciju (sticanje Koda 95)?",
-    "toRedna": "Tražite periodičnu obuku (obnavljanje Koda 95)?",
-    "cta": "Pogledajte termine"
+    "toZacetna": "Prvi put stičete Koda 95?",
+    "toZacetnaLink": "Pogledajte osnovnu kvalifikaciju",
+    "toRedna": "Već imate Koda 95 i obnavljate ga?",
+    "toRednaLink": "Pogledajte periodičnu obuku"
   },
   "TerminiSection": {
     "heading": "Izaberite termin obuke",

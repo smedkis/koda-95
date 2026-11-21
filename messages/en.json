@@ -37,9 +37,10 @@
     "imageAlt": "An instructor explaining a tachograph printout to drivers during training"
   },
   "ProgramCrossLink": {
-    "toZacetna": "Looking for the initial qualification (getting Koda 95)?",
-    "toRedna": "Looking for periodic training (renewing Koda 95)?",
-    "cta": "See sessions"
+    "toZacetna": "Getting Koda 95 for the first time?",
+    "toZacetnaLink": "View the initial qualification",
+    "toRedna": "Already have Koda 95 and need to renew it?",
+    "toRednaLink": "View periodic training"
   },
   "TerminiSection": {
     "heading": "Choose a training session",

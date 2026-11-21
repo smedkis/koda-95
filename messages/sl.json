@@ -37,9 +37,10 @@
     "imageAlt": "Inštruktor med usposabljanjem vozniku razlaga izpis tahografa"
   },
   "ProgramCrossLink": {
-    "toZacetna": "Iščete začetno usposabljanje (pridobitev kode 95)?",
-    "toRedna": "Iščete redno usposabljanje (podaljšanje kode 95)?",
-    "cta": "Poglejte termine"
+    "toZacetna": "Kodo 95 pridobivate prvič?",
+    "toZacetnaLink": "Oglejte si začetno usposabljanje",
+    "toRedna": "Kodo 95 že imate in jo podaljšujete?",
+    "toRednaLink": "Oglejte si redno usposabljanje"
   },
   "TerminiSection": {
     "heading": "Izberite termin usposabljanja",

@@ -18,9 +18,9 @@ export function ProgramCrossLink() {
       {onZacetna ? t("toRedna") : t("toZacetna")}{" "}
       <Link
         href={href}
-        className="font-semibold whitespace-nowrap text-heading underline decoration-primary decoration-2 underline-offset-4 hover:text-primary"
+        className="font-semibold text-heading underline decoration-primary decoration-2 underline-offset-4 hover:text-primary"
       >
-        {t("cta")} →
+        {onZacetna ? t("toRednaLink") : t("toZacetnaLink")}
       </Link>
     </p>
   );
