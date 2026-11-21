@@ -35,7 +35,7 @@ export function Hero({
   const t = useTranslations("Hero");
 
   return (
-    <section className="relative -mx-4 flex min-h-[520px] items-center overflow-hidden sm:-mx-8 lg:min-h-[540px]">
+    <section className="relative -mx-4 flex min-h-[600px] items-center overflow-hidden sm:-mx-8 lg:min-h-[640px]">
       <Image
         src="/hero-usposabljanje.webp"
         alt={t("imageAlt")}
@@ -48,7 +48,7 @@ export function Hero({
         aria-hidden="true"
         className="absolute inset-0 bg-black/65 lg:bg-transparent lg:bg-linear-to-r lg:from-black/85 lg:via-black/60 lg:to-black/10"
       />
-      <div className="relative flex max-w-[680px] flex-col items-start gap-5 px-4 py-12 sm:px-8 lg:px-14 lg:py-16">
+      <div className="relative flex max-w-[680px] flex-col items-start gap-5 px-4 py-16 sm:px-8 lg:px-14 lg:py-24">
         {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
         <span className="rounded-full bg-white/15 px-3 py-1.5 font-body text-[14px] font-semibold text-white">
           {t("badge")}
