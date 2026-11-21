@@ -64,6 +64,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
+      data-scroll-behavior="smooth"
       className={`${montserrat.variable} ${sourceSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">

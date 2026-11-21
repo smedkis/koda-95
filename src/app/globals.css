@@ -36,6 +36,17 @@ html {
      scroll — without this, centered content visibly shifts sideways
      between pages. */
   scrollbar-gutter: stable;
+  /* In-page anchor links (e.g. the hero's "Izberite termin" → #termini)
+     glide instead of jumping. The <html data-scroll-behavior="smooth">
+     attribute in the locale layout tells Next.js to switch this off during
+     route changes, so normal page navigations still jump straight to top. */
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
