@@ -1,13 +1,12 @@
-import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Box } from "@/components/ui/Box";
-import { Heading3, Text, TextMedium, TextSmall } from "@/components/ui/Typography";
+import { Text } from "@/components/ui/Typography";
 import { Link } from "@/i18n/navigation";
-import { parseModul } from "@/lib/termini-format";
+import { formatLongDate, parseModul } from "@/lib/termini-format";
 import { cn } from "@/lib/cn";
 
 // Deterministic per-termin jitter (same termin always gets the same value,
-// so it doesn't change on every reload) so the progress-bar floor below
+// so it doesn't change on every reload) so the "spots left" count below
 // doesn't land on the exact same number on every card.
 function hashToRange(value: string, min: number, max: number): number {
   let hash = 0;
@@ -17,32 +16,10 @@ function hashToRange(value: string, min: number, max: number): number {
   return min + (Math.abs(hash) % (max - min + 1));
 }
 
-function HeroChip({ icon, label, value }: { icon: string; label: string; value: string }) {
-  return (
-    <div className="flex min-w-0 items-center gap-3">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#FFEEDD]">
-        <Image src={icon} alt="" width={18} height={18} className="size-[18px]" />
-      </span>
-      <div className="min-w-0">
-        <TextSmall className="text-[12px] text-placeholder">{label}</TextSmall>
-        <TextMedium className="truncate text-[16px] font-semibold text-heading">{value}</TextMedium>
-      </div>
-    </div>
-  );
-}
-
-function SecondaryItem({ icon, children }: { icon: string; children: string }) {
-  return (
-    <div className="flex items-center gap-1.5">
-      <Image src={icon} alt="" width={16} height={16} className="size-4 shrink-0" />
-      <Text className="text-[14px] text-paragraph">{children}</Text>
-    </div>
-  );
-}
-
 export type TerminCardProps = {
   title: string;
   date: string;
+  dateISO: string;
   address?: string;
   timeRange?: string;
   price?: string;
@@ -54,7 +31,7 @@ export type TerminCardProps = {
 
 export function TerminCard({
   title,
-  date,
+  dateISO,
   address,
   timeRange,
   price,
@@ -64,6 +41,7 @@ export function TerminCard({
   daysUntil,
 }: TerminCardProps) {
   const t = useTranslations("TerminCard");
+  const locale = useLocale();
   const isNext = daysUntil !== undefined;
   const modul = parseModul(title);
   const cleanTitle = title.replace(/\s*\([^)]*\)\s*$/, "");
@@ -76,37 +54,23 @@ export function TerminCard({
   const displayedAttendeeCount = hasCapacity
     ? Math.min(capacity as number, (attendeeCount as number) + jitter)
     : 0;
-  const percentage = hasCapacity
-    ? Math.round((displayedAttendeeCount / (capacity as number)) * 100)
-    : 0;
   const spotsLeft = hasCapacity ? Math.max(0, (capacity as number) - displayedAttendeeCount) : 0;
   const isScarce = hasCapacity && spotsLeft <= 3;
 
-  // The two facts someone scans a termin card for first: when it is, and
-  // either which module it is or whether there's still room. Price moves
-  // down to the secondary row instead (client wanted these two swapped).
-  // Začetna has no modul, so its top-right slot shows price instead — spots
-  // availability lives exclusively in the progress bar below, not repeated
-  // here too.
-  const heroRight = modul
-    ? { icon: "/Category.svg", label: t("modulLabel"), value: modul }
-    : price
-      ? { icon: "/icon-ticket.svg", label: t("priceLabel"), value: price }
-      : hasCapacity
-        ? { icon: "/icon-profile.svg", label: t("spotsLabel"), value: `${attendeeCount}/${capacity}` }
-        : { icon: "/icon-profile.svg", label: t("spotsLabel"), value: t("unlimited") };
+  const longDate = formatLongDate(dateISO, locale);
+  const eyebrow = modul ? `${cleanTitle} · ${t("modulLabel")} ${modul}` : cleanTitle;
+  const details = [timeRange ?? t("timeAgreed"), address ?? t("locationAgreed")].join(" · ");
 
-  const secondaryItems: { icon: string; label: string }[] = [];
-  if (price && modul) secondaryItems.push({ icon: "/icon-ticket.svg", label: price });
-  secondaryItems.push({ icon: "/icon-clock.svg", label: timeRange ?? t("timeAgreed") });
-  secondaryItems.push({ icon: "/icon-location.svg", label: address ?? t("locationAgreed") });
-
+  // Kept deliberately plain and in the site's own vocabulary (flat grey Box,
+  // hairline divider, the hero's orange button) rather than chips/shadows:
+  // the date is the headline because "when" is what people scan for first,
+  // and the bottom row pairs the price with the one action.
   return (
     <Box
       as={Link}
       href={href}
       className={cn(
-        "relative flex flex-col transition-shadow hover:shadow-md",
+        "group relative flex flex-col transition-colors hover:border-primary",
         isNext && "border-2 border-primary",
       )}
     >
@@ -115,44 +79,41 @@ export function TerminCard({
           {t("nextBadge", { days: daysUntil })}
         </span>
       ) : null}
-      <Heading3>{cleanTitle}</Heading3>
 
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        <HeroChip icon="/icon-calendar.svg" label={t("dateLabel")} value={date} />
-        <HeroChip icon={heroRight.icon} label={heroRight.label} value={heroRight.value} />
-      </div>
+      <h3 className="font-body text-[13px] font-semibold uppercase tracking-[0.06em] text-placeholder">
+        {eyebrow}
+      </h3>
+      <p className="mt-3 font-heading text-[26px] leading-[32px] font-semibold text-heading sm:text-[30px] sm:leading-[38px]">
+        {longDate}
+      </p>
+      <Text className="mt-2 text-[16px] text-paragraph">{details}</Text>
 
-      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-divider pt-4">
-        {secondaryItems.map((item) => (
-          <SecondaryItem key={item.label} icon={item.icon}>
-            {item.label}
-          </SecondaryItem>
-        ))}
-      </div>
-
-      {hasCapacity ? (
-        <div className="mt-8 flex items-center gap-3">
-          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-divider">
-            <div
-              className="h-full rounded-full"
-              style={{
-                width: `${percentage}%`,
-                backgroundColor: percentage >= 80 ? "#852600" : percentage >= 60 ? "#D97706" : "#006e5e",
-              }}
-            />
-          </div>
-          <Text className="shrink-0 whitespace-nowrap text-[14px] text-paragraph">
-            {isScarce ? `${t("highDemand")} · ` : ""}
-            {t("spotsLeft", { count: spotsLeft })}
-          </Text>
+      <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-divider pt-6">
+        <div>
+          {price ? (
+            <p className="font-heading text-[20px] font-semibold text-heading">{price}</p>
+          ) : null}
+          {hasCapacity ? (
+            <Text
+              className={cn(
+                "text-[14px]",
+                isScarce ? "font-semibold text-primary" : "text-paragraph",
+              )}
+            >
+              {isScarce ? `${t("highDemand")} · ` : ""}
+              {t("spotsLeft", { count: spotsLeft })}
+            </Text>
+          ) : null}
         </div>
-      ) : null}
-
-      <div className="mt-8 flex flex-col items-center gap-2">
-        <span className="inline-flex w-full items-center justify-center gap-2 rounded bg-secondary px-[14px] py-[10px] font-body text-[16px] font-medium text-paragraph transition-colors hover:bg-[#5de0c0]">
-          {t("reserve")}
-        </span>
-        <Text className="text-[13px] font-medium text-[#006e5e]">{t("payLater")}</Text>
+        <div className="flex flex-col items-end gap-1.5 max-sm:w-full max-sm:items-stretch">
+          <span className="inline-flex items-center justify-center gap-2 rounded bg-primary px-5 py-3 font-body text-[16px] font-medium text-white transition-colors group-hover:bg-[#d06e1b]">
+            {t("reserve")}
+            <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
+              →
+            </span>
+          </span>
+          <Text className="text-[13px] text-placeholder max-sm:text-center">{t("payLater")}</Text>
+        </div>
       </div>
     </Box>
   );

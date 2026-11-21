@@ -4,7 +4,7 @@ import { Box } from "@/components/ui/Box";
 import { cn } from "@/lib/cn";
 import { TerminCard, type TerminCardProps } from "./TerminCard";
 
-export type TerminEntry = Omit<TerminCardProps, "daysUntil"> & { dateISO: string };
+export type TerminEntry = Omit<TerminCardProps, "daysUntil">;
 
 function getDaysUntil(dateISO: string): number {
   const today = new Date();
@@ -61,7 +61,7 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
             : "grid w-full grid-cols-1 gap-8 lg:grid-cols-2"
         }
       >
-        {sortedTermini.map(({ dateISO, ...cardProps }, index) => (
+        {sortedTermini.map((cardProps, index) => (
           <div
             key={cardProps.href}
             className={cn(
@@ -73,7 +73,7 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
             <TerminCard
               {...cardProps}
               href={vir ? `${cardProps.href}?vir=${vir}` : cardProps.href}
-              daysUntil={cardProps.href === nextHref ? getDaysUntil(dateISO) : undefined}
+              daysUntil={cardProps.href === nextHref ? getDaysUntil(cardProps.dateISO) : undefined}
             />
           </div>
         ))}
