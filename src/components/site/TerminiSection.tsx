@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Eyebrow, Text } from "@/components/ui/Typography";
+import { Box } from "@/components/ui/Box";
 import { cn } from "@/lib/cn";
 import { TerminCard, type TerminCardProps } from "./TerminCard";
 
@@ -29,7 +30,10 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
 
   if (sortedTermini.length === 0) {
     return (
-      <div id="termini" className="mx-auto mt-16 flex max-w-[680px] flex-col items-center gap-4 text-center">
+      <Box
+        id="termini"
+        className="mx-auto mt-16 flex max-w-[680px] flex-col items-center gap-4 border-notice-border bg-notice-bg text-center"
+      >
         <Eyebrow>{t("emptyHeading")}</Eyebrow>
         <Text>
           {t.rich("emptyBody", {
@@ -40,7 +44,7 @@ export function TerminiSection({ termini, vir }: { termini: TerminEntry[]; vir?:
             ),
           })}
         </Text>
-      </div>
+      </Box>
     );
   }
 
