@@ -29,6 +29,14 @@
     "nextBadge": "Sledeći termin za {days, plural, one {# dan} few {# dana} other {# dana}}",
     "payLater": "Prijavi se sada, plati kasnije"
   },
+  "Hero": {
+    "badge": "Ovlašćeni centar za obuku Koda 95",
+    "cta": "Izaberite termin",
+    "call": "Pozovite nas",
+    "rating": "4,9 ★ (51 recenzija na Google-u)",
+    "companies": "Više od 250 kompanija nam veruje",
+    "imageAlt": "Instruktor tokom obuke vozačima objašnjava ispis tahografa"
+  },
   "TerminiSection": {
     "heading": "Izaberite termin obuke",
     "emptyHeading": "Trenutno nema raspisanih termina",

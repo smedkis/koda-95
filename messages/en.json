@@ -29,6 +29,14 @@
     "nextBadge": "Next session in {days, plural, one {# day} other {# days}}",
     "payLater": "Register now, pay later"
   },
+  "Hero": {
+    "badge": "Authorised Koda 95 training centre",
+    "cta": "Choose a session",
+    "call": "Call us",
+    "rating": "4.9 ★ (51 Google reviews)",
+    "companies": "250+ companies trust us",
+    "imageAlt": "An instructor explaining a tachograph printout to drivers during training"
+  },
   "TerminiSection": {
     "heading": "Choose a training session",
     "emptyHeading": "There are currently no scheduled sessions",

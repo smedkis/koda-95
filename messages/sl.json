@@ -29,6 +29,14 @@
     "nextBadge": "Naslednji termin čez {days, plural, one {# dan} other {# dni}}",
     "payLater": "Prijavi se zdaj, plačaj kasneje"
   },
+  "Hero": {
+    "badge": "Pooblaščen center za usposabljanje Koda 95",
+    "cta": "Izberite termin",
+    "call": "Pokličite nas",
+    "rating": "4,9 ★ (51 mnenj na Googlu)",
+    "companies": "250+ podjetij nam zaupa",
+    "imageAlt": "Inštruktor med usposabljanjem vozniku razlaga izpis tahografa"
+  },
   "TerminiSection": {
     "heading": "Izberite termin usposabljanja",
     "emptyHeading": "Trenutno ni razpisanih terminov",
